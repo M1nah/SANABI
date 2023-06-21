@@ -9,14 +9,7 @@ public class PlayerInput : MonoBehaviour
     public float Move_Value { get; private set; }
     public float Rotate_Value { get; private set; }
     public bool isInteraction { get; private set; }
-
-    // Start is called before the first frame update
-    void Start()
-    {
-     
-        
-
-    }
+    public bool isJump { get; private set; }
 
     // Update is called once per frame
     void Update()
@@ -24,6 +17,9 @@ public class PlayerInput : MonoBehaviour
         Move_Value = Input.GetAxis(MoveAxisName);
         Rotate_Value = Input.GetAxis(RotateAxisName);
 
-        isInteraction = Input.GetKey(KeyCode.E);
+        isInteraction = Input.GetKeyDown(KeyCode.E);
+        isJump = Input.GetKeyDown(KeyCode.Space);
+
+
     }
 }
