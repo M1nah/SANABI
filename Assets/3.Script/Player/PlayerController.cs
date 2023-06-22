@@ -91,8 +91,6 @@ public class PlayerController : MonoBehaviour
             rigidBody.velocity = new Vector2(0.3f * rigidBody.velocity.normalized.x, rigidBody.velocity.y);
         }
 
-
-
     }
 
     private void OnCollisionEnter2D(Collision2D col)
@@ -102,11 +100,11 @@ public class PlayerController : MonoBehaviour
             isGround = true;
             isJump = false;
             jumpCount = 0; //jumpcount √ ±‚»≠
+            ani.SetBool("isJumping", false);
         }
     }
     private void OnCollisionExit2D(Collision2D col)
     {
         isGround = false;
-        ani.SetBool("isJumping", false);
     }
 }
