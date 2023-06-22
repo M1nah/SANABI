@@ -34,15 +34,6 @@ public class PlayerController : MonoBehaviour
         Jump();
         Move();
 
-        // Animation
-        if (rigidBody.velocity.normalized.x == 0)
-        {
-            ani.SetBool("isRunning", false);
-        }
-        else
-        {
-            ani.SetBool("isRunning", true);
-        }
 
     }
 
@@ -55,8 +46,14 @@ public class PlayerController : MonoBehaviour
             rigidBody.AddForce(Vector2.up * jump, ForceMode2D.Impulse);
             isJump = true;
             ani.SetBool("isJumping", true);
+            Debug.Log("너 돌아가는중이니? 점프 시작?");
         }
 
+        if(jumpCount == 0 && isJump)
+        {
+            ani.SetBool("isJumping", false);
+            Debug.Log("너도 돌아가는중이니? 점프 끝남?");
+        }
         // falling할 때 조금 더 빨리 떨어지게하기
     }
 
@@ -85,10 +82,24 @@ public class PlayerController : MonoBehaviour
             Debug.Log("방향바꾸기");
         }
 
+
+        // Animation
+        if (rigidBody.velocity.normalized.x == 0)
+        {
+            ani.SetBool("isRunning", false);
+            Debug.Log("너 계속 돌아가는중이니? 러닝끝남?");
+        }
+        else
+        {
+            ani.SetBool("isRunning", true);
+            Debug.Log("너도 계속 돌아가는중이니? 러닝시작?");
+        }
+
         //stop Speed
         if (Input.GetButtonUp("Horizontal"))
         {
             rigidBody.velocity = new Vector2(0.3f * rigidBody.velocity.normalized.x, rigidBody.velocity.y);
+
         }
 
     }
