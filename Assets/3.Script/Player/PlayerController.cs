@@ -26,12 +26,24 @@ public class PlayerController : MonoBehaviour
         rigidBody = GetComponent<Rigidbody2D>();
         spriteRenderer = GetComponent<SpriteRenderer>();
         plyerInput = transform.GetComponent<PlayerInput>();
+        ani = GetComponent<Animator>();
     }
 
     private void Update()
     {
         Jump();
         Move();
+
+        // Animation
+        if (rigidBody.velocity.normalized.x == 0)
+        {
+            ani.SetBool("isRunning", false);
+        }
+        else
+        {
+            ani.SetBool("isRunning", true);
+        }
+
     }
 
     private void Jump()
@@ -42,25 +54,14 @@ public class PlayerController : MonoBehaviour
             jumpCount++;
             rigidBody.AddForce(Vector2.up * jump, ForceMode2D.Impulse);
             isJump = true;
+            ani.SetBool("isJumping", true);
         }
+
         // falling할 때 조금 더 빨리 떨어지게하기
     }
 
     private void Move()
     {
-
-        //DirectionSprite 방향 바꾸기
-        if (Input.GetButtonDown("Horizontal"))
-        {
-            spriteRenderer.flipX = Input.GetAxisRaw("Horizontal") == -1;
-            Debug.Log("방향바꾸기");
-        }
-
-        //stop Speed
-        if (Input.GetButtonUp("Horizontal"))
-        {
-            rigidBody.velocity = new Vector2(0.5f * rigidBody.velocity.normalized.x, rigidBody.velocity.y);
-        }
 
         float h = Input.GetAxisRaw("Horizontal");
         rigidBody.AddForce(Vector2.right * h, ForceMode2D.Impulse);
@@ -77,6 +78,21 @@ public class PlayerController : MonoBehaviour
         }
         #endregion
 
+        //DirectionSprite 방향 바꾸기
+        if (Input.GetButtonDown("Horizontal"))
+        {
+            spriteRenderer.flipX = Input.GetAxisRaw("Horizontal") == -1;
+            Debug.Log("방향바꾸기");
+        }
+
+        //stop Speed
+        if (Input.GetButtonUp("Horizontal"))
+        {
+            rigidBody.velocity = new Vector2(0.3f * rigidBody.velocity.normalized.x, rigidBody.velocity.y);
+        }
+
+
+
     }
 
     private void OnCollisionEnter2D(Collision2D col)
@@ -91,5 +107,6 @@ public class PlayerController : MonoBehaviour
     private void OnCollisionExit2D(Collision2D col)
     {
         isGround = false;
+        ani.SetBool("isJumping", false);
     }
 }
