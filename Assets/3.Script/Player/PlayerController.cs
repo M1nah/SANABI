@@ -16,7 +16,6 @@ public class PlayerController : MonoBehaviour
     [SerializeField]  private float jump;
     private int jumpCount = 0;
 
-
     bool isJump = false;
     bool isGround = false;
 
@@ -33,10 +32,9 @@ public class PlayerController : MonoBehaviour
     {
         Jump();
         Move();
-
-
     }
 
+    
     private void Jump()
     {
         //jump 
@@ -47,16 +45,15 @@ public class PlayerController : MonoBehaviour
             isJump = true;
             ani.SetBool("isJumping", true);
             Debug.Log("너 돌아가는중이니? 점프 시작?");
-        }
+        } 
 
-        if(jumpCount == 0 && isJump)
+        else 
         {
             ani.SetBool("isJumping", false);
-            Debug.Log("너도 돌아가는중이니? 점프 끝남?");
+            Debug.Log("너도 돌아가는중이니? 점프 끝남?<계속 돌아가네...");
         }
         // falling할 때 조금 더 빨리 떨어지게하기
     }
-
     private void Move()
     {
 
@@ -75,6 +72,19 @@ public class PlayerController : MonoBehaviour
         }
         #endregion
 
+        // Animation
+        if (rigidBody.velocity.normalized.x == 0)
+        {
+            ani.SetBool("isRunning", false);
+            Debug.Log("너 계속 돌아가는중이니? 러닝끝남?< 계속 돌아가네... ");
+        }
+        else
+        {
+            ani.SetBool("isRunning", true);
+            Debug.Log("너도 계속 돌아가는중이니? 러닝시작?<너도... ");
+        }
+
+
         //DirectionSprite 방향 바꾸기
         if (Input.GetButtonDown("Horizontal"))
         {
@@ -83,25 +93,12 @@ public class PlayerController : MonoBehaviour
         }
 
 
-        // Animation
-        if (rigidBody.velocity.normalized.x == 0)
-        {
-            ani.SetBool("isRunning", false);
-            Debug.Log("너 계속 돌아가는중이니? 러닝끝남?");
-        }
-        else
-        {
-            ani.SetBool("isRunning", true);
-            Debug.Log("너도 계속 돌아가는중이니? 러닝시작?");
-        }
-
         //stop Speed
         if (Input.GetButtonUp("Horizontal"))
         {
             rigidBody.velocity = new Vector2(0.3f * rigidBody.velocity.normalized.x, rigidBody.velocity.y);
 
         }
-
     }
 
     private void OnCollisionEnter2D(Collision2D col)
@@ -111,11 +108,12 @@ public class PlayerController : MonoBehaviour
             isGround = true;
             isJump = false;
             jumpCount = 0; //jumpcount 초기화
-            ani.SetBool("isJumping", false);
         }
     }
     private void OnCollisionExit2D(Collision2D col)
     {
         isGround = false;
     }
+
+
 }
