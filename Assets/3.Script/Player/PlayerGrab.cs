@@ -4,16 +4,11 @@ using UnityEngine;
 
 public class PlayerGrab : MonoBehaviour
 {
-    PlayerInput playerInput;
-    PlayerController playerController;
+    Rigidbody2D rgd;
+
+    [SerializeField]float maxSpeed;
 
     bool isUp=false;
-
-    private void Awake()
-    {
-        playerInput = GetComponent<PlayerInput>();
-        playerController = GetComponent<PlayerController>();
-    }
 
     private void OnTriggerEnter2D(Collider2D col)
     {
@@ -30,12 +25,24 @@ public class PlayerGrab : MonoBehaviour
         }
     }
 
+    private void FixedUpdate()
+    {
+        GrabHill();
+    }
+
+
     private void GrabHill()
     {
-        if (Input.GetKeyDown(KeyCode.W))
+
+        if (isUp)
         {
-            //사다리 응용
-            //transform.position += new Vector2(transform.position.y, 0f);
+            float ver = Input.GetAxisRaw("Vertical");
+            rgd.gravityScale = 0;
+            rgd.velocity = new Vector2(rgd.velocity.x, ver * maxSpeed);
+        }
+        else
+        {
+            rgd.gravityScale = 6;
         }
 
     }
