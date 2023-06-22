@@ -31,10 +31,8 @@ public class PlayerController : MonoBehaviour
     private void Update()
     {
         Jump();
-        Move();
+        Move(); 
     }
-
-    
     private void Jump()
     {
         //jump 
@@ -44,19 +42,18 @@ public class PlayerController : MonoBehaviour
             rigidBody.AddForce(Vector2.up * jump, ForceMode2D.Impulse);
             isJump = true;
             ani.SetBool("isJumping", true);
-            Debug.Log("너 돌아가는중이니? 점프 시작?");
-        } 
-
-        else 
-        {
-            ani.SetBool("isJumping", false);
-            Debug.Log("너도 돌아가는중이니? 점프 끝남?<계속 돌아가네...");
         }
-        // falling할 때 조금 더 빨리 떨어지게하기
+        else if (ani.GetBool("isJumping"))
+        {
+            isJump = false;
+            jumpCount = 0;
+            ani.SetBool("isJumping", false);
+        }
+        //애니메이션이 안먹혀..
     }
+
     private void Move()
     {
-
         float h = Input.GetAxisRaw("Horizontal");
         rigidBody.AddForce(Vector2.right * h, ForceMode2D.Impulse);
 
@@ -96,24 +93,9 @@ public class PlayerController : MonoBehaviour
         //stop Speed
         if (Input.GetButtonUp("Horizontal"))
         {
-            rigidBody.velocity = new Vector2(0.3f * rigidBody.velocity.normalized.x, rigidBody.velocity.y);
+            rigidBody.velocity = new Vector2(0.1f * rigidBody.velocity.normalized.x, rigidBody.velocity.y);
 
         }
     }
-
-    private void OnCollisionEnter2D(Collision2D col)
-    {
-        if (col.contacts[0].normal.y > 0.7f) //playercollier에 붙어있는 함수
-        {
-            isGround = true;
-            isJump = false;
-            jumpCount = 0; //jumpcount 초기화
-        }
-    }
-    private void OnCollisionExit2D(Collision2D col)
-    {
-        isGround = false;
-    }
-
 
 }
