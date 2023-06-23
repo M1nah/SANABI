@@ -42,7 +42,7 @@ public class PlayerGrab : MonoBehaviour
         }
         else
         {
-            rgd.gravityScale = 6;
+            rgd.gravityScale = 0;
         }
 
     }

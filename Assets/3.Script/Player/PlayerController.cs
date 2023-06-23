@@ -16,6 +16,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField]  private float jump;
     private int jumpCount = 0;
 
+    bool isRun = false;
     bool isJump = false;
     bool isGround = false;
 
@@ -33,6 +34,7 @@ public class PlayerController : MonoBehaviour
         Jump();
         Move(); 
     }
+
     private void Jump()
     {
         //jump 
@@ -83,10 +85,13 @@ public class PlayerController : MonoBehaviour
 
 
         //DirectionSprite 방향 바꾸기
-        if (Input.GetButtonDown("Horizontal"))
+        if (plyerInput.isMoveLeft)
         {
-            spriteRenderer.flipX = Input.GetAxisRaw("Horizontal") == -1;
-            Debug.Log("방향바꾸기");
+            spriteRenderer.transform.localScale = new Vector2(-2, 2);
+        }
+        else if (plyerInput.isMoveRight)
+        {
+            spriteRenderer.transform.localScale = new Vector2(2, 2);
         }
 
 
@@ -94,7 +99,6 @@ public class PlayerController : MonoBehaviour
         if (Input.GetButtonUp("Horizontal"))
         {
             rigidBody.velocity = new Vector2(0.1f * rigidBody.velocity.normalized.x, rigidBody.velocity.y);
-
         }
     }
 
