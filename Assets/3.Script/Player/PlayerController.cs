@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
-    Rigidbody2D rigidBody; // 물리 이동을 위한 변수 선언
+    [SerializeField] Rigidbody2D rigidBody; // 물리 이동을 위한 변수 선언
     SpriteRenderer spriteRenderer; // 방향 전환을 위한 변수
     public PlayerInput plyerInput;
 
@@ -20,6 +20,10 @@ public class PlayerController : MonoBehaviour
     bool isJump = false;
     bool isGround = false;
 
+    private float vertical; //climing
+    bool isPlatform;
+    bool isCliming;
+
 
     private void Awake()
     {
@@ -27,12 +31,32 @@ public class PlayerController : MonoBehaviour
         spriteRenderer = GetComponent<SpriteRenderer>();
         plyerInput = transform.GetComponent<PlayerInput>();
         ani = GetComponent<Animator>();
+
     }
 
     private void Update()
     {
         Jump();
-        Move(); 
+        Move();
+        Climing();
+    }
+
+
+
+    private void FixedUpdate()
+    {
+
+
+        //climimg Update
+        if(isCliming)
+        {
+            rigidBody.gravityScale = 0f;
+            rigidBody.velocity = new Vector2(rigidBody.velocity.x, vertical * moveSpeed);
+        }
+        else
+        {
+            rigidBody.gravityScale = 6f;
+        }
     }
 
     private void Jump()
@@ -75,12 +99,12 @@ public class PlayerController : MonoBehaviour
         if (rigidBody.velocity.normalized.x == 0) // when player position == 0
         {
             ani.SetBool("isRunning", false);
-            Debug.Log("너 계속 돌아가는중이니? 러닝끝남?< 계속 돌아가네... ");
+            //Debug.Log("너 계속 돌아가는중이니? 러닝끝남?< 계속 돌아가네... ");
         }
         else
         {
             ani.SetBool("isRunning", true);
-            Debug.Log("너도 계속 돌아가는중이니? 러닝시작?<너도... ");
+            //Debug.Log("너도 계속 돌아가는중이니? 러닝시작?<너도... ");
         }
 
 
@@ -92,6 +116,7 @@ public class PlayerController : MonoBehaviour
         else if (plyerInput.isMoveRight)
         {
             spriteRenderer.transform.localScale = new Vector2(2, 2);
+
         }
 
 
@@ -99,6 +124,51 @@ public class PlayerController : MonoBehaviour
         if (Input.GetButtonUp("Horizontal"))
         {
             rigidBody.velocity = new Vector2(0.1f * rigidBody.velocity.normalized.x, rigidBody.velocity.y);
+        }
+    }
+
+    private void Climing()
+    {
+        vertical = Input.GetAxis("Vertical");
+        if(isPlatform && Mathf.Abs(vertical) > 0f)
+        {
+            isCliming = true;
+        }
+    }
+
+
+
+    //jump count 초기화
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        if(collision.contacts[0].normal.y>0.1f)
+        {
+            isGround = true;
+            isJump = false;
+            jumpCount = 0;
+        }
+    }
+    private void OnCollisionExit2D(Collision2D collision)
+    {
+        isGround = false;
+    }
+
+    
+
+    //오르기
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.CompareTag("GrabPlatform"))
+        {
+            isPlatform = true;
+        }
+    }
+    private void OnTriggerExit2D(Collider2D collision)
+    {
+        if (collision.CompareTag("GrabPlatform"))
+        {
+            isPlatform = false;
+            isCliming = false;
         }
     }
 
