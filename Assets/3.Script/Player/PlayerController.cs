@@ -71,8 +71,8 @@ public class PlayerController : MonoBehaviour
         }
         #endregion
 
-        // Animation
-        if (rigidBody.velocity.normalized.x == 0)
+        // Running Animation
+        if (rigidBody.velocity.normalized.x == 0) // when player position == 0
         {
             ani.SetBool("isRunning", false);
             Debug.Log("너 계속 돌아가는중이니? 러닝끝남?< 계속 돌아가네... ");
@@ -84,7 +84,7 @@ public class PlayerController : MonoBehaviour
         }
 
 
-        //DirectionSprite 방향 바꾸기
+        //DirectionSprite Flip (with Child Component)
         if (plyerInput.isMoveLeft)
         {
             spriteRenderer.transform.localScale = new Vector2(-2, 2);
