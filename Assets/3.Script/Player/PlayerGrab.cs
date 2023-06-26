@@ -9,9 +9,10 @@ public class PlayerGrab : MonoBehaviour
     public Transform grabhook; //후크 위치
 
     Vector2 mouseDirection; //마우스 커서의 위치 
+
     private bool isHookActive;
     private bool isLineMax;
-
+    public bool isAttach = false; //이 변수가 참일때 후크의 이동 코드가 동작하지 않게
 
 
     private void Start()
@@ -34,7 +35,6 @@ public class PlayerGrab : MonoBehaviour
        {
            //grabhook은 플레이어의 위치에서 발사되어야 하니까 grabhook의 초기 위치값은 플레이어의 위치값으로 설정
            grabhook.position = transform.position;
-           //뭐지.. 왜 player기준으로 후크가 발사가 않뒈는거지........ 왜...후크 기준으로 player가 발사되는겨...
        
            //마우스 포지션은 스크린 기준으로 값을 반환하니까 월드 좌표로 바꿔준 뒤
            //player의 위치값을 빼주면 고리가 날아가는 방향의 백터값을 알수 있다
@@ -50,7 +50,7 @@ public class PlayerGrab : MonoBehaviour
            GrabHook.SetActive(false);
        }
        
-       if (isHookActive&& !isLineMax)
+       if (isHookActive && !isLineMax &&!isAttach)
        {
            ///////youtu.be/jBw3wUDvQ8Y?list=LL&t=210 참고한거...뭔소리여 다시 보기///////
            grabhook.Translate(mouseDirection.normalized * Time.deltaTime * 15);
@@ -59,7 +59,7 @@ public class PlayerGrab : MonoBehaviour
            {
                isLineMax = true;
            }
-           else if(isHookActive && isLineMax)
+           else if(isHookActive && isLineMax && !isAttach)
            {
                grabhook.position = Vector2.MoveTowards(grabhook.position, transform.position, Time.deltaTime * 15);
                //후크와 player의 간격이 0.1보다 작아지면 후크 비활성화
@@ -68,8 +68,21 @@ public class PlayerGrab : MonoBehaviour
                    isHookActive = false;
                    isLineMax = false;
                    GrabHook.SetActive(false);
+                    Debug.Log("후크 사라지니? 작동을 아예 안하네.. ");
                }
            }
+           else if (isAttach) 
+            {
+                if (Input.GetMouseButtonUp(0))
+                {
+                    isAttach = false;
+                    isHookActive = false;
+                    isLineMax = false;
+                    grabhook.GetComponent<GrabPlatform>().joint2D.enabled = false;
+                    GrabHook.SetActive(false);
+                    Debug.Log("후크 비활성화 너는 하니?");
+                }
+            }
        
        }
 
