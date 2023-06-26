@@ -4,12 +4,12 @@ using UnityEngine;
 
 public class GrabPlatform : MonoBehaviour
 {
-    PlayerGrab grab;
+    PlayerGrab playerGrab;
     public DistanceJoint2D joint2D;
 
     private void Start()
     {
-        grab = GameObject.Find("Player").GetComponent<PlayerGrab>();
+        playerGrab = GameObject.Find("Player").GetComponent<PlayerGrab>();
         joint2D = GetComponent<DistanceJoint2D>();
     }
     private void OnTriggerEnter2D(Collider2D collision)
@@ -17,7 +17,7 @@ public class GrabPlatform : MonoBehaviour
         if (collision.CompareTag("GrabPlatform"))
         {
             joint2D.enabled = true;
-            grab.isAttach = true;
+            playerGrab.isAttach = true;
         }
         
     }
