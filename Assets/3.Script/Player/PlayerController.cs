@@ -45,8 +45,6 @@ public class PlayerController : MonoBehaviour
 
     private void FixedUpdate()
     {
-
-
         //climimg Update
         if(isCliming)
         {
@@ -67,15 +65,17 @@ public class PlayerController : MonoBehaviour
             jumpCount++;
             rigidBody.AddForce(Vector2.up * jump, ForceMode2D.Impulse);
             isJump = true;
-            ani.SetBool("isJumping", true);
+            //ani.SetBool("isJumping", true);
         }
         else if (ani.GetBool("isJumping"))
         {
             isJump = false;
             jumpCount = 0;
-            ani.SetBool("isJumping", false);
+            //ani.SetBool("isJumping", false);
         }
+
         //애니메이션이 안먹혀..
+        
     }
 
     private void Move()
@@ -123,7 +123,7 @@ public class PlayerController : MonoBehaviour
         //stop Speed
         if (Input.GetButtonUp("Horizontal"))
         {
-            rigidBody.velocity = new Vector2(0.1f * rigidBody.velocity.normalized.x, rigidBody.velocity.y);
+            rigidBody.velocity = new Vector2(0.2f * rigidBody.velocity.normalized.x, rigidBody.velocity.y);
         }
     }
 
@@ -147,6 +147,8 @@ public class PlayerController : MonoBehaviour
             isJump = false;
             jumpCount = 0;
         }
+
+
     }
     private void OnCollisionExit2D(Collision2D collision)
     {
