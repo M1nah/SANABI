@@ -12,10 +12,10 @@ public class PlayerGrab : MonoBehaviour
 
     private bool isHookActive;
     private bool isLineMax;
-    public bool isAttach = false; //이 변수가 참일때 후크의 이동 코드가 동작하지 않게
+    public bool isAttach = false; //이 변수가 참이면 GrabPlatform에 붙음 islinemax 함수가 작동 x
 
 
-    private void Start()
+    private void Start()  
     {
         line.positionCount = 2; // 라인을 그리는 포지션 (한 점은 player의 포지션, 한 점은 grabhook의 포지션)
         line.endWidth = line.startWidth = 0.05f;
@@ -53,6 +53,10 @@ public class PlayerGrab : MonoBehaviour
         if (isHookActive && !isLineMax && !isAttach)
         {
             grabhook.Translate(mouseDirection.normalized * Time.deltaTime * 35);
+
+
+
+
 
             ///////youtu.be/jBw3wUDvQ8Y?list=LL&t=210 참고한거...뭔소리여 다시 보기///////
             if (Vector2.Distance(transform.position, grabhook.position) > 7)

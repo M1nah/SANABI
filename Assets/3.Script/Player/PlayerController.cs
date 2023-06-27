@@ -98,6 +98,7 @@ public class PlayerController : MonoBehaviour
         // Running Animation
         if (rigidBody.velocity.normalized.x == 0) // when player position == 0
         {
+
             ani.SetBool("isRunning", false);
             //Debug.Log("너 계속 돌아가는중이니? 러닝끝남?< 계속 돌아가네... ");
         }
@@ -123,7 +124,7 @@ public class PlayerController : MonoBehaviour
         //stop Speed
         if (Input.GetButtonUp("Horizontal"))
         {
-            rigidBody.velocity = new Vector2(0.2f * rigidBody.velocity.normalized.x, rigidBody.velocity.y);
+            rigidBody.velocity = new Vector2(0.1f * rigidBody.velocity.normalized.x, rigidBody.velocity.y);
         }
     }
 
@@ -158,20 +159,20 @@ public class PlayerController : MonoBehaviour
     
 
     //오르기
-    private void OnTriggerEnter2D(Collider2D collision)
-    {
-        if (collision.CompareTag("GrabPlatform"))
-        {
-            isPlatform = true;
-        }
-    }
-    private void OnTriggerExit2D(Collider2D collision)
-    {
-        if (collision.CompareTag("GrabPlatform"))
-        {
-            isPlatform = false;
-            isCliming = false;
-        }
-    }
+    //private void OnTriggerEnter2D(Collider2D collision)
+    //{
+    //    if (collision.CompareTag("GrabPlatform"))
+    //    {
+    //        isPlatform = true;
+    //    }
+    //}
+    //private void OnTriggerExit2D(Collider2D collision)
+    //{
+    //    if (collision.CompareTag("GrabPlatform"))
+    //    {
+    //        isPlatform = false;
+    //        isCliming = false;
+    //    }
+    //}
 
 }

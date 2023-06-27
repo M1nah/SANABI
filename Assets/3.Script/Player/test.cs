@@ -11,7 +11,7 @@ public class test : MonoBehaviour
     public LayerMask GrabPlatform; //<-> 태그로 구분
 
     RaycastHit2D hit;
-    LineRenderer line; //왜 위치가 0 0 0 이지?
+    LineRenderer line; //왜 그려지는 라인 위치가 0 0 0 이지?
 
     bool onGrapping = false;
 
@@ -37,15 +37,16 @@ public class test : MonoBehaviour
 
     private void RopeShoot()
     {
-        if(Physics2D.Raycast(player.transform.position, grabHook.position, GrabPlatform)) //위치, 방향, 거리 
-        {
-            Debug.Log("Platform 검출");//마우스 커서에 따라 레이캐스트 쏘기
 
-            onGrapping = true;
-            line.positionCount = 2;
-            line.SetPosition(0, this.transform.position); //player의 포지션
-            line.SetPosition(1, hit.point); //grabhook의 포지션
-        }
+            if (Physics2D.Raycast(player.transform.position, grabHook.position, GrabPlatform)) //위치, 방향, 거리 
+            {
+             
+                Debug.Log("Platform 검출");//마우스 커서에 따라 레이캐스트 
+                onGrapping = true;
+                line.positionCount = 2;
+                line.SetPosition(0, player.transform.position); //player의 포지션
+                line.SetPosition(1, hit.point); //grabhook의 포지션
+            }
     }
 
     private void EndShoot()

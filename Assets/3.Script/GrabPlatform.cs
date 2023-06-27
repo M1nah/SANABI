@@ -18,7 +18,8 @@ public class GrabPlatform : MonoBehaviour
         {
             joint2D.enabled = true;
             playerGrab.isAttach = true;
+            Debug.Log("ÇÃ·§Æû¿¡ ´êÀ½"); //´êÁö¸¦..¾Ê¾Æ.. 
         }
-        
     }
+
 }
