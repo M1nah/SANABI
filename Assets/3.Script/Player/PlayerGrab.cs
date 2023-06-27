@@ -15,7 +15,7 @@ public class PlayerGrab : MonoBehaviour
     public bool isAttach = false; //이 변수가 참이면 GrabPlatform에 붙음 islinemax 함수가 작동 x
 
 
-    private void Start()  
+    private void Start()
     {
         line.positionCount = 2; // 라인을 그리는 포지션 (한 점은 player의 포지션, 한 점은 grabhook의 포지션)
         line.endWidth = line.startWidth = 0.05f;
@@ -50,13 +50,9 @@ public class PlayerGrab : MonoBehaviour
            GrabHook.SetActive(false);
        }
 
-        if (isHookActive && !isLineMax && !isAttach)
+        if (isHookActive && !isLineMax && !isAttach) 
         {
-            grabhook.Translate(mouseDirection.normalized * Time.deltaTime * 35);
-
-
-
-
+            grabhook.Translate(mouseDirection.normalized * Time.deltaTime * 45);
 
             ///////youtu.be/jBw3wUDvQ8Y?list=LL&t=210 참고한거...뭔소리여 다시 보기///////
             if (Vector2.Distance(transform.position, grabhook.position) > 7)
@@ -64,7 +60,11 @@ public class PlayerGrab : MonoBehaviour
                 isLineMax = true;
             }
 
-            else if (isHookActive && isLineMax && !isAttach) //여기서부터 작동을 안하네잉
+
+
+
+            //↓↓↓여기서부터 작동을 안하네잉↓↓↓//
+            else if (isHookActive && isLineMax && !isAttach) 
             {
                 grabhook.position = Vector2.MoveTowards(grabhook.position, transform.position, Time.deltaTime * 5);
 

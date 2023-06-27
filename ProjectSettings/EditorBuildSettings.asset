@@ -11,4 +11,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/1.Scene/01 Prologue.unity
     guid: c7f76d66fa8971648892cf06204408d9
+  - enabled: 1
+    path: Assets/1.Scene/02 Stage1.unity
+    guid: 2d7f1f1ed2d83114bb015f7797948707
   m_configObjects: {}
