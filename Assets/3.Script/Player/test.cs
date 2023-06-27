@@ -4,32 +4,62 @@ using UnityEngine;
 
 public class test : MonoBehaviour
 {
+    public Transform grabHook;
+    public Transform player;
 
-    [SerializeField] Rigidbody2D rigd;
-    SpriteRenderer spriteRenderer;
+    //Camera cam; // <-> 플레이어 위치로 바꾸기
+    public LayerMask GrabPlatform; //<-> 태그로 구분
 
-    PlayerInput playerInput; //input 가져오기
+    RaycastHit2D hit;
+    LineRenderer line; //왜 위치가 0 0 0 이지?
+
+    bool onGrapping = false;
 
 
-    private void Awake()
+    private void Start()
     {
-        //컴포넌트 가져오기
-        rigd = GetComponent<Rigidbody2D>();
-        spriteRenderer = GetComponent<SpriteRenderer>();
-
-        playerInput = GetComponent<PlayerInput>();
-
+        line = GetComponent<LineRenderer>();
     }
 
-    private void FixedUpdate()
+
+    private void Update()
     {
-        PlayerMove();
+        if (Input.GetMouseButtonDown(0))
+        {
+            RopeShoot();
+        }
+        else if (Input.GetMouseButtonUp(0))
+        {
+            EndShoot();
+        }
+        DrawRope();
     }
 
-    private void PlayerMove()
+    private void RopeShoot()
     {
-        float h = Input.GetAxisRaw("Horizontal");
-        rigd.AddForce(Vector2.right*h,ForceMode2D.Impulse);
+        if(Physics2D.Raycast(player.transform.position, grabHook.position, GrabPlatform)) //위치, 방향, 거리 
+        {
+            Debug.Log("Platform 검출");//마우스 커서에 따라 레이캐스트 쏘기
+
+            onGrapping = true;
+            line.positionCount = 2;
+            line.SetPosition(0, this.transform.position); //player의 포지션
+            line.SetPosition(1, hit.point); //grabhook의 포지션
+        }
+    }
+
+    private void EndShoot()
+    {
+        onGrapping = false;
+        line.positionCount = 0;
+    }
+
+    private void DrawRope()
+    {
+        if (onGrapping)
+        {
+            line.SetPosition(0,this.transform.position);
+        }
     }
 
 }

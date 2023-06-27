@@ -43,32 +43,37 @@ public class PlayerGrab : MonoBehaviour
            isLineMax = false;
            GrabHook.SetActive(true); 
        }
-
-
-       if (isHookActive && !isLineMax &&!isAttach)
-       {
-           grabhook.Translate(mouseDirection.normalized * Time.deltaTime * 35);
        
-           ///////youtu.be/jBw3wUDvQ8Y?list=LL&t=210 참고한거...뭔소리여 다시 보기///////
-           if(Vector2.Distance(transform.position, grabhook.position) > 7)
-           {
-               isLineMax = true;
-           }
+        else if (Input.GetMouseButtonUp(0) && isHookActive)
+       {
+           isHookActive = false;
+           GrabHook.SetActive(false);
+       }
 
-           else if(isHookActive && isLineMax && !isAttach) //여기서부터 작동을 안하네잉
-           {
-               grabhook.position = Vector2.MoveTowards(grabhook.position, transform.position, Time.deltaTime * 5);
+        if (isHookActive && !isLineMax && !isAttach)
+        {
+            grabhook.Translate(mouseDirection.normalized * Time.deltaTime * 35);
 
-               //후크와 player의 간격이 0.1보다 작아지면 후크 비활성화
-               if (Vector2.Distance(transform.position, grabhook.position) < 0.1f) 
-               {
-                   isHookActive = false;
-                   isLineMax = false;
-                   GrabHook.SetActive(false);
+            ///////youtu.be/jBw3wUDvQ8Y?list=LL&t=210 참고한거...뭔소리여 다시 보기///////
+            if (Vector2.Distance(transform.position, grabhook.position) > 7)
+            {
+                isLineMax = true;
+            }
+
+            else if (isHookActive && isLineMax && !isAttach) //여기서부터 작동을 안하네잉
+            {
+                grabhook.position = Vector2.MoveTowards(grabhook.position, transform.position, Time.deltaTime * 5);
+
+                //후크와 player의 간격이 0.1보다 작아지면 후크 비활성화
+                if (Vector2.Distance(transform.position, grabhook.position) < 0.1f)
+                {
+                    isHookActive = false;
+                    isLineMax = false;
+                    GrabHook.SetActive(false);
                     Debug.Log("후크 사라지니? 작동을 아예 안하네.. ");
-               }
-           }
-           else if (isAttach) 
+                }
+            }
+            else if (isAttach)
             {
                 if (Input.GetMouseButtonUp(0))
                 {
@@ -80,6 +85,8 @@ public class PlayerGrab : MonoBehaviour
                     Debug.Log("후크 비활성화 너는 하니?");
                 }
             }
-       }
+        }
+
     }
+
 }
