@@ -69,7 +69,7 @@ public class PlayerGrab : MonoBehaviour
                 grabhook.position = Vector2.MoveTowards(grabhook.position, transform.position, Time.deltaTime * 5);
 
                 //후크와 player의 간격이 0.1보다 작아지면 후크 비활성화
-                if (Vector2.Distance(transform.position, grabhook.position) < 0.1f)
+                if (Vector2.Distance(transform.position, grabhook.position) < 0.1f) 
                 {
                     isHookActive = false;
                     isLineMax = false;
