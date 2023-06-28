@@ -18,7 +18,7 @@ public class PlayerGrab : MonoBehaviour
     private void Start()
     {
         line.positionCount = 2; // 라인을 그리는 포지션 (한 점은 player의 포지션, 한 점은 grabhook의 포지션)
-        line.endWidth = line.startWidth = 0.05f;
+        line.endWidth = line.startWidth = 0.04f;
         line.SetPosition(0, transform.position); //player의 포지션
         line.SetPosition(1, grabhook.position); //grabhook의 포지션
         line.useWorldSpace = true; //라인렌더러가 추가되어있는 오브젝트의 위치와 상관없이 월드 좌표를 기준으로 화면에 라인이 그려지게 됨
@@ -60,16 +60,13 @@ public class PlayerGrab : MonoBehaviour
                 isLineMax = true;
             }
 
-
-
-
             //↓↓↓여기서부터 작동을 안하네잉↓↓↓//
-            else if (isHookActive && isLineMax && !isAttach) 
-            {
+            else if (isHookActive && isLineMax && !isAttach)
+            { 
                 grabhook.position = Vector2.MoveTowards(grabhook.position, transform.position, Time.deltaTime * 5);
 
                 //후크와 player의 간격이 0.1보다 작아지면 후크 비활성화
-                if (Vector2.Distance(transform.position, grabhook.position) < 0.1f) 
+                if (Vector2.Distance(transform.position, grabhook.position) < 0.1f)
                 {
                     isHookActive = false;
                     isLineMax = false;
