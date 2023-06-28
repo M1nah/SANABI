@@ -42,11 +42,21 @@ public class test : MonoBehaviour //moving부터 시작하는 리코딩 생활 하...
         if(playerInput.isMoveLeft || playerInput.isMoveRight)
         {
             Move();
+            ani.SetBool("isRunning", true);
         }
-        
+        else
+        {
+            ani.SetBool("isRunning", false);
+        }
+
         if (playerInput.isJump)
         {
             Jump();
+            ani.SetBool("isJumping", true);
+        }
+        else
+        {
+            ani.SetBool("isJumping", false);
         }
 
 
@@ -82,11 +92,11 @@ public class test : MonoBehaviour //moving부터 시작하는 리코딩 생활 하...
         //Direction Sprite Flip(with Child Component)
         if (playerInput.isMoveLeft)
         {
-            spriteRenderer.transform.localScale = new Vector2(-2,2);
+            spriteRenderer.transform.localScale = new Vector2(-1,1);
         }
         else if (playerInput.isMoveRight)
         {
-            spriteRenderer.transform.localScale = new Vector2(2,2);
+            spriteRenderer.transform.localScale = new Vector2(1,1);
         }
 
         //stop Speed
@@ -94,6 +104,7 @@ public class test : MonoBehaviour //moving부터 시작하는 리코딩 생활 하...
         {
             moveSpeed = 0;
         }
+        
     }
 
     private void Jump()
