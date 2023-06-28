@@ -37,8 +37,8 @@ public class PlayerController : MonoBehaviour
     private void Update()
     {
         Jump();
-        Move();
         Climing();
+        Move();
     }
 
 
@@ -65,16 +65,16 @@ public class PlayerController : MonoBehaviour
             jumpCount++;
             rigidBody.AddForce(Vector2.up * jump, ForceMode2D.Impulse);
             isJump = true;
-            //ani.SetBool("isJumping", true);
+            ani.SetBool("isJumping", true);
         }
-        else if (ani.GetBool("isJumping"))
+        else
         {
             isJump = false;
             jumpCount = 0;
-            //ani.SetBool("isJumping", false);
+            ani.SetBool("isJumping", false);
         }
 
-        //애니메이션이 안먹혀..
+        //달릴때 애니메이션이 안먹혀..
         
     }
 
@@ -95,17 +95,20 @@ public class PlayerController : MonoBehaviour
         }
         #endregion
 
+
         // Running Animation
-        if (rigidBody.velocity.normalized.x == 0) // when player position == 0
+        if (rigidBody.velocity.normalized.x == 0) 
         {
             ani.SetBool("isRunning", false);
-            //Debug.Log("너 계속 돌아가는중이니? 러닝끝남?< 계속 돌아가네... ");
+            Debug.Log("러닝끝남?");
         }
-        else
-        {
-            ani.SetBool("isRunning", true);
-            //Debug.Log("너도 계속 돌아가는중이니? 러닝시작?<너도... ");
-        }
+
+        //else
+        //{
+        //    ani.SetBool("isRunning", true);
+        //    Debug.Log("러닝시작?");
+        //}
+
 
 
         //DirectionSprite Flip (with Child Component)
@@ -122,7 +125,9 @@ public class PlayerController : MonoBehaviour
         //stop Speed
         if (Input.GetButtonUp("Horizontal"))
         {
-            rigidBody.velocity = new Vector2(0.1f * rigidBody.velocity.normalized.x, rigidBody.velocity.y);
+            rigidBody.velocity = new Vector2(0 * rigidBody.velocity.normalized.x, rigidBody.velocity.y);
+            moveSpeed = 0;
+            //ani.SetBool("isRunning", false);
         }
     }
 

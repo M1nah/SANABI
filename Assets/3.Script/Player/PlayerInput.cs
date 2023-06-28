@@ -17,10 +17,10 @@ public class PlayerInput : MonoBehaviour
     {
         isInteraction = Input.GetKeyDown(KeyCode.E);
 
-        isMoveLeft = Input.GetKeyDown(KeyCode.A);
-        isMoveRight = Input.GetKeyDown(KeyCode.D);
-        isMoveUp = Input.GetKeyDown(KeyCode.W);
-        isMoveDown = Input.GetKeyDown(KeyCode.S);
+        isMoveLeft = Input.GetKey(KeyCode.A);
+        isMoveRight = Input.GetKey(KeyCode.D);
+        isMoveUp = Input.GetKey(KeyCode.W);
+        isMoveDown = Input.GetKey(KeyCode.S);
         isJump = Input.GetKeyDown(KeyCode.Space);
 
     }

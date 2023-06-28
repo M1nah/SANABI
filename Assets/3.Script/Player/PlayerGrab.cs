@@ -81,7 +81,7 @@ public class PlayerGrab : MonoBehaviour
                     isAttach = false;
                     isHookActive = false;
                     isLineMax = false;
-                    grabhook.GetComponent<GrabPlatform>().joint2D.enabled = false;
+                    //grabhook.GetComponent<GrabPlatform>().joint2D.enabled = false;
                     GrabHook.SetActive(false);
                     Debug.Log("후크 비활성화 너는 하니?");
                 }
