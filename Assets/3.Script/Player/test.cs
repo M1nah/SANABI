@@ -122,7 +122,7 @@ public class test : MonoBehaviour //moving부터 시작하는 리코딩 생활 하...
     }
 
 
-    private void Climing()
+    private void Climing() //벽오르기
     {
         vertical = Input.GetAxis("Vertical");
         if(isPlatform && Mathf.Abs(vertical)>0.1f)
