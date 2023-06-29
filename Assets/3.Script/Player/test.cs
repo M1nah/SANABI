@@ -18,6 +18,7 @@ public class test : MonoBehaviour //moving부터 시작하는 리코딩 생활 하...
     int jumpCount = 0;
 
     bool isJump = false;
+    bool isGround = false; //점프하고 바닥에 닿았는지 체크
 
     //climing
     float vertical;
@@ -57,11 +58,6 @@ public class test : MonoBehaviour //moving부터 시작하는 리코딩 생활 하...
             armAni.SetBool("ArmIsRunning", false);
         }
 
-            Climing();
-    }
-
-    private void FixedUpdate()
-    {
 
         if (playerInput.isJump)
         {
@@ -69,13 +65,18 @@ public class test : MonoBehaviour //moving부터 시작하는 리코딩 생활 하...
             playerAni.SetBool("isJumping", true);
             armAni.SetBool("ArmIsJumping", true);
         }
-        else if (!playerInput.isJump)
+        else if(!playerInput.isJump && !isJump)
         {
             playerAni.SetBool("isJumping", false);
             armAni.SetBool("ArmIsJumping", false);
         }
 
 
+        Climing();
+    }
+
+    private void FixedUpdate()
+    {
 
         if (isCliming)
         {
@@ -134,7 +135,7 @@ public class test : MonoBehaviour //moving부터 시작하는 리코딩 생활 하...
             rigid.AddForce(Vector2.up*jump, ForceMode2D.Impulse);
             isJump = true;
         }
-        else
+        else if(isGround)
         {
             isJump = false;
             jumpCount = 0;
@@ -146,16 +147,26 @@ public class test : MonoBehaviour //moving부터 시작하는 리코딩 생활 하...
     {
         if (collision.contacts[0].normal.y > 0.1f)
         {
+            isGround = true;
             isJump = false;
             jumpCount = 0;
+            Debug.Log("jump reset"); //점프리셋이 전혀 안되는디
+                                     //isGround bool값을 만들어주고 체크하니까 이제 리셋 됨
+                                     //그리고 공중에서 점프 안하게 됨 해결 ! 
         }
+    }
+    private void OnCollisionExit2D(Collision2D collision)
+    {
+        isGround = false;
     }
 
 
-    private void Climing() //벽오르기
+
+    //Platform Climing
+    private void Climing()
     {
         vertical = Input.GetAxis("Vertical");
-        if(isPlatform && Mathf.Abs(vertical)>0.1f)
+        if(isPlatform && Mathf.Abs(vertical)>0f)
         {
             isCliming = true;
         }
