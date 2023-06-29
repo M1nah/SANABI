@@ -65,7 +65,7 @@ public class PlayerController : MonoBehaviour
             playerAni.SetBool("isJumping", true);
             armAni.SetBool("ArmIsJumping", true);
         }
-        else if (!playerInput.isJump && !isJump)
+        else if (!playerInput.isJump)
         {
 
             playerAni.SetBool("isJumping", false);
@@ -83,7 +83,7 @@ public class PlayerController : MonoBehaviour
         {
             vertical = Input.GetAxis("Vertical");
             rigid.gravityScale = 0f;
-            rigid.velocity = new Vector2(rigid.velocity.x, vertical * 3); //3 = moveSpeed였음 
+            rigid.velocity = new Vector2(rigid.velocity.x, vertical * moveSpeed); //3 = moveSpeed였음 
             //아래 stopSpeed 부분에서 멈추느라 속도를 0으로 만들어버려서 그뒤로 쭉 moveSpeed에 0이 적용된다...
         }
         else
@@ -136,10 +136,25 @@ public class PlayerController : MonoBehaviour
         }
 
         //stop Speed
-        if (Input.GetButtonUp("Horizontal"))
+        if(playerInput.isMoveLeft ==true || playerInput.isMoveRight == true)
         {
-            moveSpeed = 0f; //여기 스피드가 0이 되느라 climb.y 값을 구할떄 0이 곱해진다... 그렇다면 어케해야하느냐... 
+            moveSpeed = 3f;
         }
+        else
+        {
+            moveSpeed = 0f;
+        }
+
+        //if (Input.GetButtonUp("Horizontal"))
+        //{
+        //    moveSpeed = 0f; //여기 스피드가 0이 되느라 climb.y 값을 구할떄 0이 곱해진다... 그렇다면 어케해야하느냐... 
+        //    Debug.Log("moveSpeed=0");
+        //}
+        //else if (Input.GetButtonDown("Horizontal"))
+        //{
+        //    moveSpeed = 3f;
+        //    Debug.Log("moveSpeed=3");
+        //}
 
     }
 
@@ -206,6 +221,19 @@ public class PlayerController : MonoBehaviour
             isCliming = true;
         }
     }
+
+    private void OnTriggerStay2D(Collider2D collision)
+    {
+        if (collision.CompareTag("GrabPlatform"))
+        {
+            if (playerInput.isJump)
+            {
+                rigid.gravityScale = 0f;
+                rigid.velocity = new Vector2(rigid.velocity.x, 10 * moveSpeed);
+            }
+        }
+    }
+
     private void OnTriggerExit2D(Collider2D collision)
     {
 
