@@ -60,17 +60,9 @@ public class test : MonoBehaviour //moving부터 시작하는 리코딩 생활 하...
 
         if (playerInput.isJump)
         {
-            if(playerAni.GetBool("isRunning")&& armAni.GetBool("ArmIsRunning"))
-            {
-
-                Jump();
-                playerAni.SetBool("isRunning", false);
-                armAni.SetBool("ArmIsRunning", false);
-                playerAni.SetBool("isJumping", true);
-                armAni.SetBool("ArmIsJumping", true);
-                Debug.Log("점프애니메이션 나오니?");
-
-            }
+            Jump();
+            playerAni.SetBool("isJumping", true);
+            armAni.SetBool("ArmIsJumping", true);
 
         }
         else
