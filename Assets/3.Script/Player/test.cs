@@ -65,8 +65,9 @@ public class test : MonoBehaviour //moving부터 시작하는 리코딩 생활 하...
             playerAni.SetBool("isJumping", true);
             armAni.SetBool("ArmIsJumping", true);
         }
-        else if(!playerInput.isJump && !isJump)
+        else if (!playerInput.isJump && !isJump)
         {
+
             playerAni.SetBool("isJumping", false);
             armAni.SetBool("ArmIsJumping", false);
         }
@@ -131,14 +132,16 @@ public class test : MonoBehaviour //moving부터 시작하는 리코딩 생활 하...
     {
         if (jumpCount < 1)
         {
+            isGround = true;
             jumpCount++;
             rigid.AddForce(Vector2.up*jump, ForceMode2D.Impulse);
             isJump = true;
         }
-        else if(isGround)
+        else if (isGround)
         {
             isJump = false;
             jumpCount = 0;
+            Debug.Log("jump stop"); // isGround= false 면 jumpCount= 0으로 바꿈... 그런데 여기가 안들어가짐
         }
     }
 
@@ -150,14 +153,16 @@ public class test : MonoBehaviour //moving부터 시작하는 리코딩 생활 하...
             isGround = true;
             isJump = false;
             jumpCount = 0;
-            Debug.Log("jump reset"); //점프리셋이 전혀 안되는디
+            Debug.Log("jump reset"); //점프 리셋이 전혀 안되는디
                                      //isGround bool값을 만들어주고 체크하니까 이제 리셋 됨
-                                     //그리고 공중에서 점프 안하게 됨 해결 ! 
+                                     //그리고 공중에서 점프 안하게 됨 해결 !  -> 근대 오ㅔ 또 애니메이션 고장난거야
+                                     // -> jumpCount++ 되는 곳에 isGround 체크해줬더니 애니메이션 또 됨 완벽하게 해결! 
+                                     //Running 도중 jumping ani로 바뀌는 건 그냥 트렌지션에 Running 값도 true로 바꿔줬더니 잘만 나오더라 하...
         }
     }
     private void OnCollisionExit2D(Collision2D collision)
     {
-        isGround = false;
+      isGround = false;
     }
 
 
