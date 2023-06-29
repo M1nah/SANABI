@@ -73,22 +73,28 @@ public class test : MonoBehaviour //moving부터 시작하는 리코딩 생활 하...
         }
 
 
-        Climing();
     }
 
     private void FixedUpdate()
     {
 
-        if (isCliming)
+        if (playerInput.isMoveUp)
         {
+            Climing();
 
-            rigid.gravityScale = 0f;
-            rigid.velocity = new Vector2(rigid.velocity.x, vertical * moveSpeed);
+            if (isCliming)
+            {
+
+                rigid.gravityScale = 0f; //벽에 닿았을 때 중력을 0으로
+                rigid.velocity = new Vector2(rigid.velocity.x, vertical * moveSpeed);
+            }
+            else if (!isCliming)
+            {
+                rigid.gravityScale = 3f; //아닐때 중력을 되돌리기 
+            }
+
         }
-        else
-        {
-            rigid.gravityScale = 3f;
-        }
+
     }
 
 
@@ -137,12 +143,14 @@ public class test : MonoBehaviour //moving부터 시작하는 리코딩 생활 하...
             rigid.AddForce(Vector2.up*jump, ForceMode2D.Impulse);
             isJump = true;
         }
-        else if (isGround)
-        {
-            isJump = false;
-            jumpCount = 0;
-            Debug.Log("jump stop"); // isGround= false 면 jumpCount= 0으로 바꿈... 그런데 여기가 안들어가짐
-        }
+        //else if (isGround)
+        //{
+        //    isJump = false;
+        //    jumpCount = 0;
+        //    Debug.Log("jump stop"); //isGround= false 면 jumpCount= 0으로 바꿈... 그런데 여기가 안들어가짐..
+        //                            //그렇지만 작동하는걸... 된거 아닐까? 여기 필요 없는거 아냐?
+        //                            //주석 처리해도 작동하잖아! 필요 없었잔아! 
+        //}
     }
 
     //jumpCount Reset 
