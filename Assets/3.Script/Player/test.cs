@@ -57,28 +57,35 @@ public class test : MonoBehaviour //moving부터 시작하는 리코딩 생활 하...
             armAni.SetBool("ArmIsRunning", false);
         }
 
+            Climing();
+    }
+
+    private void FixedUpdate()
+    {
 
         if (playerInput.isJump)
         {
             Jump();
             playerAni.SetBool("isJumping", true);
             armAni.SetBool("ArmIsJumping", true);
-
         }
-        else
+        else if (!playerInput.isJump)
         {
             playerAni.SetBool("isJumping", false);
             armAni.SetBool("ArmIsJumping", false);
         }
 
 
-    }
 
-    private void FixedUpdate()
-    {
         if (isCliming)
         {
-            Climing();
+
+            rigid.gravityScale = 0f;
+            rigid.velocity = new Vector2(rigid.velocity.x, vertical * moveSpeed);
+        }
+        else
+        {
+            rigid.gravityScale = 3f;
         }
     }
 
@@ -94,7 +101,7 @@ public class test : MonoBehaviour //moving부터 시작하는 리코딩 생활 하...
             {
                 //해당 오브젝트의 속력은 maxSpeed
                 rigid.velocity = new Vector2(maxSpeed, rigid.velocity.y);
-            }
+            } 
             else if (rigid.velocity.x < maxSpeed * (-1))
             {
                 rigid.velocity = new Vector2(maxSpeed * -1, rigid.velocity.y);
@@ -124,8 +131,8 @@ public class test : MonoBehaviour //moving부터 시작하는 리코딩 생활 하...
         if (jumpCount < 1)
         {
             jumpCount++;
-            isJump = true;
             rigid.AddForce(Vector2.up*jump, ForceMode2D.Impulse);
+            isJump = true;
         }
         else
         {
@@ -151,7 +158,6 @@ public class test : MonoBehaviour //moving부터 시작하는 리코딩 생활 하...
         if(isPlatform && Mathf.Abs(vertical)>0.1f)
         {
             isCliming = true;
-            //rigid.velocity = new Vector2(rigid.velocity.x, vertical*moveSpeed);
         }
     }
 
@@ -170,6 +176,7 @@ public class test : MonoBehaviour //moving부터 시작하는 리코딩 생활 하...
         
         if (collision.CompareTag("GrabPlatform"))
         {
+            isPlatform = false;
             isCliming = false;
         }
     }
