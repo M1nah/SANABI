@@ -25,7 +25,11 @@ public class test : MonoBehaviour //moving부터 시작하는 리코딩 생활 하...
     bool isCliming;
 
 
-    Animator ani;
+    //Animation player + Arm
+    public GameObject Arm;
+    Animator playerAni;
+    Animator armAni;
+
 
     private void Awake()
     {
@@ -33,7 +37,8 @@ public class test : MonoBehaviour //moving부터 시작하는 리코딩 생활 하...
         rigid = GetComponent<Rigidbody2D>();
         spriteRenderer = GetComponent<SpriteRenderer>();
 
-        ani = GetComponent<Animator>();
+        playerAni = GetComponent<Animator>();
+        armAni = Arm.GetComponent<Animator>();
     }
 
     private void Update()
@@ -42,21 +47,36 @@ public class test : MonoBehaviour //moving부터 시작하는 리코딩 생활 하...
         if(playerInput.isMoveLeft || playerInput.isMoveRight)
         {
             Move();
-            ani.SetBool("isRunning", true);
+            playerAni.SetBool("isRunning", true);
+            armAni.SetBool("ArmIsRunning", true);
+            
         }
         else
         {
-            ani.SetBool("isRunning", false);
+            playerAni.SetBool("isRunning", false);
+            armAni.SetBool("ArmIsRunning", false);
         }
+
 
         if (playerInput.isJump)
         {
-            Jump();
-            ani.SetBool("isJumping", true);
+            if(playerAni.GetBool("isRunning")&& armAni.GetBool("ArmIsRunning"))
+            {
+
+                Jump();
+                playerAni.SetBool("isRunning", false);
+                armAni.SetBool("ArmIsRunning", false);
+                playerAni.SetBool("isJumping", true);
+                armAni.SetBool("ArmIsJumping", true);
+                Debug.Log("점프애니메이션 나오니?");
+
+            }
+
         }
         else
         {
-            ani.SetBool("isJumping", false);
+            playerAni.SetBool("isJumping", false);
+            armAni.SetBool("ArmIsJumping", false);
         }
 
 
