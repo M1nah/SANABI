@@ -65,33 +65,27 @@ public class PlayerController : MonoBehaviour
             playerAni.SetBool("isJumping", true);
             armAni.SetBool("ArmIsJumping", true);
         }
-        else if (!playerInput.isJump)
+        else if (!playerInput.isJump && !isJump)
         {
-
             playerAni.SetBool("isJumping", false);
             armAni.SetBool("ArmIsJumping", false);
         }
-
     }
 
     private void FixedUpdate()
     {
-        //Climing();
+        //if (playerInput.isMoveUp || playerInput.isMoveDown)
+        //{
+        //    Climing();
+        //    playerAni.SetBool("isWallClimbUp", true);
+        //    armAni.SetBool("ArmIsWallClimbUp", true);
+        //}
+        //else
+        //{
+        //    playerAni.SetBool("isWallClimbUp", false);
+        //    armAni.SetBool("ArmIsWallClimbUp", false);
+        //}
 
-        if (isCliming)
-        {
-            //오르는 상태일때 중력을 0으로 두고 velocity.y값만 움직일 수 있게 해두었다
-            vertical = Input.GetAxis("Vertical");
-            rigid.gravityScale = 0f;
-            rigid.velocity = new Vector2(rigid.velocity.x, vertical * moveSpeed); 
-            //아래 stopSpeed 부분에서 멈추느라 속도를 0으로 만들어버려서 그뒤로 쭉 moveSpeed에 0이 적용된다...
-            //stopSpeed 쪽에서 input.isMoveRight와 input.isMoveRight를 조건문으로 걸어 moveSpeed를 지정해주었더니 해결 !
-        }
-        else
-        {
-            //오르는 상태가 아니라면 중력을 원래대로 되돌려주기 
-            rigid.gravityScale = 3f;
-        }
     }
 
 
@@ -124,7 +118,7 @@ public class PlayerController : MonoBehaviour
         }
 
         //stop Speed
-        if(playerInput.isMoveLeft ==true || playerInput.isMoveRight == true)
+        if (playerInput.isMoveLeft == true || playerInput.isMoveRight == true)
         {
             moveSpeed = 3f;
         }
@@ -132,8 +126,8 @@ public class PlayerController : MonoBehaviour
         {
             moveSpeed = 0f;
         }
-    }
 
+    }
     private void Jump()
     {
         if (jumpCount < 1)
@@ -152,6 +146,7 @@ public class PlayerController : MonoBehaviour
         //                            //주석 처리해도 작동하잖아! 필요 없었잔아! @@
         //}
     }
+
 
     //jumpCount Reset 
     private void OnCollisionEnter2D(Collision2D collision)
@@ -173,8 +168,6 @@ public class PlayerController : MonoBehaviour
         isGround = false;
     }
 
-
-
     //Platform Climing
     private void Climing()
     {
@@ -183,9 +176,21 @@ public class PlayerController : MonoBehaviour
         {
             isCliming = true;
         }
+
+        if (isCliming)
+        {
+            //vertical = Input.GetAxis("Vertical");
+            rigid.gravityScale = 0f; 
+            rigid.velocity = new Vector2(rigid.velocity.x, vertical * moveSpeed);
+        }
+        else
+        {
+            //오르는 상태가 아니라면 중력을 원래대로 되돌려주기 
+            rigid.gravityScale = 3f;
+        }
+
+
     }
-
-
 
     //Touch the Climing "GrabPlatform" Tag
     private void OnTriggerEnter2D(Collider2D collision)
