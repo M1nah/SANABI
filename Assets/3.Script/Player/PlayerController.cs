@@ -78,32 +78,20 @@ public class PlayerController : MonoBehaviour
     {
         //Climing();
 
-
         if (isCliming)
         {
+            //오르는 상태일때 중력을 0으로 두고 velocity.y값만 움직일 수 있게 해두었다
             vertical = Input.GetAxis("Vertical");
             rigid.gravityScale = 0f;
-            rigid.velocity = new Vector2(rigid.velocity.x, vertical * moveSpeed); //3 = moveSpeed였음 
+            rigid.velocity = new Vector2(rigid.velocity.x, vertical * moveSpeed); 
             //아래 stopSpeed 부분에서 멈추느라 속도를 0으로 만들어버려서 그뒤로 쭉 moveSpeed에 0이 적용된다...
+            //stopSpeed 쪽에서 input.isMoveRight와 input.isMoveRight를 조건문으로 걸어 moveSpeed를 지정해주었더니 해결 !
         }
         else
         {
+            //오르는 상태가 아니라면 중력을 원래대로 되돌려주기 
             rigid.gravityScale = 3f;
         }
-
-        //if (isCliming)
-        //{
-        //    rigid.gravityScale = 0f; //벽에 닿았을 때 중력을 0으로
-        //    rigid.velocity = new Vector2(rigid.velocity.x, vertical * moveSpeed);
-        //    Debug.Log("벽 오르기");
-        //}
-        //
-        //else if(!(isCliming))
-        //{
-        //    isCliming = false;
-        //    rigid.gravityScale = 3f; //아닐때 중력을 되돌리기 
-        //    Debug.Log("벽에서 떨어짐"); //걍 isMoveUp 키만 눌러도 여기가 무한적으로 올라가는구만..
-        //}
     }
 
 
@@ -144,18 +132,6 @@ public class PlayerController : MonoBehaviour
         {
             moveSpeed = 0f;
         }
-
-        //if (Input.GetButtonUp("Horizontal"))
-        //{
-        //    moveSpeed = 0f; //여기 스피드가 0이 되느라 climb.y 값을 구할떄 0이 곱해진다... 그렇다면 어케해야하느냐... 
-        //    Debug.Log("moveSpeed=0");
-        //}
-        //else if (Input.GetButtonDown("Horizontal"))
-        //{
-        //    moveSpeed = 3f;
-        //    Debug.Log("moveSpeed=3");
-        //}
-
     }
 
     private void Jump()
@@ -207,8 +183,6 @@ public class PlayerController : MonoBehaviour
         {
             isCliming = true;
         }
-
-       
     }
 
 
@@ -221,19 +195,6 @@ public class PlayerController : MonoBehaviour
             isCliming = true;
         }
     }
-
-    private void OnTriggerStay2D(Collider2D collision)
-    {
-        if (collision.CompareTag("GrabPlatform"))
-        {
-            if (playerInput.isJump)
-            {
-                rigid.gravityScale = 0f;
-                rigid.velocity = new Vector2(rigid.velocity.x, 10 * moveSpeed);
-            }
-        }
-    }
-
     private void OnTriggerExit2D(Collider2D collision)
     {
 
@@ -241,9 +202,15 @@ public class PlayerController : MonoBehaviour
         {
             isPlatform = false;
             isCliming = false;
+
+            //if (playerInput.isJump)
+            //{
+            //    rigid.gravityScale = 0f;
+            //    rigid.velocity = new Vector2(rigid.velocity.x, 10 * moveSpeed);
+            //}
         }
     }
 
 
-
+   
 }
