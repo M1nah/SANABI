@@ -18,12 +18,12 @@ public class PlayerController : MonoBehaviour
     int jumpCount = 0;
 
     bool isJump = false;
-    bool isGround = false; //점프하고 바닥에 닿았는지 체크
+    bool isGround = false; //점프하고 바닥에 닿았는지 체크 ->이거 없애도 되겠다.. 이유: 이미 Tag로 체크하고있음
 
     //climing
-    float vertical;
-    bool isPlatform;
-    bool isCliming;
+    //float vertical;
+    //bool isPlatform;
+    //bool isCliming;
 
 
     //Animation player + Arm
@@ -137,21 +137,15 @@ public class PlayerController : MonoBehaviour
             rigid.AddForce(Vector2.up * jump, ForceMode2D.Impulse);
             isJump = true;
         }
-        //else if (isGround)
-        //{
-        //    isJump = false;
-        //    jumpCount = 0;
-        //    Debug.Log("jump stop"); //isGround= false 면 jumpCount= 0으로 바꿈... 그런데 여기가 안들어가짐..
-        //                            //그렇지만 작동하는걸... 된거 아닐까? 여기 필요 없는거 아냐?
-        //                            //주석 처리해도 작동하잖아! 필요 없었잔아! @@
-        //}
+        
+        //바닥 닿았을 때 점프 return;
     }
 
 
     //jumpCount Reset 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        if (collision.contacts[0].normal.y > 0.1f)
+        if (collision.gameObject.CompareTag ("Platform") || collision.gameObject.CompareTag("GrabPlatform"))
         {
             isGround = true;
             isJump = false;
@@ -162,60 +156,55 @@ public class PlayerController : MonoBehaviour
                                      // -> jumpCount++ 되는 곳에 isGround 체크해줬더니 애니메이션 또 됨 완벽하게 해결! 
                                      //Running 도중 jumping ani로 바뀌는 건 그냥 트렌지션에 Running 값도 true로 바꿔줬더니 잘만 나오더라 하... @@
         }
-    }
-    private void OnCollisionExit2D(Collision2D collision)
-    {
-        isGround = false;
+
     }
 
     //Platform Climing
-    private void Climing()
-    {
-        vertical = Input.GetAxis("Vertical");
-        if (isPlatform && Mathf.Abs(vertical) > 0f)
-        {
-            isCliming = true;
-        }
-
-        if (isCliming)
-        {
-            //vertical = Input.GetAxis("Vertical");
-            rigid.gravityScale = 0f; 
-            rigid.velocity = new Vector2(rigid.velocity.x, vertical * moveSpeed);
-        }
-        else
-        {
-            //오르는 상태가 아니라면 중력을 원래대로 되돌려주기 
-            rigid.gravityScale = 3f;
-        }
-
-
-    }
+    //private void Climing()
+    //{
+    //    vertical = Input.GetAxis("Vertical");
+    //    if (isPlatform && Mathf.Abs(vertical) > 0f)
+    //    {
+    //        isCliming = true;
+    //    }
+    //
+    //    if (isCliming)
+    //    {
+    //        //vertical = Input.GetAxis("Vertical");
+    //        rigid.gravityScale = 0f; 
+    //        rigid.velocity = new Vector2(rigid.velocity.x, vertical * moveSpeed);
+    //    }
+    //    else
+    //    {
+    //        //오르는 상태가 아니라면 중력을 원래대로 되돌려주기 
+    //        rigid.gravityScale = 3f;
+    //    }
+    //
+    //
+    //}
 
     //Touch the Climing "GrabPlatform" Tag
-    private void OnTriggerEnter2D(Collider2D collision)
-    {
-        if (collision.CompareTag("GrabPlatform"))
-        {
-            isCliming = true;
-        }
-    }
-    private void OnTriggerExit2D(Collider2D collision)
-    {
-
-        if (collision.CompareTag("GrabPlatform"))
-        {
-            isPlatform = false;
-            isCliming = false;
-
-            //if (playerInput.isJump)
-            //{
-            //    rigid.gravityScale = 0f;
-            //    rigid.velocity = new Vector2(rigid.velocity.x, 10 * moveSpeed);
-            //}
-        }
-    }
-
-
+    //private void OnTriggerEnter2D(Collider2D collision)
+    //{
+    //    if (collision.CompareTag("GrabPlatform"))
+    //    {
+    //        isCliming = true;
+    //    }
+    //}
+    //private void OnTriggerExit2D(Collider2D collision)
+    //{
+    //
+    //    if (collision.CompareTag("GrabPlatform"))
+    //    {
+    //        isPlatform = false;
+    //        isCliming = false;
+    //
+    //        //if (playerInput.isJump)
+    //        //{
+    //        //    rigid.gravityScale = 0f;
+    //        //    rigid.velocity = new Vector2(rigid.velocity.x, 10 * moveSpeed);
+    //        //}
+    //    }
+    //}
    
 }
