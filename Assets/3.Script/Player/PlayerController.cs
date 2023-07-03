@@ -14,7 +14,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] float maxSpeed;
 
     //jump
-    [SerializeField] float jump;
+    [SerializeField] public float jump;
     int jumpCount = 0;
 
     bool isJump = false;
