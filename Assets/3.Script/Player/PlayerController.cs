@@ -92,6 +92,15 @@ public class PlayerController : MonoBehaviour
                 rigid.velocity = new Vector2(rigid.velocity.x, ver * slidingSpeed);
                 playerAni.SetBool("isWallCilmbUp", true);
                 armAni.SetBool("ArmIsWallClimbUp", true);
+
+                Debug.Log("climb 시작"); //들어가짐
+            }
+            else if(!playerInput.isMoveUp && !isWallStay || !playerInput.isMoveDown && !isWallStay) 
+            {
+                //↑ 뭔가 조건을 잘못 걸어둔거같은데 
+                playerAni.SetBool("isWallCilmbUp", false);
+                armAni.SetBool("ArmIsWallClimbUp", false);
+                Debug.Log("climb 끝"); //들어가짐
             }
           
             ////이건 천천히 미끄러지는거 지울거임
@@ -101,11 +110,12 @@ public class PlayerController : MonoBehaviour
             //collider가 너무 얇아서 검출 안되던 거였다...box로 바꾸니 잘됨 이런젠장
             // 그렇다면 왼쪽 collider는 두꺼웠던것인가
         }
-        else if(!isWallStay && !playerInput.isMoveUp || !isWallStay && !playerInput.isMoveDown)
-        {
-            playerAni.SetBool("isWallCilmbUp", false);
-            armAni.SetBool("ArmIsWallClimbUp", false);
-        }
+        //if(!isWallStay)
+        //{
+        //    playerAni.SetBool("isWallCilmbUp", false);
+        //    armAni.SetBool("ArmIsWallClimbUp", false);
+        //    Debug.Log("climb 애니메이션 끝"); //여기 안들어가짐... 
+        //}
     }
 
 

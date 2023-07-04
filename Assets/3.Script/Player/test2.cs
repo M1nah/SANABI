@@ -85,12 +85,19 @@ public class test2 : MonoBehaviour //playerController에 test 스크립트를 합쳐보자
 
     private void FixedUpdate()
     {
-        if (isWall && isWallStay)
+        if (isWall && isWallStay) //Wall에 Raycast를 쐈고 Wall collider에 닿았을 때
         {
-            if (playerInput.isMoveUp)
+
+            if (playerInput.isMoveUp) // input값을 받아서
             {
+                Debug.Log("climb 시작..혹시 여기니?"); //여기 자체를 못들어가고있는데 머임
                 float ver = Input.GetAxis("Vertical");
-                rigid.velocity = new Vector2(rigid.velocity.x, ver * slidingSpeed);
+                rigid.velocity = new Vector2(rigid.velocity.x, ver * slidingSpeed); //리지드바디가 위로 움직임
+                //근데 지금 Down키가 안먹힘
+                playerAni.SetBool("isWallCilmbUp", true);
+                armAni.SetBool("ArmIsWallClimbUp", true);
+                Debug.Log("climb 시작");
+
             }
             ////이건 천천히 미끄러지는거 지울거임
             //wallRgd.velocity = new Vector2(wallRgd.velocity.x, wallRgd.velocity.y * slidingSpeed);
