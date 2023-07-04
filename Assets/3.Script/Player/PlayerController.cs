@@ -86,18 +86,25 @@ public class PlayerController : MonoBehaviour
     {
         if (isWall && isWallStay)
         {
-            if (playerInput.isMoveUp)
+            if (playerInput.isMoveUp || playerInput.isMoveDown)
             {
                 float ver = Input.GetAxis("Vertical");
                 rigid.velocity = new Vector2(rigid.velocity.x, ver * slidingSpeed);
+                playerAni.SetBool("isWallCilmbUp", true);
+                armAni.SetBool("ArmIsWallClimbUp", true);
             }
-
+          
             ////이건 천천히 미끄러지는거 지울거임
             //wallRgd.velocity = new Vector2(wallRgd.velocity.x, wallRgd.velocity.y * slidingSpeed);
             //Debug.Log("벽에 닿았으며 미끄러져내려감"); //작동은 하는데 천천히 미끄러지지가 않음 
             //왼쪽(-)은 작동하는데 오른쪽(+)은 작동안함
             //collider가 너무 얇아서 검출 안되던 거였다...box로 바꾸니 잘됨 이런젠장
             // 그렇다면 왼쪽 collider는 두꺼웠던것인가
+        }
+        else if(!isWallStay && !playerInput.isMoveUp || !isWallStay && !playerInput.isMoveDown)
+        {
+            playerAni.SetBool("isWallCilmbUp", false);
+            armAni.SetBool("ArmIsWallClimbUp", false);
         }
     }
 
@@ -202,6 +209,7 @@ public class PlayerController : MonoBehaviour
         if (collision.CompareTag("GrabPlatform") && playerInput.isJump)
         {
             isWallStay = false;
+
         }
     }
     private void OnTriggerExit2D(Collider2D collision)

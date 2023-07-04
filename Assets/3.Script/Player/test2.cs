@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class test2 : MonoBehaviour //playercon에 test를 합쳐보자
+public class test2 : MonoBehaviour //playerController에 test 스크립트를 합쳐보자
 {
     public PlayerInput playerInput;
     [SerializeField] Rigidbody2D rigid; //물리 이동을 위한 변수 선언
@@ -92,8 +92,6 @@ public class test2 : MonoBehaviour //playercon에 test를 합쳐보자
                 float ver = Input.GetAxis("Vertical");
                 rigid.velocity = new Vector2(rigid.velocity.x, ver * slidingSpeed);
             }
-
-
             ////이건 천천히 미끄러지는거 지울거임
             //wallRgd.velocity = new Vector2(wallRgd.velocity.x, wallRgd.velocity.y * slidingSpeed);
             //Debug.Log("벽에 닿았으며 미끄러져내려감"); //작동은 하는데 천천히 미끄러지지가 않음 
