@@ -5,28 +5,36 @@ using UnityEngine;
 public class PlayerController : MonoBehaviour
 {
     public PlayerInput playerInput;
-
     [SerializeField] Rigidbody2D rigid; //물리 이동을 위한 변수 선언
     SpriteRenderer spriteRenderer; //방향전환을 위한 변수
 
     //move
-    [SerializeField] float moveSpeed=3f;
+    [Header("Move")]
+    [SerializeField] float moveSpeed = 3f;
     [SerializeField] float maxSpeed;
 
     //jump
+    [Header("Jump")]
     [SerializeField] public float jump;
     int jumpCount = 0;
 
     bool isJump = false;
     bool isGround = false; //점프하고 바닥에 닿았는지 체크 ->이거 없애도 되겠다.. 이유: 이미 Tag로 체크하고있음
 
-    //climing
-    //float vertical;
-    //bool isPlatform;
-    //bool isCliming;
+    //Climing && Slide
+    [Header("Climing && Slide")]
+    [SerializeField] Transform wallCheck;
+    [SerializeField] float slidingSpeed;
+    [SerializeField] float wallChkDistance;
+  
+    [SerializeField] LayerMask wallLayer; //레이캐스트 겁출 레이어
+    float isRight = 1f; //바라보는 방향 1= right , -1 = Left => 이거 없으니까 레이캐스트가 안나감
 
+    bool isWall;
+    bool isWallStay = false;
 
     //Animation player + Arm
+    [Header("Animation player && Arm")]
     public GameObject Arm;
     Animator playerAni;
     Animator armAni;
@@ -44,9 +52,10 @@ public class PlayerController : MonoBehaviour
 
     private void Update()
     {
-
+        //move
         if (playerInput.isMoveLeft || playerInput.isMoveRight)
         {
+            Climb_Ray(); //Wall 검출 RayCast
             Move();
             playerAni.SetBool("isRunning", true);
             armAni.SetBool("ArmIsRunning", true);
@@ -58,7 +67,7 @@ public class PlayerController : MonoBehaviour
             armAni.SetBool("ArmIsRunning", false);
         }
 
-
+        //jump
         if (playerInput.isJump)
         {
             Jump();
@@ -70,22 +79,26 @@ public class PlayerController : MonoBehaviour
             playerAni.SetBool("isJumping", false);
             armAni.SetBool("ArmIsJumping", false);
         }
+
     }
 
     private void FixedUpdate()
     {
-        //if (playerInput.isMoveUp || playerInput.isMoveDown)
-        //{
-        //    Climing();
-        //    playerAni.SetBool("isWallClimbUp", true);
-        //    armAni.SetBool("ArmIsWallClimbUp", true);
-        //}
-        //else
-        //{
-        //    playerAni.SetBool("isWallClimbUp", false);
-        //    armAni.SetBool("ArmIsWallClimbUp", false);
-        //}
+        if (isWall && isWallStay)
+        {
+            if (playerInput.isMoveUp)
+            {
+                float ver = Input.GetAxis("Vertical");
+                rigid.velocity = new Vector2(rigid.velocity.x, ver * slidingSpeed);
+            }
 
+            ////이건 천천히 미끄러지는거 지울거임
+            //wallRgd.velocity = new Vector2(wallRgd.velocity.x, wallRgd.velocity.y * slidingSpeed);
+            //Debug.Log("벽에 닿았으며 미끄러져내려감"); //작동은 하는데 천천히 미끄러지지가 않음 
+            //왼쪽(-)은 작동하는데 오른쪽(+)은 작동안함
+            //collider가 너무 얇아서 검출 안되던 거였다...box로 바꾸니 잘됨 이런젠장
+            // 그렇다면 왼쪽 collider는 두꺼웠던것인가
+        }
     }
 
 
@@ -137,15 +150,27 @@ public class PlayerController : MonoBehaviour
             rigid.AddForce(Vector2.up * jump, ForceMode2D.Impulse);
             isJump = true;
         }
-        
-        //바닥 닿았을 때 점프 return;
     }
 
+    private void Climb_Ray()
+    {
+        if (playerInput.isMoveRight)
+        {
+            isWall = Physics2D.Raycast(wallCheck.position, Vector2.right * isRight, wallChkDistance, wallLayer);
+            //2D에서는 기본적으로 오른쪽을 바라보고 있기 때문에 Vetor2D의 값을 right로 지정한다
+            Debug.DrawRay(wallCheck.position, Vector2.right * isRight, Color.red);
+        }
+        if (playerInput.isMoveLeft)
+        {
+            isWall = Physics2D.Raycast(wallCheck.position, Vector2.left, wallChkDistance, wallLayer);
+            Debug.DrawRay(wallCheck.position, Vector2.left, Color.blue);
+        }
+    }
 
     //jumpCount Reset 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        if (collision.gameObject.CompareTag ("Platform") || collision.gameObject.CompareTag("GrabPlatform"))
+        if (collision.gameObject.CompareTag("Platform") || collision.gameObject.CompareTag("GrabPlatform"))
         {
             isGround = true;
             isJump = false;
@@ -159,52 +184,31 @@ public class PlayerController : MonoBehaviour
 
     }
 
-    //Platform Climing
-    //private void Climing()
-    //{
-    //    vertical = Input.GetAxis("Vertical");
-    //    if (isPlatform && Mathf.Abs(vertical) > 0f)
-    //    {
-    //        isCliming = true;
-    //    }
-    //
-    //    if (isCliming)
-    //    {
-    //        //vertical = Input.GetAxis("Vertical");
-    //        rigid.gravityScale = 0f; 
-    //        rigid.velocity = new Vector2(rigid.velocity.x, vertical * moveSpeed);
-    //    }
-    //    else
-    //    {
-    //        //오르는 상태가 아니라면 중력을 원래대로 되돌려주기 
-    //        rigid.gravityScale = 3f;
-    //    }
-    //
-    //
-    //}
+    //Wall Climb Check
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.CompareTag("GrabPlatform") && isWall)
+        {
+            isWallStay = true;
+        }
+    }
+    private void OnTriggerStay2D(Collider2D collision)
+    {
+        if (collision.CompareTag("GrabPlatform") && isWall)
+        {
+            isWallStay = true;
+        }
 
-    //Touch the Climing "GrabPlatform" Tag
-    //private void OnTriggerEnter2D(Collider2D collision)
-    //{
-    //    if (collision.CompareTag("GrabPlatform"))
-    //    {
-    //        isCliming = true;
-    //    }
-    //}
-    //private void OnTriggerExit2D(Collider2D collision)
-    //{
-    //
-    //    if (collision.CompareTag("GrabPlatform"))
-    //    {
-    //        isPlatform = false;
-    //        isCliming = false;
-    //
-    //        //if (playerInput.isJump)
-    //        //{
-    //        //    rigid.gravityScale = 0f;
-    //        //    rigid.velocity = new Vector2(rigid.velocity.x, 10 * moveSpeed);
-    //        //}
-    //    }
-    //}
-   
+        if (collision.CompareTag("GrabPlatform") && playerInput.isJump)
+        {
+            isWallStay = false;
+        }
+    }
+    private void OnTriggerExit2D(Collider2D collision)
+    {
+        if (collision.CompareTag("GrabPlatform") && playerInput.isJump)
+        {
+            isWallStay = false;
+        }
+    }
 }
