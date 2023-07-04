@@ -100,15 +100,8 @@ public class PlayerController : MonoBehaviour
                 //↑ 뭔가 조건을 잘못 걸어둔거같은데 
                 playerAni.SetBool("isWallCilmbUp", false);
                 armAni.SetBool("ArmIsWallClimbUp", false);
-                Debug.Log("climb 끝"); //들어가짐
+                Debug.Log("climb 끝"); //안들어가짐 
             }
-          
-            ////이건 천천히 미끄러지는거 지울거임
-            //wallRgd.velocity = new Vector2(wallRgd.velocity.x, wallRgd.velocity.y * slidingSpeed);
-            //Debug.Log("벽에 닿았으며 미끄러져내려감"); //작동은 하는데 천천히 미끄러지지가 않음 
-            //왼쪽(-)은 작동하는데 오른쪽(+)은 작동안함
-            //collider가 너무 얇아서 검출 안되던 거였다...box로 바꾸니 잘됨 이런젠장
-            // 그렇다면 왼쪽 collider는 두꺼웠던것인가
         }
         //if(!isWallStay)
         //{
@@ -187,7 +180,7 @@ public class PlayerController : MonoBehaviour
     //jumpCount Reset 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        if (collision.gameObject.CompareTag("Platform") || collision.gameObject.CompareTag("GrabPlatform"))
+        if (collision.gameObject.CompareTag("Platform"))
         {
             isGround = true;
             isJump = false;

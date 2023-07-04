@@ -46,13 +46,14 @@ public class PlayerGrab : MonoBehaviour
        
         else if (Input.GetMouseButtonUp(0) && isHookActive)
        {
-           isHookActive = false;
-           GrabHook.SetActive(false);
+            isHookActive = false;
+            GrabHook.SetActive(false);
        }
+
 
         if (isHookActive && !isLineMax && !isAttach) 
         {
-            grabhook.Translate(mouseDirection.normalized * Time.deltaTime * 45);
+            grabhook.Translate(mouseDirection.normalized * Time.deltaTime * 10);
 
             ///////youtu.be/jBw3wUDvQ8Y?list=LL&t=210 참고한거...뭔소리여 다시 보기///////
             if (Vector2.Distance(transform.position, grabhook.position) > 7)
