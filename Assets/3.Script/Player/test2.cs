@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class test2 : MonoBehaviour //Hookshot(Hook)
 {
-    [SerializeField] test grapping;
+    [SerializeField] PlayerHookShot grapping;
     [SerializeField] public DistanceJoint2D joint2D;
 
     private void Start()

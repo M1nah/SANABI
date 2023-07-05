@@ -25,7 +25,7 @@ public class PlayerHookShot : MonoBehaviour
         //↑라인렌더러가 추가되어있는 오브젝트의 위치와 상관없이
         //월드 좌표를 기준으로 화면에 라인이 그려지게 됨
 
-        isAttach = false;
+        isAttach = false; 
     }
 
     private void Update()
@@ -44,7 +44,6 @@ public class PlayerHookShot : MonoBehaviour
             //마우스 포지션은 스크린 기준으로 값을 반환하니까 월드 좌표로 바꿔준 뒤
             //player의 위치값을 빼주면 고리가 날아가는 방향의 백터값을 알수 있다
             mouseDirection = Camera.main.ScreenToWorldPoint(Input.mousePosition) - transform.position;
-            //=> 그렇다면 main 기준이 아니라 cinemachineCamera 기준으로 바꿔보면 어떨까? 되나? 
 
             isHookActive = true;
             isLineMax = false;

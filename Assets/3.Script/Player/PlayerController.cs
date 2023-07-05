@@ -10,7 +10,7 @@ public class PlayerController : MonoBehaviour
 
     //move
     [Header("Move")]
-    [SerializeField] float moveSpeed = 3f;
+    [SerializeField] float moveSpeed;
     [SerializeField] float maxSpeed;
 
     //jump
@@ -27,7 +27,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] float slidingSpeed;
     [SerializeField] float wallChkDistance;
   
-    [SerializeField] LayerMask wallLayer; //레이캐스트 겁출 레이어
+    [SerializeField] LayerMask wallLayer; 
     float isRight = 1f; //바라보는 방향 1= right , -1 = Left => 이거 없으니까 레이캐스트가 안나감
 
     bool isWall;
@@ -39,7 +39,6 @@ public class PlayerController : MonoBehaviour
     Animator playerAni;
     Animator armAni;
 
-
     private void Awake()
     {
         playerInput = GetComponent<PlayerInput>();
@@ -48,6 +47,7 @@ public class PlayerController : MonoBehaviour
 
         playerAni = GetComponent<Animator>();
         armAni = Arm.GetComponent<Animator>();
+
     }
 
     private void Update()
@@ -103,12 +103,7 @@ public class PlayerController : MonoBehaviour
                 Debug.Log("climb 끝"); //안들어가짐 
             }
         }
-        //if(!isWallStay)
-        //{
-        //    playerAni.SetBool("isWallCilmbUp", false);
-        //    armAni.SetBool("ArmIsWallClimbUp", false);
-        //    Debug.Log("climb 애니메이션 끝"); //여기 안들어가짐... 
-        //}
+
     }
 
 
