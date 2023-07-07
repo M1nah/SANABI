@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerHookShot : MonoBehaviour
+public class PlayerHookShot : MonoBehaviour //hookshot && dash
 {
     [SerializeField] GameObject GrabHook;
     public Transform hook;
@@ -15,6 +15,18 @@ public class PlayerHookShot : MonoBehaviour
     public bool isAttach; // 이 변수가 참일 때 platform에 붙는다 linemax가 발동 안함 
 
 
+
+    //dash
+    Rigidbody2D rgd;
+
+    float defaultSpeed;
+    public float speed; //<=> moveSpeed 변수 대체(기존 player speed) 
+    public float dashSpeed;
+    public float defaultTime;//기본 시간
+    float dashTime; //dash 시간
+
+    bool isDash;
+
     private void Start()
     {
         line.positionCount = 2;
@@ -26,7 +38,13 @@ public class PlayerHookShot : MonoBehaviour
         //↑라인렌더러가 추가되어있는 오브젝트의 위치와 상관없이
         //월드 좌표를 기준으로 화면에 라인이 그려지게 됨
 
-        isAttach = false; 
+        isAttach = false;
+
+
+        //dash
+        defaultSpeed = speed; //왜...? 그냥 speed 지정해주면 안돼?
+        rgd = GetComponent<Rigidbody2D>();
+
     }
 
     private void Update()
@@ -37,7 +55,6 @@ public class PlayerHookShot : MonoBehaviour
 
         if (Input.GetMouseButtonDown(0) && !isHookActive)
         {
-
             //hoook는 player의 위치에서 날아가야하니까
             //마우스 버튼을 눌렀을 때 hook의 위치를 player의 위치로 초기화 시켜준다
             hook.position = transform.position;
@@ -55,6 +72,7 @@ public class PlayerHookShot : MonoBehaviour
         if (isHookActive && !isLineMax && !isAttach) //isHookActive가 참이고 lineMax가 거짓일 때만 후크가 날아가게끔 하기
         {
             hook.Translate(mouseDirection.normalized * Time.deltaTime * 8);
+
 
             if (Vector2.Distance(transform.position, hook.position) > 2) //Distance(a,b)=> a에서 b까지의 거리구하기함수
             {
@@ -90,6 +108,41 @@ public class PlayerHookShot : MonoBehaviour
     }
 
 
+    private void FixedUpdate()
+    {
+        if (isHookActive && !isLineMax && !isAttach)
+        {
+            Dash();
+        }
+    }
+
+    private void Dash()
+    {
+        Debug.Log("Dash activate");
+        float hor = Input.GetAxis("Horizontal");
+        rgd.velocity = new Vector2(hor * defaultSpeed, rgd.velocity.y);
+
+        if (Input.GetKeyDown(KeyCode.LeftShift))
+        {
+            isDash = true;
+        }
+        if (dashTime <= 0)
+        {
+            //dashtime이 0보다 작을 때 쉬프트가 눌리면 dashtime을 defaulttime으로 초기화
+            defaultSpeed = speed;
+            if (isDash)
+            {
+                dashTime = defaultTime;
+            }
+        }
+        else
+        {
+            //그 외에는 dashtime을 매프레임 delftatime만큼 빼주기....왜? 
+            dashTime -= Time.deltaTime;
+            defaultSpeed = dashSpeed;
+        }
+        isDash = false;
+    }
 
 
 

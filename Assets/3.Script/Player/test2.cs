@@ -2,26 +2,51 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class test2 : MonoBehaviour //Hookshot(Hook)
+public class test2 : MonoBehaviour //dash ...첨부터 써보자
 {
-    [SerializeField] PlayerHookShot grapping;
-    [SerializeField] public DistanceJoint2D joint2D;
+    Rigidbody2D rgd;
+
+    float defaultSpeed; 
+    public float speed; //<=> moveSpeed 변수 대체(기존 player speed) 
+    public float dashSpeed;
+    public float defaultTime;//기본 시간
+    float dashTime; //dash 시간
+
+
+    bool isDash;
 
     private void Start()
     {
-        //grapping은 "Player" 태그가 붙은 GameObject를 찾아서 거기에 붙은 test 컴포넌트를 가져오다는 뜻
-        //직접 변수를 할당해줘도 괜춘함
-        //grapping = GameObject.Find("Player").GetComponent<test>();
-        //joint2D = GetComponent<DistanceJoint2D>();
+        defaultSpeed = speed; //왜...? 그냥 speed 지정해주면 안돼?
+        rgd = GetComponent<Rigidbody2D>();
     }
 
-    private void OnTriggerEnter2D(Collider2D collision)
+    private void FixedUpdate()
     {
-        if (collision.CompareTag("GrabPlatform"))
-        {
-            joint2D.enabled = true;
-            grapping.isAttach = true;
-        }
-    }
+        float hor = Input.GetAxis("Horizontal");
+        rgd.velocity = new Vector2(hor * defaultSpeed, rgd.velocity.y);
 
+        if (Input.GetKeyDown(KeyCode.LeftShift))
+        {
+            isDash = true;
+        }
+
+        if(dashTime <= 0)
+        {
+            //dashtime이 0보다 작을 때 쉬프트가 눌리면 dashtime을 defaulttime으로 초기화
+            defaultSpeed = speed;
+            if (isDash)
+            {
+                dashTime = defaultTime;
+            }
+        }
+        else
+        {
+            //그 외에는 dashtime을 매프레임 delftatime만큼 빼주기....왜? 
+            dashTime -= Time.deltaTime;
+            defaultSpeed = dashSpeed;
+        }
+        isDash = false;
+
+    }
 }
