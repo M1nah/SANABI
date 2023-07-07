@@ -5,8 +5,9 @@ using UnityEngine;
 public class test : MonoBehaviour //playerController에 dash 기능 추가중 
 {
     public PlayerInput playerInput;
-    [SerializeField] Rigidbody2D rigid; 
-    SpriteRenderer spriteRenderer;
+    public PlayerHookShot hookShot;
+    [SerializeField] public Rigidbody2D rigid; //물리 이동을 위한 변수 선언
+    SpriteRenderer spriteRenderer; //방향전환을 위한 변수
 
     //move
     [Header("Move")]
@@ -19,6 +20,7 @@ public class test : MonoBehaviour //playerController에 dash 기능 추가중
     int jumpCount = 0;
 
     bool isJump = false;
+    bool isGround = false; //점프하고 바닥에 닿았는지 체크 ->이거 없애도 되겠다.. 이유: 이미 Tag로 체크하고있음
 
     //Climing && Slide
     [Header("Climing && Slide")]
@@ -27,7 +29,7 @@ public class test : MonoBehaviour //playerController에 dash 기능 추가중
     [SerializeField] float wallChkDistance;
 
     [SerializeField] LayerMask wallLayer;
-    float isRight = 1f;
+    float isRight = 1f; //바라보는 방향 1= right , -1 = Left => 이거 없으니까 레이캐스트가 안나감
 
     bool isWall;
     bool isWallStay = false;
@@ -38,15 +40,16 @@ public class test : MonoBehaviour //playerController에 dash 기능 추가중
     Animator playerAni;
     Animator armAni;
 
+    /////////////////////////
 
-
+    /////////////////////////
     [Header("Dash Speed")]
-    PlayerHookShot hookShot;
+    public float dashForce;
+    public float startDashTime;
+    float currentDashTime;
+    float dashDirection=1f;
 
-    bool isDash;
-    float dashSpd = 7f; // dash 스피드
-    float defaultTime;
-    float dashTime;
+    bool isDashing;
 
 
     private void Awake()
@@ -58,6 +61,8 @@ public class test : MonoBehaviour //playerController에 dash 기능 추가중
         playerAni = GetComponent<Animator>();
         armAni = Arm.GetComponent<Animator>();
 
+
+        //dash
         hookShot = GetComponent<PlayerHookShot>();
     }
 
@@ -91,6 +96,13 @@ public class test : MonoBehaviour //playerController에 dash 기능 추가중
             armAni.SetBool("ArmIsJumping", false);
         }
 
+
+        //dash
+        if (Input.GetKeyDown(KeyCode.LeftShift) )
+        {
+            Dash();
+        }
+
     }
 
     private void FixedUpdate()
@@ -113,13 +125,6 @@ public class test : MonoBehaviour //playerController에 dash 기능 추가중
                 armAni.SetBool("ArmIsWallClimbUp", false);
                 Debug.Log("climb 끝"); //안들어가짐 
             }
-        }
-
-
-        //dash => 공중에 매달릴 때만 써야함
-        if (Input.GetKeyDown(KeyCode.LeftShift) && hookShot.isHookActive)
-        {
-            isDash = true;
         }
 
     }
@@ -168,11 +173,43 @@ public class test : MonoBehaviour //playerController에 dash 기능 추가중
     {
         if (jumpCount < 1)
         {
+            isGround = true;
             jumpCount++;
             rigid.AddForce(Vector2.up * jump, ForceMode2D.Impulse);
             isJump = true;
         }
     }
+
+
+    private void Dash()
+    {
+        //LeftShift를 누른 상태에서 hookshot isAttach가 true라면(hook가 grabPlatform에 붙었다면)
+
+        isDashing = true; //dash 상태는 true
+        currentDashTime = startDashTime; // 지금 시간은 누른 시간과 같게 
+        rigid.velocity = Vector2.zero; //rigid의 Vector방향은 zero
+        dashDirection = Input.GetAxisRaw("Horizontal"); //dash 방향은 input.Horizontal 방향
+        
+        if (isDashing && hookShot.isAttach && hookShot.isHookActive) //만약 dash중이고 hookshot이 true라면 Speed++;
+        {
+            rigid.velocity = transform.position * dashDirection * dashForce;
+            currentDashTime -= Time.deltaTime;
+            Debug.Log("currentDashTime" + currentDashTime); //잘 들어가지는데 뭐가 문제지 
+
+            if (currentDashTime <= 0)
+            {
+                isDashing = false;
+            }
+        }
+        /*
+        GrabHook가 GrabPlatform에 닿아있을 때
+        player는 Left Shift를 눌러 dash 사용 
+        해당 input 키 방향으로 일정한 power를 적용한다
+
+        한번 누르고 나면 5초간 재사용x
+        */
+    }
+
 
     private void Climb_Ray()
     {
@@ -194,6 +231,7 @@ public class test : MonoBehaviour //playerController에 dash 기능 추가중
     {
         if (collision.gameObject.CompareTag("Platform"))
         {
+            isGround = true;
             isJump = false;
             jumpCount = 0;
             Debug.Log("jump reset"); //점프 리셋이 전혀 안되는디
@@ -234,3 +272,4 @@ public class test : MonoBehaviour //playerController에 dash 기능 추가중
         }
     }
 }
+

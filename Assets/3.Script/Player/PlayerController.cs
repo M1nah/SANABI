@@ -5,7 +5,7 @@ using UnityEngine;
 public class PlayerController : MonoBehaviour
 {
     public PlayerInput playerInput;
-    [SerializeField] Rigidbody2D rigid; //물리 이동을 위한 변수 선언
+    [SerializeField] public Rigidbody2D rigid; //물리 이동을 위한 변수 선언
     SpriteRenderer spriteRenderer; //방향전환을 위한 변수
 
     //move

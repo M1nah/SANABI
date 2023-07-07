@@ -15,4 +15,6 @@ public class Hook : MonoBehaviour
             hookShot.isAttach = true;
         }
     }
+
+
 }

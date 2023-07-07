@@ -14,6 +14,7 @@ public class PlayerHookShot : MonoBehaviour
     public bool isLineMax;
     public bool isAttach; // 이 변수가 참일 때 platform에 붙는다 linemax가 발동 안함 
 
+
     private void Start()
     {
         line.positionCount = 2;
@@ -75,6 +76,7 @@ public class PlayerHookShot : MonoBehaviour
         }
         else if (isAttach) //platform에서 후크가 떨어질 때 모든 bool 변수가 비활성화
         {
+
             if (Input.GetMouseButtonUp(0))
             {
                 isAttach = false;
@@ -83,7 +85,12 @@ public class PlayerHookShot : MonoBehaviour
                 GrabHook.GetComponent<Hook>().joint2D.enabled = false;
                 GrabHook.SetActive(false);
             }
+
         }
     }
+
+
+
+
 
 }
