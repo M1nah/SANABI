@@ -23,12 +23,17 @@ public class IntroButton : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+
     }
 
     private void PeassStartBtn()
     {
-    
+        levelpanel.SetActive(true);
+
+        if(levelpanel == true)
+        {
+            //StartButton(string start);
+        }
     }
 
 }

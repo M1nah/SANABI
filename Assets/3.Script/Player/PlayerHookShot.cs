@@ -15,9 +15,9 @@ public class PlayerHookShot : MonoBehaviour //hookshot && dash
     public bool isAttach; // 이 변수가 참일 때 platform에 붙는다 linemax가 발동 안함 
 
 
-
     //dash
-    Rigidbody2D rgd;
+    PlayerController playerController;
+    PlayerInput playerInput;
 
     float defaultSpeed;
     public float speed; //<=> moveSpeed 변수 대체(기존 player speed) 
@@ -25,7 +25,8 @@ public class PlayerHookShot : MonoBehaviour //hookshot && dash
     public float defaultTime;//기본 시간
     float dashTime; //dash 시간
 
-    bool isDash;
+    bool isDash; //dash 상태
+    bool isCanDash; //grabplatform에 닿아있는 상태
 
     private void Start()
     {
@@ -43,7 +44,8 @@ public class PlayerHookShot : MonoBehaviour //hookshot && dash
 
         //dash
         defaultSpeed = speed; //왜...? 그냥 speed 지정해주면 안돼?
-        rgd = GetComponent<Rigidbody2D>();
+        playerController = GetComponent <PlayerController>();
+        playerInput = GetComponent<PlayerInput>();
 
     }
 
@@ -110,7 +112,7 @@ public class PlayerHookShot : MonoBehaviour //hookshot && dash
 
     private void FixedUpdate()
     {
-        if (isHookActive && !isLineMax && !isAttach)
+        if (isAttach && isCanDash)
         {
             Dash();
         }
@@ -120,30 +122,44 @@ public class PlayerHookShot : MonoBehaviour //hookshot && dash
     {
         Debug.Log("Dash activate");
         float hor = Input.GetAxis("Horizontal");
-        rgd.velocity = new Vector2(hor * defaultSpeed, rgd.velocity.y);
+        playerController.rigid.velocity = new Vector2(hor * defaultSpeed, playerController.rigid.velocity.y);
 
-        if (Input.GetKeyDown(KeyCode.LeftShift))
+        if ( playerInput.isMoveLeft || playerInput.isMoveRight)
         {
-            isDash = true;
-        }
-        if (dashTime <= 0)
-        {
-            //dashtime이 0보다 작을 때 쉬프트가 눌리면 dashtime을 defaulttime으로 초기화
-            defaultSpeed = speed;
-            if (isDash)
+            if (Input.GetKeyDown(KeyCode.LeftShift))
             {
-                dashTime = defaultTime;
+                isDash = true;
             }
-        }
-        else
-        {
-            //그 외에는 dashtime을 매프레임 delftatime만큼 빼주기....왜? 
-            dashTime -= Time.deltaTime;
-            defaultSpeed = dashSpeed;
+            if (dashTime <= 0)
+            {
+                //dashtime이 0보다 작을 때 쉬프트가 눌리면 dashtime을 defaulttime으로 초기화
+                defaultSpeed = speed;
+                if (isDash)
+                {
+                    dashTime = defaultTime;
+                    playerController.rigid.gravityScale = 1f;
+                    Debug.Log("중력 1");
+                
+                }
+            }
+            else
+            {
+                //그 외에는 dashtime을 매프레임 delftatime만큼 빼주기....왜? 
+                dashTime -= Time.deltaTime;
+                defaultSpeed = dashSpeed;
+                playerController.rigid.gravityScale = 3f;
+                    Debug.Log("중력 3");
+            }
         }
         isDash = false;
     }
 
 
-
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (collision.gameObject.CompareTag("GrabPlatform"))
+        {
+            isCanDash = true;
+        }
+    }
 }
