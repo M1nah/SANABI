@@ -73,7 +73,7 @@ public class PlayerHookShot : MonoBehaviour //hookshot && dash
 
         if (isHookActive && !isLineMax && !isAttach) //isHookActive가 참이고 lineMax가 거짓일 때만 후크가 날아가게끔 하기
         {
-            hook.Translate(mouseDirection.normalized * Time.deltaTime * 8);
+            hook.Translate(mouseDirection.normalized * Time.deltaTime * 10);
 
 
             if (Vector2.Distance(transform.position, hook.position) > 2) //Distance(a,b)=> a에서 b까지의 거리구하기함수
@@ -84,7 +84,7 @@ public class PlayerHookShot : MonoBehaviour //hookshot && dash
         }
         else if (isHookActive && isLineMax && !isAttach)
         { //마우스 버튼을 떼고 isHookActive가 참이고 line이 최고지점에 도달했을 때(isLineMax가 참일때) 후크가 돌아옴
-            hook.position = Vector2.MoveTowards(hook.position, transform.position, Time.deltaTime * 8);
+            hook.position = Vector2.MoveTowards(hook.position, transform.position, Time.deltaTime * 10);
 
             if (Vector2.Distance(transform.position, hook.position) < 0.1f)
             { //hook와 player의 간격이 0.1보다 작아지면 isHookActive와 isLineMax를 비활성화 => 고리가 움직이지 않게 한다 
@@ -112,7 +112,7 @@ public class PlayerHookShot : MonoBehaviour //hookshot && dash
 
     private void FixedUpdate()
     {
-        if (isAttach && isCanDash)
+        if (!isAttach && isCanDash)
         {
             Dash();
         }
@@ -122,7 +122,8 @@ public class PlayerHookShot : MonoBehaviour //hookshot && dash
     {
         Debug.Log("Dash activate");
         float hor = Input.GetAxis("Horizontal");
-        playerController.rigid.velocity = new Vector2(hor * defaultSpeed, playerController.rigid.velocity.y);
+        playerController.rigid.AddForce(Vector2.up * defaultSpeed, ForceMode2D.Impulse);
+        //playerController.rigid.velocity = new Vector2(hor * defaultSpeed, playerController.rigid.velocity.y);
 
         if ( playerInput.isMoveLeft || playerInput.isMoveRight)
         {
@@ -137,8 +138,6 @@ public class PlayerHookShot : MonoBehaviour //hookshot && dash
                 if (isDash)
                 {
                     dashTime = defaultTime;
-                    playerController.rigid.gravityScale = 1f;
-                    Debug.Log("중력 1");
                 
                 }
             }
@@ -147,8 +146,6 @@ public class PlayerHookShot : MonoBehaviour //hookshot && dash
                 //그 외에는 dashtime을 매프레임 delftatime만큼 빼주기....왜? 
                 dashTime -= Time.deltaTime;
                 defaultSpeed = dashSpeed;
-                playerController.rigid.gravityScale = 3f;
-                    Debug.Log("중력 3");
             }
         }
         isDash = false;

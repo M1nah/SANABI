@@ -4,10 +4,15 @@ using UnityEngine;
 
 public class test2 : MonoBehaviour //dash ...첨부터 써보자
 {
+
+    PlayerHookShot hookShot;
+    PlayerController playerController;
+    PlayerInput playerInput;
+
     Rigidbody2D rgd;
 
     float defaultSpeed; 
-    public float speed; //<=> moveSpeed 변수 대체(기존 player speed) 
+    public float speed; //<=> moveSpeed 변수 대체(기본 player speed) 
     public float dashSpeed;
     public float defaultTime;//기본 시간
     float dashTime; //dash 시간
@@ -17,6 +22,10 @@ public class test2 : MonoBehaviour //dash ...첨부터 써보자
 
     private void Start()
     {
+
+        hookShot = GetComponent<PlayerHookShot>();
+        playerController = GetComponent<PlayerController>();
+        playerInput = GetComponent<PlayerInput>();
         defaultSpeed = speed; //왜...? 그냥 speed 지정해주면 안돼?
         rgd = GetComponent<Rigidbody2D>();
     }
