@@ -14,14 +14,5 @@ public class Hook : MonoBehaviour
             joint2D.enabled = true;
             hookShot.isAttach = true;
         }
-
-        if (collision.CompareTag("Enemy"))
-        {
-            joint2D.enabled = false;
-            hookShot.isAttach = false;
-        }
-
     }
-
-
 }

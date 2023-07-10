@@ -13,12 +13,11 @@ public class PlayerAttack : MonoBehaviour //후크에 스크립트 다는게 좋겠음
     [SerializeField] GameObject player;
     [SerializeField] float atkSpeed;
 
-    float hitCount;
-    float enemyHP = 3;
+    public float hitCount;
 
 
-    bool findEnemy;
-    bool isAtk;
+    public bool findEnemy;
+    public bool isAtk;
 
     private void Awake()
     {
@@ -41,8 +40,17 @@ public class PlayerAttack : MonoBehaviour //후크에 스크립트 다는게 좋겠음
                     //gravityScale을 바꿨더니 오류 발생.. 
                     hitCount++;
                     //hookShot.enabled = false;
-                    Attack();
                     Debug.Log("Enemy 클릭");
+                    
+                
+                    /*
+                    1. enemy Object를 검출했을 때 hook와 line 모두 비활성화
+                    2. 
+                     
+                     
+                    */
+
+
                 }
             }
             else if(Input.GetMouseButtonUp(0) && hitCount>=1)
@@ -57,32 +65,12 @@ public class PlayerAttack : MonoBehaviour //후크에 스크립트 다는게 좋겠음
     {
         if(findEnemy && hitCount >= 1)
         {
+
             //using animation
 
         }
     }
 
-
-    private void Enemy()
-    {
-        for(int i=0; i<enemyHP; i++)
-        {
-            enemyHP--;
-            if (hitCount <= 0) //맞기
-            {
-                
-            }
-            else
-            {
-
-            }
-        }
-
-        if(enemyHP == 0) //죽음
-        {
-
-        }
-    }
 
     private void OnTriggerEnter2D(Collider2D collision)
     {

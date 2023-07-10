@@ -41,7 +41,6 @@ public class PlayerHookShot : MonoBehaviour //hookshot && dash
 
         isAttach = false;
 
-
         //dash
         defaultSpeed = speed; //왜...? 그냥 speed 지정해주면 안돼?
         playerController = GetComponent <PlayerController>();
@@ -138,7 +137,6 @@ public class PlayerHookShot : MonoBehaviour //hookshot && dash
                 if (isDash)
                 {
                     dashTime = defaultTime;
-                
                 }
             }
             else
