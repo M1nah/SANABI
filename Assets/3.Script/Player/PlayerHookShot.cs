@@ -12,24 +12,26 @@ public class PlayerHookShot : MonoBehaviour //hookshot && dash
 
     public bool isHookActive; //마우스 버튼이 눌렸을 때 참으로 바꿔주는 변수
     public bool isLineMax;
-    public bool isAttach; // 이 변수가 참일 때 platform에 붙는다 linemax가 발동 안함 
+    public bool isAttach = false; // 이 변수가 참일 때 platform에 붙는다 linemax가 발동 안함 
 
 
     //dash
     PlayerController playerController;
+    PlayerInput playerInput;
 
     public float speed; //<=> moveSpeed 변수 대체(기존 player speed) 
     public float dashSpeed;
     public float defaultTime;//기본 시간
     float dashTime; //dash 시간
 
-    bool isDash; //dash 상태
+    bool isDash = false; //dash 상태
 
 
     private void Awake()
     {
         //dash
         playerController = GetComponent<PlayerController>();
+        playerInput = GetComponent<PlayerInput>();
     }
 
     private void Start()
@@ -42,8 +44,6 @@ public class PlayerHookShot : MonoBehaviour //hookshot && dash
         line.useWorldSpace = true;
         //↑라인렌더러가 추가되어있는 오브젝트의 위치와 상관없이
         //월드 좌표를 기준으로 화면에 라인이 그려지게 됨
-
-        isAttach = false;
     }
 
     private void Update()
@@ -99,6 +99,7 @@ public class PlayerHookShot : MonoBehaviour //hookshot && dash
                 isAttach = false;
                 isHookActive = false;
                 isLineMax = false;
+                isDash = false;
                 GrabHook.GetComponent<Hook>().joint2D.enabled = false;
                 GrabHook.SetActive(false);
             }
@@ -117,15 +118,24 @@ public class PlayerHookShot : MonoBehaviour //hookshot && dash
     }
     private void Dash()
     {
-        float hor = Input.GetAxis("Horizontal");
-        playerController.rigid.velocity = new Vector2(hor * speed, playerController.rigid.velocity.y);
+        
         
         if (Input.GetKeyDown(KeyCode.LeftShift)) //여기에 안들어가짐...input키 자체가 안먹히는데? ㅇ왜? 
         {
-            //Dash를 사용한 이후 바로 platform에서 hook가 떼어져야함... 코루틴을 돌리는게 편할까... 
             isDash = true;
+            //float hor = Input.GetAxis("Horizontal");
+            if (playerInput.isMoveRight)
+            {
+            playerController.rigid.velocity = new Vector2(1 * speed, playerController.rigid.velocity.y);
+            }
+
+            if (playerInput.isMoveLeft)
+            {
+            playerController.rigid.velocity = new Vector2(-1 * speed, playerController.rigid.velocity.y);
+            }
             Debug.Log("Dash2"); 
-        if ( dashTime <= 0)
+        }
+        if (dashTime <= 0)
         {
             //dashtime이 0보다 작을 때 쉬프트가 눌리면 dashtime을 defaulttime으로 초기화
             Debug.Log("Dash3");
@@ -135,7 +145,7 @@ public class PlayerHookShot : MonoBehaviour //hookshot && dash
                 Debug.Log("Dash4");
             }
         }
-        }
+
         else
         {
             //그 외에는 dashtime을 매프레임 delftatime만큼 빼주기....왜? 
@@ -143,7 +153,7 @@ public class PlayerHookShot : MonoBehaviour //hookshot && dash
             speed = dashSpeed;
             Debug.Log("Dash5"); 
         }
-        isDash = false;
+        //isDash = false;
     }
 
 

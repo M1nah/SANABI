@@ -1306,7 +1306,7 @@ MonoBehaviour:
   isAttach: 0
   speed: 4
   dashSpeed: 10
-  defaultTime: 0.2
+  defaultTime: 1
 --- !u!114 &886325595
 MonoBehaviour:
   m_ObjectHideFlags: 0
