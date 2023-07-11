@@ -17,16 +17,20 @@ public class PlayerHookShot : MonoBehaviour //hookshot && dash
 
     //dash
     PlayerController playerController;
-    PlayerInput playerInput;
 
-    float defaultSpeed;
     public float speed; //<=> moveSpeed 변수 대체(기존 player speed) 
     public float dashSpeed;
     public float defaultTime;//기본 시간
     float dashTime; //dash 시간
 
     bool isDash; //dash 상태
-    bool isCanDash; //grabplatform에 닿아있는 상태
+
+
+    private void Awake()
+    {
+        //dash
+        playerController = GetComponent<PlayerController>();
+    }
 
     private void Start()
     {
@@ -40,12 +44,6 @@ public class PlayerHookShot : MonoBehaviour //hookshot && dash
         //월드 좌표를 기준으로 화면에 라인이 그려지게 됨
 
         isAttach = false;
-
-        //dash
-        defaultSpeed = speed; //왜...? 그냥 speed 지정해주면 안돼?
-        playerController = GetComponent <PlayerController>();
-        playerInput = GetComponent<PlayerInput>();
-
     }
 
     private void Update()
@@ -72,7 +70,7 @@ public class PlayerHookShot : MonoBehaviour //hookshot && dash
 
         if (isHookActive && !isLineMax && !isAttach) //isHookActive가 참이고 lineMax가 거짓일 때만 후크가 날아가게끔 하기
         {
-            hook.Translate(mouseDirection.normalized * Time.deltaTime * 10);
+            hook.Translate(mouseDirection.normalized * Time.deltaTime * 12);
 
 
             if (Vector2.Distance(transform.position, hook.position) > 2) //Distance(a,b)=> a에서 b까지의 거리구하기함수
@@ -83,7 +81,7 @@ public class PlayerHookShot : MonoBehaviour //hookshot && dash
         }
         else if (isHookActive && isLineMax && !isAttach)
         { //마우스 버튼을 떼고 isHookActive가 참이고 line이 최고지점에 도달했을 때(isLineMax가 참일때) 후크가 돌아옴
-            hook.position = Vector2.MoveTowards(hook.position, transform.position, Time.deltaTime * 10);
+            hook.position = Vector2.MoveTowards(hook.position, transform.position, Time.deltaTime * 12);
 
             if (Vector2.Distance(transform.position, hook.position) < 0.1f)
             { //hook와 player의 간격이 0.1보다 작아지면 isHookActive와 isLineMax를 비활성화 => 고리가 움직이지 않게 한다 
@@ -109,52 +107,63 @@ public class PlayerHookShot : MonoBehaviour //hookshot && dash
     }
 
 
-    private void FixedUpdate()
+    private void FixedUpdate() //한번만 실행해야하는 물리변수는 FixedUpdate에 써주는게 효율적임
     {
-        if (!isAttach && isCanDash)
+        if (isAttach) //
         {
             Dash();
+            Debug.Log("Dash1");
         }
     }
-
     private void Dash()
     {
-        Debug.Log("Dash activate");
         float hor = Input.GetAxis("Horizontal");
-        playerController.rigid.AddForce(Vector2.up * defaultSpeed, ForceMode2D.Impulse);
-        //playerController.rigid.velocity = new Vector2(hor * defaultSpeed, playerController.rigid.velocity.y);
-
-        if ( playerInput.isMoveLeft || playerInput.isMoveRight)
+        playerController.rigid.velocity = new Vector2(hor * speed, playerController.rigid.velocity.y);
+        
+        if (Input.GetKeyDown(KeyCode.LeftShift)) //여기에 안들어가짐...input키 자체가 안먹히는데? ㅇ왜? 
         {
-            if (Input.GetKeyDown(KeyCode.LeftShift))
+            //Dash를 사용한 이후 바로 platform에서 hook가 떼어져야함... 코루틴을 돌리는게 편할까... 
+            isDash = true;
+            Debug.Log("Dash2"); 
+        if ( dashTime <= 0)
+        {
+            //dashtime이 0보다 작을 때 쉬프트가 눌리면 dashtime을 defaulttime으로 초기화
+            Debug.Log("Dash3");
+            if (isDash)
             {
-                isDash = true;
+                dashTime = defaultTime;
+                Debug.Log("Dash4");
             }
-            if (dashTime <= 0)
-            {
-                //dashtime이 0보다 작을 때 쉬프트가 눌리면 dashtime을 defaulttime으로 초기화
-                defaultSpeed = speed;
-                if (isDash)
-                {
-                    dashTime = defaultTime;
-                }
-            }
-            else
-            {
-                //그 외에는 dashtime을 매프레임 delftatime만큼 빼주기....왜? 
-                dashTime -= Time.deltaTime;
-                defaultSpeed = dashSpeed;
-            }
+        }
+        }
+        else
+        {
+            //그 외에는 dashtime을 매프레임 delftatime만큼 빼주기....왜? 
+            dashTime -= Time.deltaTime;
+            speed = dashSpeed;
+            Debug.Log("Dash5"); 
         }
         isDash = false;
     }
 
 
-    private void OnCollisionEnter2D(Collision2D collision)
-    {
-        if (collision.gameObject.CompareTag("GrabPlatform"))
-        {
-            isCanDash = true;
-        }
-    }
+
+    //IEnumerator Dash_Co()
+    //{
+    //    isDash = true;
+    //
+    //    if(dashTime <= 0)
+    //    {
+    //        if (isDash)
+    //        {
+    //            dashTime = defaultTime;
+    //        }
+    //    }
+    //    else
+    //    {
+    //
+    //    }
+    //
+    //}
+
 }
