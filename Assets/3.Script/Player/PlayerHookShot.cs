@@ -26,6 +26,11 @@ public class PlayerHookShot : MonoBehaviour //hookshot && dash
 
     bool isDash = false; //dash 상태
 
+    public Animator ani;
+
+    //DashGhost
+    public DastGhost ghost;
+
 
     private void Awake()
     {
@@ -111,55 +116,26 @@ public class PlayerHookShot : MonoBehaviour //hookshot && dash
     {
         if (isAttach)
         {
-            StartCoroutine("Dash_Co");
+            Dash();
+            //StartCoroutine("Dash_Co");
             //platform에서 hook가 떨어지게 만들기 
         }
        
     }
 
 
-    private IEnumerator Dash_Co()
-    {
-    if (Input.GetKeyDown(KeyCode.LeftShift))
-    {
-        isDash = true;
-        ////float hor = Input.GetAxis("Horizontal"); //쓰지 않는 이유는 좌우키를 누르고 있을때마다 Dash가 되기 때문에 ! 
-        //float hor = Input.GetAxisRaw("Horizontal"); //그래서 즉각적인 반응이 있는 GetAxisRaw를 썼는데 외 안나와...
-        playerController.rigid.velocity = new Vector2(1 * speed, playerController.rigid.velocity.y);
-        Debug.Log("Shift누름");
-        //되긴 되는데... 방향전환 bool값을 걸어야할까
-    }
-        if (dashTime <= 0)
-        {
-            //dashtime이 0보다 작을 때 쉬프트가 눌리면 dashtime을 defaulttime으로 초기화...왜?
-            if (isDash)
-            {
-                dashTime = defaultTime;
-            }
-        }
-        else
-        {
-            //그 외에는 dashtime을 매프레임 delftatime만큼 빼주기....왜...? 곰돌선생 왜 설명을 안해주세요..?
-            dashTime -= Time.deltaTime;
-            speed = dashSpeed;
-        }
-
-        yield return new WaitForSeconds(3f);
-    }
-
-    //private void Dash()
+    //private IEnumerator Dash_Co()
     //{
-    //    if (Input.GetKeyDown(KeyCode.LeftShift))
-    //    {
-    //        isDash = true;
-    //
-    //        ////float hor = Input.GetAxis("Horizontal"); //쓰지 않는 이유는 좌우키를 누르고 있을때마다 Dash가 되기 때문에 ! 
-    //        //float hor = Input.GetAxisRaw("Horizontal"); //그래서 즉각적인 반응이 있는 GetAxisRaw를 썼는데 외 안나와...
-    //        playerController.rigid.velocity = new Vector2(1 * speed, playerController.rigid.velocity.y);
-    //        Debug.Log("Shift누름"); 
-    //        //되긴 되는데... 방향전환 bool값을 걸어야할까
-    //    }
-    //
+    //if (Input.GetKeyDown(KeyCode.LeftShift))
+    //{
+    //    ghost.makeGhost = true;
+    //    isDash = true;
+    //    ////float hor = Input.GetAxis("Horizontal"); //쓰지 않는 이유는 좌우키를 누르고 있을때마다 Dash가 되기 때문에 ! 
+    //    //float hor = Input.GetAxisRaw("Horizontal"); //그래서 즉각적인 반응이 있는 GetAxisRaw를 썼는데 외 안나와...
+    //    playerController.rigid.velocity = new Vector2(1 * speed, playerController.rigid.velocity.y);
+    //    Debug.Log("Shift누름");
+    //    //되긴 되는데... 방향전환 bool값을 걸어야할까
+    //}
     //    if (dashTime <= 0)
     //    {
     //        //dashtime이 0보다 작을 때 쉬프트가 눌리면 dashtime을 defaulttime으로 초기화...왜?
@@ -170,11 +146,46 @@ public class PlayerHookShot : MonoBehaviour //hookshot && dash
     //    }
     //    else
     //    {
+    //        ghost.makeGhost = false;
     //        //그 외에는 dashtime을 매프레임 delftatime만큼 빼주기....왜...? 곰돌선생 왜 설명을 안해주세요..?
     //        dashTime -= Time.deltaTime;
     //        speed = dashSpeed;
     //    }
+    //
+    //    yield return new WaitForSeconds(3f);
     //}
+
+    private void Dash()
+    {
+        if (Input.GetKeyDown(KeyCode.LeftShift))
+        {
+            isDash = true;
+            ghost.makeGhost = true;
+            //makeGhost ... 위치찾기
+            ////float hor = Input.GetAxis("Horizontal"); //쓰지 않는 이유는 좌우키를 누르고 있을때마다 Dash가 되기 때문에 ! 
+            //float hor = Input.GetAxisRaw("Horizontal"); //그래서 즉각적인 반응이 있는 GetAxisRaw를 썼는데 외 안나와...
+            playerController.rigid.velocity = new Vector2(1 * speed, playerController.rigid.velocity.y);
+            Debug.Log("Shift누름");
+            //되긴 되는데... 방향전환 bool값을 걸어야할까
+            //https://youtu.be/y982Gb00dho
+        }
+
+        if (dashTime <= 0)
+        {
+            //dashtime이 0보다 작을 때 쉬프트가 눌리면 dashtime을 defaulttime으로 초기화...왜?
+            if (isDash)
+            {
+                dashTime = defaultTime;
+            }
+        }
+        else
+        {
+            ghost.makeGhost = false;
+            //그 외에는 dashtime을 매프레임 delftatime만큼 빼주기....왜...? 곰돌선생 왜 설명을 안해주세요..?
+            dashTime -= Time.deltaTime;
+            speed = dashSpeed;
+        }
+    }
 
 
 }
