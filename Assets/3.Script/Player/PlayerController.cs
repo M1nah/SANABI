@@ -10,7 +10,7 @@ public class PlayerController : MonoBehaviour
 
     //move
     [Header("Move")]
-    [SerializeField] float moveSpeed;
+    [SerializeField] public float moveSpeed;
     [SerializeField] float maxSpeed;
 
     //jump

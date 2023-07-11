@@ -103,67 +103,66 @@ public class PlayerHookShot : MonoBehaviour //hookshot && dash
                 GrabHook.GetComponent<Hook>().joint2D.enabled = false;
                 GrabHook.SetActive(false);
             }
-
         }
     }
 
 
     private void FixedUpdate() //한번만 실행해야하는 물리변수는 FixedUpdate에 써주는게 효율적임
     {
-        if (isAttach) //
+        if (isAttach)
         {
-            Dash();
-            Debug.Log("Dash1");
+            StartCoroutine("Dash_Co");
+            //platform에서 hook가 떨어지게 만들기 
         }
+       
     }
-    private void Dash()
-    {
-        
-        
-        if (Input.GetKeyDown(KeyCode.LeftShift)) //여기에 안들어가짐...input키 자체가 안먹히는데? ㅇ왜? 
-        {
-            isDash = true;
-            //float hor = Input.GetAxis("Horizontal");
-            if (playerInput.isMoveRight)
-            {
-            playerController.rigid.velocity = new Vector2(1 * speed, playerController.rigid.velocity.y);
-            }
 
-            if (playerInput.isMoveLeft)
-            {
-            playerController.rigid.velocity = new Vector2(-1 * speed, playerController.rigid.velocity.y);
-            }
-            Debug.Log("Dash2"); 
-        }
+
+    private IEnumerator Dash_Co()
+    {
+    if (Input.GetKeyDown(KeyCode.LeftShift))
+    {
+        isDash = true;
+        ////float hor = Input.GetAxis("Horizontal"); //쓰지 않는 이유는 좌우키를 누르고 있을때마다 Dash가 되기 때문에 ! 
+        //float hor = Input.GetAxisRaw("Horizontal"); //그래서 즉각적인 반응이 있는 GetAxisRaw를 썼는데 외 안나와...
+        playerController.rigid.velocity = new Vector2(1 * speed, playerController.rigid.velocity.y);
+        Debug.Log("Shift누름");
+        //되긴 되는데... 방향전환 bool값을 걸어야할까
+    }
         if (dashTime <= 0)
         {
-            //dashtime이 0보다 작을 때 쉬프트가 눌리면 dashtime을 defaulttime으로 초기화
-            Debug.Log("Dash3");
+            //dashtime이 0보다 작을 때 쉬프트가 눌리면 dashtime을 defaulttime으로 초기화...왜?
             if (isDash)
             {
                 dashTime = defaultTime;
-                Debug.Log("Dash4");
             }
         }
-
         else
         {
-            //그 외에는 dashtime을 매프레임 delftatime만큼 빼주기....왜? 
+            //그 외에는 dashtime을 매프레임 delftatime만큼 빼주기....왜...? 곰돌선생 왜 설명을 안해주세요..?
             dashTime -= Time.deltaTime;
             speed = dashSpeed;
-            Debug.Log("Dash5"); 
         }
-        //isDash = false;
+
+        yield return new WaitForSeconds(3f);
     }
 
-
-
-    //IEnumerator Dash_Co()
+    //private void Dash()
     //{
-    //    isDash = true;
-    //
-    //    if(dashTime <= 0)
+    //    if (Input.GetKeyDown(KeyCode.LeftShift))
     //    {
+    //        isDash = true;
+    //
+    //        ////float hor = Input.GetAxis("Horizontal"); //쓰지 않는 이유는 좌우키를 누르고 있을때마다 Dash가 되기 때문에 ! 
+    //        //float hor = Input.GetAxisRaw("Horizontal"); //그래서 즉각적인 반응이 있는 GetAxisRaw를 썼는데 외 안나와...
+    //        playerController.rigid.velocity = new Vector2(1 * speed, playerController.rigid.velocity.y);
+    //        Debug.Log("Shift누름"); 
+    //        //되긴 되는데... 방향전환 bool값을 걸어야할까
+    //    }
+    //
+    //    if (dashTime <= 0)
+    //    {
+    //        //dashtime이 0보다 작을 때 쉬프트가 눌리면 dashtime을 defaulttime으로 초기화...왜?
     //        if (isDash)
     //        {
     //            dashTime = defaultTime;
@@ -171,9 +170,11 @@ public class PlayerHookShot : MonoBehaviour //hookshot && dash
     //    }
     //    else
     //    {
-    //
+    //        //그 외에는 dashtime을 매프레임 delftatime만큼 빼주기....왜...? 곰돌선생 왜 설명을 안해주세요..?
+    //        dashTime -= Time.deltaTime;
+    //        speed = dashSpeed;
     //    }
-    //
     //}
+
 
 }

@@ -1304,9 +1304,9 @@ MonoBehaviour:
   isHookActive: 0
   isLineMax: 0
   isAttach: 0
-  speed: 4
-  dashSpeed: 10
-  defaultTime: 1
+  speed: 3
+  dashSpeed: 20
+  defaultTime: 2
 --- !u!114 &886325595
 MonoBehaviour:
   m_ObjectHideFlags: 0
