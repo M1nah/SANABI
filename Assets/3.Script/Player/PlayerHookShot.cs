@@ -7,6 +7,7 @@ public class PlayerHookShot : MonoBehaviour //hookshot && dash
     [SerializeField] GameObject GrabHook;
     public Transform hook;
     public LineRenderer line;
+    public LineRenderer guideline;
 
     Vector2 mouseDirection; //마우스 커서 위치
 
