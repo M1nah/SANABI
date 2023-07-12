@@ -19,12 +19,14 @@ public class PlayerHookShot : MonoBehaviour //hookshot && dash
     PlayerController playerController;
     PlayerInput playerInput;
 
-    public float speed; //<=> moveSpeed 변수 대체(기존 player speed) 
+    //public float speed; //<=> moveSpeed 변수 대체(기존 player speed) 
     public float dashSpeed;
     public float defaultTime;//기본 시간
-    float dashTime; //dash 시간
+    [SerializeField]float dashTime; //dash 시간
 
-    bool isDash = false; //dash 상태
+    public bool isDirection = false;
+
+    public bool isDash = false; //dash 상태
 
     public Animator ani;
 
@@ -101,91 +103,86 @@ public class PlayerHookShot : MonoBehaviour //hookshot && dash
 
             if (Input.GetMouseButtonUp(0))
             {
+                /*
+                 * <dash>
+                 1. hook를 놓았을때 (platform에 매달려있지 않을때)
+                 2. Dash를 썼을 때
+                 3. player.rigid.velocity.y !=0떄
+                4.  ground에 닿지 않았을 때 
+
+                => Horizontal  입력값을 받고 거기에 x축*어떤 속도?(이건 어디서 받아와야함) 곱해서 이동
+                 */
                 isAttach = false;
                 isHookActive = false;
-                isLineMax = false;
                 isDash = false;
+                isLineMax = false;
                 GrabHook.GetComponent<Hook>().joint2D.enabled = false;
                 GrabHook.SetActive(false);
+
+                if (isDirection && !isAttach && playerController.rigid.velocity.y >= 0) //방향에 따라 속도 곱하기...여기 조건식 뭔가 이상함 
+                {
+                    playerController.rigid.AddForce(Vector2.right * 500, ForceMode2D.Force);
+                    Debug.Log("11111" + Vector2.right);
+                }
+                else if (!isDirection && !isAttach && playerController.rigid.velocity.y >= 0)
+                {
+                    playerController.rigid.AddForce(Vector2.left * 500, ForceMode2D.Force);
+                    Debug.Log("22222" + Vector2.left);
+                }
+          
             }
+        }
+
+
+        if (Input.GetKeyDown(KeyCode.LeftShift) && isAttach)
+        {
+            StartCoroutine(Dash_Co());
+
+
+
+        }
+        else if(!isAttach)
+        {
+            ghost.makeGhost = false; //잔상off... 그냥 이정도로 만족할까...
         }
     }
 
-
-    private void FixedUpdate() //한번만 실행해야하는 물리변수는 FixedUpdate에 써주는게 효율적임
+    private IEnumerator Dash_Co()
     {
-        if (isAttach)
+        isDash = true;
+        ghost.makeGhost = true; //잔상 on 
+        if (isDirection) //방향전환
         {
-            Dash();
-            //StartCoroutine("Dash_Co");
-            //platform에서 hook가 떨어지게 만들기 
-        }
-       
-    }
-
-
-    //private IEnumerator Dash_Co()
-    //{
-    //if (Input.GetKeyDown(KeyCode.LeftShift))
-    //{
-    //    ghost.makeGhost = true;
-    //    isDash = true;
-    //    ////float hor = Input.GetAxis("Horizontal"); //쓰지 않는 이유는 좌우키를 누르고 있을때마다 Dash가 되기 때문에 ! 
-    //    //float hor = Input.GetAxisRaw("Horizontal"); //그래서 즉각적인 반응이 있는 GetAxisRaw를 썼는데 외 안나와...
-    //    playerController.rigid.velocity = new Vector2(1 * speed, playerController.rigid.velocity.y);
-    //    Debug.Log("Shift누름");
-    //    //되긴 되는데... 방향전환 bool값을 걸어야할까
-    //}
-    //    if (dashTime <= 0)
-    //    {
-    //        //dashtime이 0보다 작을 때 쉬프트가 눌리면 dashtime을 defaulttime으로 초기화...왜?
-    //        if (isDash)
-    //        {
-    //            dashTime = defaultTime;
-    //        }
-    //    }
-    //    else
-    //    {
-    //        ghost.makeGhost = false;
-    //        //그 외에는 dashtime을 매프레임 delftatime만큼 빼주기....왜...? 곰돌선생 왜 설명을 안해주세요..?
-    //        dashTime -= Time.deltaTime;
-    //        speed = dashSpeed;
-    //    }
-    //
-    //    yield return new WaitForSeconds(3f);
-    //}
-
-    private void Dash()
-    {
-        if (Input.GetKeyDown(KeyCode.LeftShift))
-        {
-            isDash = true;
-            ghost.makeGhost = true;
-            //makeGhost ... 위치찾기
-            ////float hor = Input.GetAxis("Horizontal"); //쓰지 않는 이유는 좌우키를 누르고 있을때마다 Dash가 되기 때문에 ! 
-            //float hor = Input.GetAxisRaw("Horizontal"); //그래서 즉각적인 반응이 있는 GetAxisRaw를 썼는데 외 안나와...
-            playerController.rigid.velocity = new Vector2(1 * speed, playerController.rigid.velocity.y);
-            Debug.Log("Shift누름");
-            //되긴 되는데... 방향전환 bool값을 걸어야할까
-            //https://youtu.be/y982Gb00dho
-        }
-
-        if (dashTime <= 0)
-        {
-            //dashtime이 0보다 작을 때 쉬프트가 눌리면 dashtime을 defaulttime으로 초기화...왜?
-            if (isDash)
-            {
-                dashTime = defaultTime;
-            }
+            playerController.rigid.velocity = new Vector2(1 * dashSpeed, playerController.rigid.velocity.y);
         }
         else
         {
-            ghost.makeGhost = false;
-            //그 외에는 dashtime을 매프레임 delftatime만큼 빼주기....왜...? 곰돌선생 왜 설명을 안해주세요..?
-            dashTime -= Time.deltaTime;
-            speed = dashSpeed;
+            playerController.rigid.velocity = new Vector2(-1 * dashSpeed, playerController.rigid.velocity.y);
         }
+
+
+        //if (dashTime <= 0)
+        //{
+        //    if (isDash)
+        //    {
+        //        //dashtime이 0보다 작을 때 쉬프트가 눌리면 dashtime을 defaulttime으로 초기화...왜?
+        //        dashTime = defaultTime;
+        //    }
+        //}
+        //else
+        //{
+        //    //그 외에는 dashtime을 매프레임 delftatime만큼 빼주기....왜...? 곰돌선생 왜 설명을 안해주세요..?
+        //    dashTime -= Time.deltaTime;
+        //    speed = dashSpeed;
+        //} 
+        //뭐임?? 없어도 아무런 지장이 없잖아?? 모르겠으니까 빼자 그냥
+
+        yield return null;
+
+      
+
     }
+
 
 
 }

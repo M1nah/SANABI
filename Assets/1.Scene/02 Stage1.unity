@@ -1308,6 +1308,8 @@ MonoBehaviour:
   speed: 3
   dashSpeed: 20
   defaultTime: 2
+  dashTime: 0
+  isDirection: 0
   ani: {fileID: 886325599}
   ghost: {fileID: 886325603}
 --- !u!114 &886325595
@@ -1327,6 +1329,7 @@ MonoBehaviour:
   moveSpeed: 3
   maxSpeed: 3
   jump: 10
+  isGround: 0
   wallCheck: {fileID: 1213419944}
   slidingSpeed: 2
   wallChkDistance: 0.1
@@ -1510,7 +1513,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ghostDelay: 0.1
-  ghost: {fileID: 5617300861639082701, guid: 46f93a0532f2cb44fb703d047f214297, type: 3}
+  ghost: {fileID: 3037627048471072671, guid: 46f93a0532f2cb44fb703d047f214297, type: 3}
   makeGhost: 0
 --- !u!1 &920772364
 GameObject:

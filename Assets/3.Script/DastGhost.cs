@@ -28,11 +28,11 @@ public class DastGhost : MonoBehaviour
             else
             {
                 //Ghost »ý¼º
-                GameObject currentGhost = Instantiate(ghost, transform.position, transform.rotation);
-                Sprite currentSprite = GetComponent<SpriteRenderer>().sprite;
-                currentGhost.GetComponent<SpriteRenderer>().sprite = currentSprite;
+                GameObject currentGhost = Instantiate(ghost, transform.position, transform.rotation); 
+                Sprite currentSprite = ghost.GetComponent<SpriteRenderer>().sprite;
+                currentGhost.GetComponent<SpriteRenderer>().sprite = currentSprite; 
                 ghostDelaySeconds = ghostDelay;
-                Destroy(currentGhost, 0.5f);
+                Destroy(currentGhost, 0.8f);
             }
         }
         else

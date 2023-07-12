@@ -18,8 +18,9 @@ public class PlayerController : MonoBehaviour
     [SerializeField] public float jump;
     int jumpCount = 0;
 
+
     bool isJump = false;
-    bool isGround = false; //점프하고 바닥에 닿았는지 체크 ->이거 없애도 되겠다.. 이유: 이미 Tag로 체크하고있음
+    public bool isGround = false; 
 
     //Climing && Slide
     [Header("Climing && Slide")]
@@ -39,6 +40,10 @@ public class PlayerController : MonoBehaviour
     Animator playerAni;
     Animator armAni;
 
+
+    PlayerHookShot playerHookShot;
+
+
     private void Awake()
     {
         playerInput = GetComponent<PlayerInput>();
@@ -48,12 +53,27 @@ public class PlayerController : MonoBehaviour
         playerAni = GetComponent<Animator>();
         armAni = Arm.GetComponent<Animator>();
 
+        playerHookShot = GetComponent<PlayerHookShot>();
+
     }
 
     private void Update()
     {
         //move
-        if (playerInput.isMoveLeft || playerInput.isMoveRight)
+        if(playerHookShot.isAttach)
+        {
+            //PlayerHookShot에서 Dash 사용할때 오른쪽인지 왼쪽인지 방향을 체크하기위한 bool값 
+            if (playerInput.isMoveLeft)
+            {
+                playerHookShot.isDirection = false;
+            }
+            else if (playerInput.isMoveRight)
+            {
+                playerHookShot.isDirection = true;
+            }
+        }
+
+        else if (playerInput.isMoveLeft || playerInput.isMoveRight )
         {
             Climb_Ray(); //Wall 검출 RayCast
             Move();
@@ -67,6 +87,7 @@ public class PlayerController : MonoBehaviour
             armAni.SetBool("ArmIsRunning", false);
         }
 
+
         //jump
         if (playerInput.isJump)
         {
@@ -79,7 +100,8 @@ public class PlayerController : MonoBehaviour
             playerAni.SetBool("isJumping", false);
             armAni.SetBool("ArmIsJumping", false);
         }
-
+        
+   
     }
 
     private void FixedUpdate()
@@ -103,7 +125,6 @@ public class PlayerController : MonoBehaviour
                 Debug.Log("climb 끝"); //안들어가짐 
             }
         }
-
     }
 
 
@@ -157,6 +178,7 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+
     private void Climb_Ray()
     {
         if (playerInput.isMoveRight)
@@ -180,13 +202,12 @@ public class PlayerController : MonoBehaviour
             isGround = true;
             isJump = false;
             jumpCount = 0;
-            Debug.Log("jump reset"); //점프 리셋이 전혀 안되는디
+            //Debug.Log("jump reset"); //점프 리셋이 전혀 안되는디
                                      //isGround bool값을 만들어주고 체크하니까 이제 리셋 됨
                                      //그리고 공중에서 점프 안하게 됨 해결 !  -> 근대 오ㅔ 또 애니메이션 고장난거야
                                      // -> jumpCount++ 되는 곳에 isGround 체크해줬더니 애니메이션 또 됨 완벽하게 해결! 
                                      //Running 도중 jumping ani로 바뀌는 건 그냥 트렌지션에 Running 값도 true로 바꿔줬더니 잘만 나오더라 하... @@
         }
-
     }
 
     //Wall Climb Check
