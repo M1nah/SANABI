@@ -1306,7 +1306,7 @@ MonoBehaviour:
   isHookActive: 0
   isLineMax: 0
   isAttach: 0
-  dashSpeed: 20
+  dashSpeed: 18
   defaultTime: 20
   dashTime: 0
   isDirection: 0
@@ -1330,6 +1330,7 @@ MonoBehaviour:
   moveSpeed: 3
   maxSpeed: 3
   jump: 10
+  isJump: 0
   isGround: 0
   wallCheck: {fileID: 1213419944}
   slidingSpeed: 2

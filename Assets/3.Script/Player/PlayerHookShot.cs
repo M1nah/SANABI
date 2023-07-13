@@ -78,7 +78,7 @@ public class PlayerHookShot : MonoBehaviour //hookshot && dash
 
         if (isHookActive && !isLineMax && !isAttach) //isHookActive가 참이고 lineMax가 거짓일 때만 후크가 날아가게끔 하기
         {
-            hook.Translate(mouseDirection.normalized * Time.deltaTime * 12);
+            hook.Translate(mouseDirection.normalized * Time.deltaTime * 10);
 
 
             if (Vector2.Distance(transform.position, hook.position) > 2) //Distance(a,b)=> a에서 b까지의 거리구하기함수
@@ -89,7 +89,7 @@ public class PlayerHookShot : MonoBehaviour //hookshot && dash
         }
         else if (isHookActive && isLineMax && !isAttach)
         { //마우스 버튼을 떼고 isHookActive가 참이고 line이 최고지점에 도달했을 때(isLineMax가 참일때) 후크가 돌아옴
-            hook.position = Vector2.MoveTowards(hook.position, transform.position, Time.deltaTime * 12);
+            hook.position = Vector2.MoveTowards(hook.position, transform.position, Time.deltaTime * 10);
 
             if (Vector2.Distance(transform.position, hook.position) < 0.1f)
             { //hook와 player의 간격이 0.1보다 작아지면 isHookActive와 isLineMax를 비활성화 => 고리가 움직이지 않게 한다 
@@ -124,17 +124,24 @@ public class PlayerHookShot : MonoBehaviour //hookshot && dash
                 */
                 if (isDirection && !isAttach && playerController.rigid.velocity.y >= 0) //방향에 따라 속도 곱하기...여기 조건식 뭔가 이상함 
                 {
-                    playerController.rigid.AddForce(Vector2.right * 500, ForceMode2D.Force);
+                    playerController.rigid.AddForce(Vector2.right * 250, ForceMode2D.Force);
                     Debug.Log("11111" + Vector2.right);
                 }
                 else if (!isDirection && !isAttach && playerController.rigid.velocity.y >= 0)
                 {
-                    playerController.rigid.AddForce(Vector2.left * 500, ForceMode2D.Force);
+                    playerController.rigid.AddForce(Vector2.left * 250, ForceMode2D.Force);
                     Debug.Log("22222" + Vector2.left);
                 }
+
+                // hook가 떼어지고 dash 이후에 공중에 조금 머물기 =>안되는구만... 고치렴...... 0713
+                if (!isDash)
+                {
+                    if(!playerController.isGround && transform.position.y != 0)
+                    {
+                        playerController.rigid.velocity = new Vector2(playerController.rigid.velocity.x, playerController.rigid.velocity.y*Time.deltaTime*2f);
+                    }
                 
-
-
+                }
             }
         }
 

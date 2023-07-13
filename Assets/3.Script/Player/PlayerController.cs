@@ -120,6 +120,8 @@ public class PlayerController : MonoBehaviour
 
                 Debug.Log("climb 시작"); //들어가짐
 
+
+                //벽 중간에 멈춰있기
                 if (playerInput.isMoveDown)
                 {
                     rigid.gravityScale = 0;
