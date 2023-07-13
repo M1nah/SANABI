@@ -1302,14 +1302,15 @@ MonoBehaviour:
   GrabHook: {fileID: 436524268}
   hook: {fileID: 436524274}
   line: {fileID: 1334163263}
+  guideline: {fileID: 0}
   isHookActive: 0
   isLineMax: 0
   isAttach: 0
-  speed: 3
   dashSpeed: 20
-  defaultTime: 2
+  defaultTime: 20
   dashTime: 0
   isDirection: 0
+  isDash: 0
   ani: {fileID: 886325599}
   ghost: {fileID: 886325603}
 --- !u!114 &886325595

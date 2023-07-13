@@ -104,15 +104,7 @@ public class PlayerHookShot : MonoBehaviour //hookshot && dash
 
             if (Input.GetMouseButtonUp(0))
             {
-                /*
-                 * <dash>
-                 1. hook를 놓았을때 (platform에 매달려있지 않을때)
-                 2. Dash를 썼을 때
-                 3. player.rigid.velocity.y !=0떄
-                4.  ground에 닿지 않았을 때 
-
-                => Horizontal  입력값을 받고 거기에 x축*어떤 속도?(이건 어디서 받아와야함) 곱해서 이동
-                 */
+           
                 isAttach = false;
                 isHookActive = false;
                 isDash = false;
@@ -120,6 +112,16 @@ public class PlayerHookShot : MonoBehaviour //hookshot && dash
                 GrabHook.GetComponent<Hook>().joint2D.enabled = false;
                 GrabHook.SetActive(false);
 
+
+                /*
+                * <dash>
+                1. hook를 놓았을때 (platform에 매달려있지 않을때)
+                2. Dash를 썼을 때
+                3. player.rigid.velocity.y !=0떄
+                4.  ground에 닿지 않았을 때 
+
+                => Horizontal  입력값을 받고 거기에 x축*어떤 속도?(이건 어디서 받아와야함) 곱해서 이동
+                */
                 if (isDirection && !isAttach && playerController.rigid.velocity.y >= 0) //방향에 따라 속도 곱하기...여기 조건식 뭔가 이상함 
                 {
                     playerController.rigid.AddForce(Vector2.right * 500, ForceMode2D.Force);
@@ -130,7 +132,9 @@ public class PlayerHookShot : MonoBehaviour //hookshot && dash
                     playerController.rigid.AddForce(Vector2.left * 500, ForceMode2D.Force);
                     Debug.Log("22222" + Vector2.left);
                 }
-          
+                
+
+
             }
         }
 
@@ -138,7 +142,6 @@ public class PlayerHookShot : MonoBehaviour //hookshot && dash
         if (Input.GetKeyDown(KeyCode.LeftShift) && isAttach)
         {
             StartCoroutine(Dash_Co());
-
 
 
         }
@@ -180,10 +183,6 @@ public class PlayerHookShot : MonoBehaviour //hookshot && dash
 
         yield return null;
 
-      
-
     }
-
-
 
 }

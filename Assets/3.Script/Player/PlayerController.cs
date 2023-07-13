@@ -19,7 +19,7 @@ public class PlayerController : MonoBehaviour
     int jumpCount = 0;
 
 
-    bool isJump = false;
+    public bool isJump = false;
     public bool isGround = false; 
 
     //Climing && Slide
@@ -94,18 +94,21 @@ public class PlayerController : MonoBehaviour
             Jump();
             playerAni.SetBool("isJumping", true);
             armAni.SetBool("ArmIsJumping", true);
+
         }
         else if (!playerInput.isJump && !isJump)
         {
             playerAni.SetBool("isJumping", false);
             armAni.SetBool("ArmIsJumping", false);
         }
-        
-   
+
+
+
     }
 
     private void FixedUpdate()
     {
+        //climb
         if (isWall && isWallStay)
         {
             if (playerInput.isMoveUp || playerInput.isMoveDown)
@@ -116,14 +119,31 @@ public class PlayerController : MonoBehaviour
                 armAni.SetBool("ArmIsWallClimbUp", true);
 
                 Debug.Log("climb 시작"); //들어가짐
+
+                if (playerInput.isMoveDown)
+                {
+                    rigid.gravityScale = 0;
+                }
+
+                if (rigid.velocity.x == transform.position.x && rigid.velocity.y == transform.position.y && !playerInput.isMoveUp && !playerInput.isMoveDown)
+                {
+                    //벽에 달라붙어있고 멈춰있다면
+                    rigid.gravityScale = 0;
+                }
+                else
+                {
+                    rigid.gravityScale = 3f;
+                }
             }
-            else if(!playerInput.isMoveUp && !isWallStay || !playerInput.isMoveDown && !isWallStay) 
+            else
             {
                 //↑ 뭔가 조건을 잘못 걸어둔거같은데 
                 playerAni.SetBool("isWallCilmbUp", false);
                 armAni.SetBool("ArmIsWallClimbUp", false);
                 Debug.Log("climb 끝"); //안들어가짐 
             }
+
+
         }
     }
 
@@ -176,6 +196,8 @@ public class PlayerController : MonoBehaviour
             rigid.AddForce(Vector2.up * jump, ForceMode2D.Impulse);
             isJump = true;
         }
+
+
     }
 
 
