@@ -42,7 +42,7 @@ public class IntroMenu : MonoBehaviour
         IntroBtn.SetActive(false);
         optionPanel.SetActive(true);
 
-        if (Input.GetKeyDown(KeyCode.Escape) && optionPanelActive)
+        if (Input.GetKeyDown(KeyCode.Escape) && optionPanelActive)//esc≈∞ æ»∏‘¿Ω
         {
             optionPanelActive = false;
             Back();
