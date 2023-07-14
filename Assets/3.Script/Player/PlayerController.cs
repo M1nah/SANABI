@@ -31,8 +31,9 @@ public class PlayerController : MonoBehaviour
     [SerializeField] LayerMask wallLayer; 
     float isRight = 1f; //바라보는 방향 1= right , -1 = Left => 이거 없으니까 레이캐스트가 안나감
 
-    bool isWall;
+    bool isWall=false;
     bool isWallStay = false;
+
 
     //Animation player + Arm
     [Header("Animation player && Arm")]
@@ -183,10 +184,8 @@ public class PlayerController : MonoBehaviour
     //climb
     private void Climb() 
     {
-        if (isWall && isWallStay)
+        if (isWall && isWallStay )
         {
-            isWall = true;
-            isWallStay = true;
             if (playerInput.isMoveUp || playerInput.isMoveDown)
             {
                 rigid.gravityScale = 0;
@@ -211,15 +210,14 @@ public class PlayerController : MonoBehaviour
             }
 
         }
-        else //이부분 계속 올라가..  
-        {
-            isWall = false;
-            isWallStay = false;
-            rigid.gravityScale = 3f;
-            playerAni.SetBool("isWallCilmbUp", false);
-            armAni.SetBool("ArmIsWallClimbUp", false);
-            Debug.Log("climb 끝");
-        }
+        //else if(!isWall && !isWallStay && climbTest) //이부분 계속 올라가..  
+        //{
+        //    climbTest = false;
+        //    rigid.gravityScale = 3f;
+        //    playerAni.SetBool("isWallCilmbUp", false);
+        //    armAni.SetBool("ArmIsWallClimbUp", false);
+        //    Debug.Log("climb 끝");
+        //}
     }
 
     //jumpCount Reset 
@@ -249,9 +247,13 @@ public class PlayerController : MonoBehaviour
 
     private void OnTriggerExit2D(Collider2D collision)
     {
-        if (collision.CompareTag("GrabPlatform") && playerInput.isJump)
+        if (collision.CompareTag("GrabPlatform"))
         {
             isWallStay = false;
+            rigid.gravityScale = 3f;
+            playerAni.SetBool("isWallCilmbUp", false);
+            armAni.SetBool("ArmIsWallClimbUp", false);
+            Debug.Log("1");
         }
     }
 }

@@ -8,6 +8,7 @@ TagManager:
   - GrabPlatform
   - Button
   - Enemy
+  - Berry
   layers:
   - Default
   - TransparentFX
