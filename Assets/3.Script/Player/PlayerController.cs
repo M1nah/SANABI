@@ -108,45 +108,7 @@ public class PlayerController : MonoBehaviour
 
     private void FixedUpdate()
     {
-        //climb
-        if (isWall && isWallStay)
-        {
-            if (playerInput.isMoveUp || playerInput.isMoveDown)
-            {
-                float ver = Input.GetAxis("Vertical");
-                rigid.velocity = new Vector2(rigid.velocity.x, ver * slidingSpeed);
-                playerAni.SetBool("isWallCilmbUp", true);
-                armAni.SetBool("ArmIsWallClimbUp", true);
-
-                Debug.Log("climb 시작"); //들어가짐
-
-
-                //벽 중간에 멈춰있기
-                if (playerInput.isMoveDown)
-                {
-                    rigid.gravityScale = 0;
-                }
-
-                if (rigid.velocity.x == transform.position.x && rigid.velocity.y == transform.position.y && !playerInput.isMoveUp && !playerInput.isMoveDown)
-                {
-                    //벽에 달라붙어있고 멈춰있다면
-                    rigid.gravityScale = 0;
-                }
-                else
-                {
-                    rigid.gravityScale = 3f;
-                }
-            }
-            else
-            {
-                //↑ 뭔가 조건을 잘못 걸어둔거같은데 
-                playerAni.SetBool("isWallCilmbUp", false);
-                armAni.SetBool("ArmIsWallClimbUp", false);
-                Debug.Log("climb 끝"); //안들어가짐 
-            }
-
-
-        }
+        Climb();
     }
 
 
@@ -218,6 +180,48 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    //climb
+    private void Climb() 
+    {
+        if (isWall && isWallStay)
+        {
+            isWall = true;
+            isWallStay = true;
+            if (playerInput.isMoveUp || playerInput.isMoveDown)
+            {
+                rigid.gravityScale = 0;
+                float ver = Input.GetAxis("Vertical");
+                rigid.velocity = new Vector2(rigid.velocity.x, ver * slidingSpeed);
+
+                playerAni.SetBool("isWallCilmbUp", true);
+                armAni.SetBool("ArmIsWallClimbUp", true);
+            }
+
+            if (!playerInput.isMoveUp && !playerInput.isMoveDown)
+            {
+                //벽중간에서 멈춤
+                slidingSpeed = 0f;
+                //rigid.AddForce(Vector2.zero, ForceMode2D.Force); // 그래도 올라갈때 밀리네.. 
+                Debug.Log("climb 일시정지"); //들어가짐 
+                //들어가지고 멈추긴 하는데 그래도 밀림.. 
+            }
+            else
+            {
+                slidingSpeed = 2f;
+            }
+
+        }
+        else //이부분 계속 올라가..  
+        {
+            isWall = false;
+            isWallStay = false;
+            rigid.gravityScale = 3f;
+            playerAni.SetBool("isWallCilmbUp", false);
+            armAni.SetBool("ArmIsWallClimbUp", false);
+            Debug.Log("climb 끝");
+        }
+    }
+
     //jumpCount Reset 
     private void OnCollisionEnter2D(Collision2D collision)
     {
@@ -242,19 +246,7 @@ public class PlayerController : MonoBehaviour
             isWallStay = true;
         }
     }
-    private void OnTriggerStay2D(Collider2D collision)
-    {
-        if (collision.CompareTag("GrabPlatform") && isWall)
-        {
-            isWallStay = true;
-        }
 
-        if (collision.CompareTag("GrabPlatform") && playerInput.isJump)
-        {
-            isWallStay = false;
-
-        }
-    }
     private void OnTriggerExit2D(Collider2D collision)
     {
         if (collision.CompareTag("GrabPlatform") && playerInput.isJump)

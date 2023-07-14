@@ -6,51 +6,21 @@ using UnityEngine.EventSystems;
 
 public class SelecteLevel : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
-   public GameObject [] levelbtn;
-   public Image levelSelect;
-
-   public Sprite unselectLevel;
-   public Sprite selectLevel;
-
-    // Start is called before the first frame update
-    void Start()
+    [SerializeField] private Sprite originalSprite;
+    [SerializeField] private Sprite changeSprite;
+    private void OnEnable()
     {
-        levelSelect = GetComponent<Image>();
+        gameObject.GetComponent<Image>().sprite = originalSprite;
     }
-
-
     public void OnPointerEnter(PointerEventData eventData)
     {
-        ResetImage();
-        levelSelect.sprite = selectLevel;
-        ;
+        gameObject.GetComponent<Image>().sprite = changeSprite;
     }
 
     public void OnPointerExit(PointerEventData eventData)
     {
-        ResetImage();
+        gameObject.GetComponent<Image>().sprite = originalSprite;
     }
 
-
-    public void ResetImage()
-    {
-
-        if (levelbtn[0])
-        {
-            levelSelect.sprite = unselectLevel;
-        }
-        if (levelbtn[1])
-        {
-            levelSelect.sprite = unselectLevel;
-        }
-        if (levelbtn[2])
-        {
-            levelSelect.sprite = unselectLevel;
-        }
-        if (levelbtn[3])
-        {
-            levelSelect.sprite = unselectLevel;
-        }
-    }
 
 }

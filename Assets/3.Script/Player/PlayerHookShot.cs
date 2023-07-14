@@ -134,14 +134,14 @@ public class PlayerHookShot : MonoBehaviour //hookshot && dash
                 }
 
                 // hook가 떼어지고 dash 이후에 공중에 조금 머물기 =>안되는구만... 고치렴...... 0713
-                if (!isDash)
-                {
-                    if(!playerController.isGround && transform.position.y != 0)
-                    {
-                        playerController.rigid.velocity = new Vector2(playerController.rigid.velocity.x, playerController.rigid.velocity.y*Time.deltaTime*2f);
-                    }
-                
-                }
+                //if (!isDash)
+                //{
+                //    if(!playerController.isGround && transform.position.y != 0)
+                //    {
+                //        playerController.rigid.velocity = new Vector2(playerController.rigid.velocity.x, playerController.rigid.velocity.y*Time.deltaTime*2f);
+                //    }
+                //
+                //}
             }
         }
 

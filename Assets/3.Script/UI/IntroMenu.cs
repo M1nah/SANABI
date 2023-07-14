@@ -15,8 +15,9 @@ public class IntroMenu : MonoBehaviour
     [SerializeField] GameObject QuitPanel;
 
 
-    bool levelPanelActive;
-    bool isQuit;
+    bool levelPanelActive=false;
+    bool optionPanelActive=false;
+    bool quitPanelActive=false;
 
 
     public void StartBtn()
@@ -29,39 +30,38 @@ public class IntroMenu : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.Escape) && levelPanelActive)
         {
-            SANNABI_Logo.SetActive(true);
-            IntroBtn.SetActive(true);
-            levelpanel.SetActive(false);
+            levelPanelActive = false;
+            Back();
         }
     }
 
     public void OptionBtn() 
     {
+        optionPanelActive = true;
         SANNABI_Logo.SetActive(false);
         IntroBtn.SetActive(false);
         optionPanel.SetActive(true);
 
-        if (Input.GetKeyDown(KeyCode.Escape))
+        if (Input.GetKeyDown(KeyCode.Escape) && optionPanelActive)
         {
-            SANNABI_Logo.SetActive(true);
-            IntroBtn.SetActive(true);
-            levelpanel.SetActive(false);
+            optionPanelActive = false;
+            Back();
         }
 
 
     }
     public void QuitBtn()
     {
+        quitPanelActive = true;
         SANNABI_Logo.SetActive(false);
         IntroBtn.SetActive(false);
         QuitPanel.SetActive(true);
 
 
-        if (Input.GetKeyDown(KeyCode.Escape))
+        if (Input.GetKeyDown(KeyCode.Escape)  && quitPanelActive)
         {
-            SANNABI_Logo.SetActive(true);
-            IntroBtn.SetActive(true);
-            levelpanel.SetActive(false);
+            quitPanelActive = false;
+            Back();
         }
     }
 
