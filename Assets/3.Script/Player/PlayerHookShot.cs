@@ -124,12 +124,16 @@ public class PlayerHookShot : MonoBehaviour //hookshot && dash
                 */
                 if (isDirection && !isAttach && playerController.rigid.velocity.y >= 0) //방향에 따라 속도 곱하기...여기 조건식 뭔가 이상함 
                 {
-                    playerController.rigid.AddForce(Vector2.right * 250, ForceMode2D.Force);
+                    playerController.rigid.AddForce(Vector2.right * 150, ForceMode2D.Force);
+
+                    playerController.rigid.velocity *= new Vector2(10,1.5f);
+
                     Debug.Log("11111" + Vector2.right);
                 }
                 else if (!isDirection && !isAttach && playerController.rigid.velocity.y >= 0)
                 {
-                    playerController.rigid.AddForce(Vector2.left * 250, ForceMode2D.Force);
+                    playerController.rigid.AddForce(Vector2.left * 150, ForceMode2D.Force);
+                    playerController.rigid.velocity *= new Vector2(10,1.5f);
                     Debug.Log("22222" + Vector2.left);
                 }
 
