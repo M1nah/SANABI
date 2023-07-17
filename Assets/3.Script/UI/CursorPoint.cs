@@ -15,8 +15,9 @@ public class CursorPoint : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        cursorHotSpot = new Vector2(cursorArrow.width, cursorArrow.height);
+        cursorHotSpot = new Vector2(cursorArrow.width * 0.5f, cursorArrow.height * 0.5f);
 
-        Cursor.SetCursor(cursorArrow, cursorHotSpot, CursorMode.Auto);
+        Cursor.SetCursor(cursorArrow, cursorHotSpot, CursorMode.ForceSoftware);
+
     }
 }

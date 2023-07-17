@@ -6,13 +6,17 @@ using UnityEngine.UI;
 public class OptionMenu : MonoBehaviour
 {
     FullScreenMode screenMode;
-
     public Dropdown resolutionDropdown;
     public Toggle fullSceenBtn;
 
     List<Resolution> resolutions = new List<Resolution>();
 
     int resolutionNum;
+
+
+    //bgm
+    public AudioSource BGM;
+
 
 
     // Start is called before the first frame update
@@ -71,5 +75,17 @@ public class OptionMenu : MonoBehaviour
     {
         Screen.SetResolution(resolutions[resolutionNum].width, resolutions[resolutionNum].height, screenMode);
     }
+
+
+    //BGM Volume
+    public void SetMusicVol(float volume)
+    {
+        BGM.volume = volume;
+
+        //씬 넘어가서도 설정 꺼지지 않게...
+        //DontDestroyOnLoad(this.gameObject);
+    }
+
+
 
 }

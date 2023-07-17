@@ -4,9 +4,7 @@ using UnityEngine;
 
 public class CameraMove : MonoBehaviour
 {
-
     public GameObject virtualCam;
-
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
@@ -15,6 +13,7 @@ public class CameraMove : MonoBehaviour
             virtualCam.SetActive(true);
         }
     }
+
     private void OnTriggerExit2D(Collider2D collision)
     {
         if (collision.CompareTag("Player") && !collision.isTrigger)
