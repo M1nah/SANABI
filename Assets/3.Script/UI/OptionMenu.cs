@@ -19,18 +19,19 @@ public class OptionMenu : MonoBehaviour
     void Start()
     {
         InitUI();
+
     }
 
     void InitUI() //해상도 목록
     {
         for(int i = 0; i<Screen.resolutions.Length; i++)
         {
-            if(Screen.resolutions[i].refreshRate == 60) 
-            {//해상도 값을 가져올 때 화면 재생 빈도가 60인 값만 가져와서 해상도 list에 넣어주기
+            if(Screen.resolutions[i].refreshRate == 75) 
+            {//해상도 값을 가져올 때 화면 재생 빈도가 75인 값만 가져와서 해상도 list에 넣어주기
                 resolutions.Add(Screen.resolutions[i]);
             }
         }
-        // ==> 특정한 해상도 값을 골라서 가져올 수 없나?
+         //==> 특정한 해상도 값을 골라서 가져올 수 없나?
 
         //resolutions.AddRange(Screen.resolutions);
         resolutionDropdown.options.Clear();

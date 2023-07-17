@@ -124,12 +124,12 @@ public class PlayerHookShot : MonoBehaviour //hookshot && dash
 
             if (!isAttach && !playerController.isGround) //천장에 떨어져있고 player가 땅에 붙어있지 않을 때
             {
-                playerController.rigid.velocity *= new Vector2(1.2f, 0.8f); //똑같이 player 리지드바디 값을 지정해서 느리게 떨어지게 함
-                Debug.Log("작동함?"); //작동함... 그런데 bool 디버그가 좀 이상함
+                playerController.rigid.velocity *= new Vector2(1.1f, 0.2f); //똑같이 player 리지드바디 값을 지정해서 느리게 떨어지게 함
+                Debug.Log("작동함?"); //작동함... 그런데  isAttach와 isGround bool 디버그가 좀 이상함
             }
         }
 
-        // dash를 입력하고 isAttach가 참일때 ==> dash가 참
+        // dash를 입력하고 isAttach가 참일때 ==> dash가 true
         if (Input.GetKeyDown(KeyCode.LeftShift) && isAttach)
         {
 
@@ -159,6 +159,7 @@ public class PlayerHookShot : MonoBehaviour //hookshot && dash
         else
         {
             playerController.isGround = false; //또 false 처리? 
+        
         }
 
 
@@ -190,7 +191,7 @@ public class PlayerHookShot : MonoBehaviour //hookshot && dash
 
                 if (timeCheck >= 0.1) //시간이 0.1 이하일 때
                 {
-                    playerController.rigid.velocity *= new Vector2(1.2f, 0.8f); //player리지드바디 값을 new Vector2로 다시 지정해주고
+                    playerController.rigid.velocity *= new Vector2(1.1f, 0.2f); //player리지드바디 값을 new Vector2로 다시 지정해주고
                     isDash = false; //dash는 종료
                     Debug.Log("dash 코루틴 종료"); //들어가짐 
                     yield break;
