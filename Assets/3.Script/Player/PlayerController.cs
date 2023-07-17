@@ -161,8 +161,6 @@ public class PlayerController : MonoBehaviour
             rigid.AddForce(Vector2.up * jump, ForceMode2D.Impulse);
             isJump = true;
         }
-
-
     }
 
 
@@ -228,6 +226,7 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+
     //Wall Climb Check
     private void OnTriggerEnter2D(Collider2D collision)
     {
@@ -235,9 +234,6 @@ public class PlayerController : MonoBehaviour
         {
             isWallStay = true;
         }
-
-
-
     }
 
     private void OnTriggerExit2D(Collider2D collision)

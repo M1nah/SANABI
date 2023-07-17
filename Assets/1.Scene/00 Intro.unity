@@ -1748,8 +1748,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 565412678}
-  - component: {fileID: 565412677}
   - component: {fileID: 565412679}
+  - component: {fileID: 565412677}
   m_Layer: 0
   m_Name: Cursor
   m_TagString: Untagged
@@ -1770,8 +1770,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cursorArrow: {fileID: 2800000, guid: d082eab9b427a6a4b9643dbd48c70aef, type: 3}
-  cursorMode: 1
-  hotSpot: {x: 0, y: 0}
+  cursorHotSpot: {x: 0, y: 0}
 --- !u!4 &565412678
 Transform:
   m_ObjectHideFlags: 0
