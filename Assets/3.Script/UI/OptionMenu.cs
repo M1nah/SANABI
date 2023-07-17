@@ -65,7 +65,6 @@ public class OptionMenu : MonoBehaviour
         //screenMode가 isFull(참)이면 풀스크린, 거짓이면 윈도우 모드
         screenMode = isFull ? FullScreenMode.FullScreenWindow : FullScreenMode.Windowed;
     }
-
  
     public void OkBtnClick() //해상도 변경 버튼
     {

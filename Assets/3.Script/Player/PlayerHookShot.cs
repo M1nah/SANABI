@@ -20,10 +20,12 @@ public class PlayerHookShot : MonoBehaviour //hookshot && dash
     PlayerController playerController;
     PlayerInput playerInput;
 
+
+
     //public float speed; //<=> moveSpeed 변수 대체(기존 player speed) 
     public float dashSpeed;
     public float defaultTime;//기본 시간
-    [SerializeField]float dashTime; //dash 시간
+    [SerializeField] float dashTime; //dash 시간
 
     public bool isDirection = false;
 
@@ -73,7 +75,6 @@ public class PlayerHookShot : MonoBehaviour //hookshot && dash
             isHookActive = true;
             isLineMax = false;
             GrabHook.SetActive(true);
-            Debug.Log("Hook 발사");
         }
 
         if (isHookActive && !isLineMax && !isAttach) //isHookActive가 참이고 lineMax가 거짓일 때만 후크가 날아가게끔 하기
@@ -96,104 +97,108 @@ public class PlayerHookShot : MonoBehaviour //hookshot && dash
                 isHookActive = false;
                 isLineMax = false;
                 GrabHook.SetActive(false);
-                Debug.Log("hook 회수");
             }
         }
         else if (isAttach) //platform에서 후크가 떨어질 때 모든 bool 변수가 비활성화
         {
-
             if (Input.GetMouseButtonUp(0))
             {
-           
                 isAttach = false;
                 isHookActive = false;
-                isDash = false;
+                //isDash = false;
                 isLineMax = false;
                 GrabHook.GetComponent<Hook>().joint2D.enabled = false;
                 GrabHook.SetActive(false);
 
-
-                /*
-                * <dash>
-                1. hook를 놓았을때 (platform에 매달려있지 않을때)
-                2. Dash를 썼을 때
-                3. player.rigid.velocity.y !=0떄
-                4.  ground에 닿지 않았을 때 
-
-                => Horizontal  입력값을 받고 거기에 x축*어떤 속도?(이건 어디서 받아와야함) 곱해서 이동
-                */
-                if (isDirection && !isAttach && playerController.rigid.velocity.y >= 0) //방향에 따라 속도 곱하기...여기 조건식 뭔가 이상함 
-                {
-                    playerController.rigid.AddForce(Vector2.right * 150, ForceMode2D.Force);
-
-                    playerController.rigid.velocity *= new Vector2(10,1.5f);
-
-                    Debug.Log("11111" + Vector2.right);
-                }
-                else if (!isDirection && !isAttach && playerController.rigid.velocity.y >= 0)
-                {
-                    playerController.rigid.AddForce(Vector2.left * 150, ForceMode2D.Force);
-                    playerController.rigid.velocity *= new Vector2(10,1.5f);
-                    Debug.Log("22222" + Vector2.left);
-                }
-
-                // hook가 떼어지고 dash 이후에 공중에 조금 머물기 =>안되는구만... 고치렴...... 0713
-                //if (!isDash)
+                //if (isDirection && !isAttach && playerController.rigid.velocity.y >= 0) //방향에 따라 속도 곱하기...여기 조건식 뭔가 이상함 
                 //{
-                //    if(!playerController.isGround && transform.position.y != 0)
-                //    {
-                //        playerController.rigid.velocity = new Vector2(playerController.rigid.velocity.x, playerController.rigid.velocity.y*Time.deltaTime*2f);
-                //    }
-                //
+                //    playerController.rigid.AddForce(Vector2.right * 150, ForceMode2D.Force);
+                //    Debug.Log("11111" + Vector2.right);
                 //}
+                //else if (!isDirection && !isAttach && playerController.rigid.velocity.y >= 0)
+                //{
+                //    playerController.rigid.AddForce(Vector2.left * 150, ForceMode2D.Force);
+                //    Debug.Log("22222" + Vector2.left);
+                //}
+            }
+
+            if (!isAttach && !playerController.isGround) //천장에 떨어져있고 player가 땅에 붙어있지 않을 때
+            {
+                playerController.rigid.velocity *= new Vector2(1.2f, 0.8f); //똑같이 player 리지드바디 값을 지정해서 느리게 떨어지게 함
+                Debug.Log("작동함?"); //작동함... 그런데 bool 디버그가 좀 이상함
             }
         }
 
-
+        // dash를 입력하고 isAttach가 참일때 ==> dash가 참
         if (Input.GetKeyDown(KeyCode.LeftShift) && isAttach)
         {
-            StartCoroutine(Dash_Co());
 
+            isDash = true;
+            ghost.makeGhost = true; //잔상 on 
 
+            if (isDirection) //dash 방향 잡아주고 
+            {
+                playerController.rigid.velocity = new Vector2(1 * dashSpeed, playerController.rigid.velocity.y);
+            }
+            else
+            {
+                playerController.rigid.velocity = new Vector2(-1 * dashSpeed, playerController.rigid.velocity.y);
+            }
         }
-        else if(!isAttach)
+        else if (!isAttach) //만약 천장에 붙어있지 않으면 
         {
-            ghost.makeGhost = false; //잔상off... 그냥 이정도로 만족할까...
+            ghost.makeGhost = false; //잔상off...
         }
-    }
 
-    private IEnumerator Dash_Co()
-    {
-        isDash = true;
-        ghost.makeGhost = true; //잔상 on 
-        if (isDirection) //방향전환
+        //천장에서 떨어지는 버튼을 누르고 isash가 참알때 ==> dashStay 코루틴 실행
+        if (Input.GetMouseButtonUp(0) && isDash)
         {
-            playerController.rigid.velocity = new Vector2(1 * dashSpeed, playerController.rigid.velocity.y);
+            Debug.Log("dash 코루틴 실행"); //들어가짐
+            StartCoroutine(DashStay_Co());
         }
         else
         {
-            playerController.rigid.velocity = new Vector2(-1 * dashSpeed, playerController.rigid.velocity.y);
+            playerController.isGround = false; //또 false 처리? 
         }
 
 
-        //if (dashTime <= 0)
+        Debug.Log("isAttach" + isAttach);
+        Debug.Log("isGround" + playerController.isGround);
+
+
+        //if (!isAttach && !playerController.isGround) //천장에 떨어져있고 player가 땅에 붙어있지 않을 때
         //{
-        //    if (isDash)
-        //    {
-        //        //dashtime이 0보다 작을 때 쉬프트가 눌리면 dashtime을 defaulttime으로 초기화...왜?
-        //        dashTime = defaultTime;
-        //    }
+        //    playerController.rigid.velocity *= new Vector2(1, 0.3f); //똑같이 player 리지드바디 값을 지정해서 느리게 떨어지게 함
+        //    Debug.Log("작동해라"); //왜안들어가져 
         //}
-        //else
-        //{
-        //    //그 외에는 dashtime을 매프레임 delftatime만큼 빼주기....왜...? 곰돌선생 왜 설명을 안해주세요..?
-        //    dashTime -= Time.deltaTime;
-        //    speed = dashSpeed;
-        //} 
-        //뭐임?? 없어도 아무런 지장이 없잖아?? 모르겠으니까 빼자 그냥
-
-        yield return null;
-
     }
 
-}
+
+
+
+        private IEnumerator DashStay_Co()
+        {
+            Vector2 dashStay = playerController.rigid.velocity; //player 리지드바디 저장하는 변수 
+            float timeCheck = 0;//코루틴 시간 체크 
+
+            while (true)
+            {
+                timeCheck += Time.deltaTime; //시간이 흐를동안
+                playerController.rigid.velocity = dashStay; // 매 프레임마다 player리지드바디는 dashSatay값이 된다 
+
+                yield return null;
+
+                if (timeCheck >= 0.1) //시간이 0.1 이하일 때
+                {
+                    playerController.rigid.velocity *= new Vector2(1.2f, 0.8f); //player리지드바디 값을 new Vector2로 다시 지정해주고
+                    isDash = false; //dash는 종료
+                    Debug.Log("dash 코루틴 종료"); //들어가짐 
+                    yield break;
+                }
+            }
+
+
+        }
+
+    } 
+

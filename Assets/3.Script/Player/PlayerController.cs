@@ -210,14 +210,6 @@ public class PlayerController : MonoBehaviour
             }
 
         }
-        //else if(!isWall && !isWallStay && climbTest) //이부분 계속 올라가..  
-        //{
-        //    climbTest = false;
-        //    rigid.gravityScale = 3f;
-        //    playerAni.SetBool("isWallCilmbUp", false);
-        //    armAni.SetBool("ArmIsWallClimbUp", false);
-        //    Debug.Log("climb 끝");
-        //}
     }
 
     //jumpCount Reset 
@@ -243,6 +235,9 @@ public class PlayerController : MonoBehaviour
         {
             isWallStay = true;
         }
+
+
+
     }
 
     private void OnTriggerExit2D(Collider2D collision)
@@ -255,5 +250,7 @@ public class PlayerController : MonoBehaviour
             armAni.SetBool("ArmIsWallClimbUp", false);
             Debug.Log("1");
         }
+
+
     }
 }
