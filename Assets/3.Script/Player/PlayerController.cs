@@ -44,7 +44,6 @@ public class PlayerController : MonoBehaviour
 
     PlayerHookShot playerHookShot;
 
-
     private void Awake()
     {
         playerInput = GetComponent<PlayerInput>();
@@ -60,51 +59,49 @@ public class PlayerController : MonoBehaviour
 
     private void Update()
     {
-        //move
-        if(playerHookShot.isAttach)
-        {
-            //PlayerHookShot에서 Dash 사용할때 오른쪽인지 왼쪽인지 방향을 체크하기위한 bool값 
-            if (playerInput.isMoveLeft)
+
+            //move
+            if (playerHookShot.isAttach)
             {
-                playerHookShot.isDirection = false;
+                //PlayerHookShot에서 Dash 사용할때 오른쪽인지 왼쪽인지 방향을 체크하기위한 bool값 
+                if (playerInput.isMoveLeft)
+                {
+                    playerHookShot.isDirection = false;
+                }
+                else if (playerInput.isMoveRight)
+                {
+                    playerHookShot.isDirection = true;
+                }
             }
-            else if (playerInput.isMoveRight)
+
+            else if (playerInput.isMoveLeft || playerInput.isMoveRight )
             {
-                playerHookShot.isDirection = true;
+                Climb_Ray(); //Wall 검출 RayCast
+                Move();
+                playerAni.SetBool("isRunning", true);
+                armAni.SetBool("ArmIsRunning", true);
+
             }
-        }
-
-        else if (playerInput.isMoveLeft || playerInput.isMoveRight )
-        {
-            Climb_Ray(); //Wall 검출 RayCast
-            Move();
-            playerAni.SetBool("isRunning", true);
-            armAni.SetBool("ArmIsRunning", true);
-
-        }
-        else
-        {
-            playerAni.SetBool("isRunning", false);
-            armAni.SetBool("ArmIsRunning", false);
-        }
+            else
+            {
+                playerAni.SetBool("isRunning", false);
+                armAni.SetBool("ArmIsRunning", false);
+            }
 
 
-        //jump
-        if (playerInput.isJump)
-        {
-            Jump();
-            playerAni.SetBool("isJumping", true);
-            armAni.SetBool("ArmIsJumping", true);
+            //jump
+            if (playerInput.isJump)
+            {
+                Jump();
+                playerAni.SetBool("isJumping", true);
+                armAni.SetBool("ArmIsJumping", true);
 
-        }
-        else if (!playerInput.isJump && !isJump)
-        {
-            playerAni.SetBool("isJumping", false);
-            armAni.SetBool("ArmIsJumping", false);
-        }
-
-
-
+            }
+            else if (!playerInput.isJump && !isJump)
+            {
+                playerAni.SetBool("isJumping", false);
+                armAni.SetBool("ArmIsJumping", false);
+            }
     }
 
     private void FixedUpdate()

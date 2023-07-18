@@ -17,8 +17,6 @@ public class OptionMenu : MonoBehaviour
     //bgm
     public AudioSource BGM;
 
-
-
     // Start is called before the first frame update
     void Start()
     {
@@ -33,11 +31,11 @@ public class OptionMenu : MonoBehaviour
             if(Screen.resolutions[i].refreshRate == 75) 
             {//해상도 값을 가져올 때 화면 재생 빈도가 75인 값만 가져와서 해상도 list에 넣어주기
                 resolutions.Add(Screen.resolutions[i]);
+                Debug.Log(resolutions[i]);
             }
         }
          //==> 특정한 해상도 값을 골라서 가져올 수 없나?
 
-        //resolutions.AddRange(Screen.resolutions);
         resolutionDropdown.options.Clear();
 
         int optionNum = 0;
@@ -48,10 +46,12 @@ public class OptionMenu : MonoBehaviour
             option.text = item.width + " X " + item.height + " " + item.refreshRate + "hz";
             resolutionDropdown.options.Add(option);
 
+            Debug.Log("해상도 가져오기" + option);
+
             if(item.width == Screen.width && item.height == Screen.height)
             {
                 resolutionDropdown.value = optionNum;
-                optionNum++;
+                optionNum++; //↓
             }
         }
         resolutionDropdown.RefreshShownValue(); //새로고침 함수
