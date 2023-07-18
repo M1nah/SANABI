@@ -125,6 +125,7 @@ public class GameManager : MonoBehaviour
         Player.GetComponent<PlayerHookShot>().enabled = false;
         Player.GetComponent<DastGhost>().enabled = false;
 
+        StartCoroutine(DieScene_co());
 
         //플레이어 모든 움직임 멈춤 
         //deadUI 활성화
@@ -137,7 +138,6 @@ public class GameManager : MonoBehaviour
          1. 검은 오브젝트 배경 .setActive(true) 
          2. 플레이어 다이 애니메이션 내보내고 +글리치이펙트
          3. 3초 텀을 둔다음
-                => 오브젝트 배경 setActive(false)
          4. 씬 가장 처음으로 이동 페이드인
          5. player에 붙은 모든 컴모넌트 스크립트들 켜기
         */
@@ -146,13 +146,9 @@ public class GameManager : MonoBehaviour
         deadImage.SetActive(true);
         //여기 플레이어 다이 애니메이션 true
         yield return new WaitForSeconds(3);
-        deadImage.SetActive(false);
-        ChangeScene(1);
 
-        Player.GetComponent<PlayerInput>().enabled = true;
-        Player.GetComponent<PlayerController>().enabled = true;
-        Player.GetComponent<PlayerHookShot>().enabled = true;
-        Player.GetComponent<DastGhost>().enabled = true;
+        ChangeScene(1);
+        //페이드인
 
     }
 
