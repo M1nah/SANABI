@@ -109,16 +109,16 @@ public class PlayerHookShot : MonoBehaviour //hookshot && dash
                 GrabHook.GetComponent<Hook>().joint2D.enabled = false;
                 GrabHook.SetActive(false);
 
-                //if (isDirection && !isAttach && playerController.rigid.velocity.y >= 0) //방향에 따라 속도 곱하기...여기 조건식 뭔가 이상함 
-                //{
-                //    playerController.rigid.AddForce(Vector2.right * 150, ForceMode2D.Force);
-                //    Debug.Log("11111" + Vector2.right);
-                //}
-                //else if (!isDirection && !isAttach && playerController.rigid.velocity.y >= 0)
-                //{
-                //    playerController.rigid.AddForce(Vector2.left * 150, ForceMode2D.Force);
-                //    Debug.Log("22222" + Vector2.left);
-                //}
+                if (isDirection && !isAttach && playerController.rigid.velocity.y >= 0) //방향에 따라 속도 곱하기...여기 조건식 뭔가 이상함 
+                {
+                    playerController.rigid.AddForce(Vector2.right * 50, ForceMode2D.Force);
+                    Debug.Log("11111" + Vector2.right);
+                }
+                else if (!isDirection && !isAttach && playerController.rigid.velocity.y >= 0)
+                {
+                    playerController.rigid.AddForce(Vector2.left * 50, ForceMode2D.Force);
+                    Debug.Log("22222" + Vector2.left);
+                }
             }
 
         }
@@ -126,7 +126,6 @@ public class PlayerHookShot : MonoBehaviour //hookshot && dash
         // dash를 입력하고 isAttach가 참일때 ==> dash가 true
         if (Input.GetKeyDown(KeyCode.LeftShift) && isAttach)
         {
-
             isDash = true;
             ghost.makeGhost = true; //잔상 on 
 
@@ -160,7 +159,6 @@ public class PlayerHookShot : MonoBehaviour //hookshot && dash
     }
 
 
-
         private IEnumerator DashStay_Co()
         {
             Vector2 dashStay = playerController.rigid.velocity; //player 리지드바디 저장하는 변수 
@@ -181,9 +179,6 @@ public class PlayerHookShot : MonoBehaviour //hookshot && dash
                     yield break;
                 }
             }
-
-
         }
-
     } 
 

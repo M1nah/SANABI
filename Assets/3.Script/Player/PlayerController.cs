@@ -191,18 +191,18 @@ public class PlayerController : MonoBehaviour
                 armAni.SetBool("ArmIsWallClimbUp", true);
             }
 
-            if (!playerInput.isMoveUp && !playerInput.isMoveDown)
-            {
-                //벽중간에서 멈춤
-                slidingSpeed = 0f;
-                //rigid.AddForce(Vector2.zero, ForceMode2D.Force); // 그래도 올라갈때 밀리네.. 
-                Debug.Log("climb 일시정지"); //들어가짐 
-                //들어가지고 멈추긴 하는데 그래도 밀림.. 
-            }
-            else
-            {
-                slidingSpeed = 2f;
-            }
+            //if (!playerInput.isMoveUp && !playerInput.isMoveDown)
+            //{
+            //    //벽중간에서 멈춤
+            //    slidingSpeed = 0f;
+            //    //rigid.AddForce(Vector2.zero, ForceMode2D.Force); // 그래도 올라갈때 밀리네.. 
+            //    Debug.Log("climb 일시정지"); //들어가짐 
+            //    //들어가지고 멈추긴 하는데 그래도 밀림.. 
+            //}
+            //else
+            //{
+            //    slidingSpeed = 2f;
+            //}
 
         }
     }
@@ -241,7 +241,6 @@ public class PlayerController : MonoBehaviour
             rigid.gravityScale = 3f;
             playerAni.SetBool("isWallCilmbUp", false);
             armAni.SetBool("ArmIsWallClimbUp", false);
-            Debug.Log("1");
         }
 
 
