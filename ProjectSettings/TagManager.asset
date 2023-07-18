@@ -9,6 +9,7 @@ TagManager:
   - Button
   - Enemy
   - Berry
+  - DeadPlatform
   layers:
   - Default
   - TransparentFX

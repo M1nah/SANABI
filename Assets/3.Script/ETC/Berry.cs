@@ -7,23 +7,20 @@ public class Berry : MonoBehaviour
 {
     public GameObject berry;
 
-    PlayerInput playerInput;
+    [SerializeField] PlayerInput playerInput;
+    [SerializeField] GameManager gameManager;
 
     bool isGetBerry=false;
 
-    bool isFadeOut;
-
-    private void Start()
-    {
-        playerInput = FindObjectOfType<PlayerInput>();
-    }
+    bool isFadeOut = false; //fadeOut 처리 
 
     private void Update()
     {
         if (playerInput.isInteraction && isGetBerry)
         {
             Debug.Log("E키를 누름");
-            SceneManager.LoadScene(0);
+            gameManager.ChangeScene(0);
+            //SceneManager.LoadScene(0);
         }
     }
 
