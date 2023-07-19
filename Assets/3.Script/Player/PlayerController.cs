@@ -179,29 +179,40 @@ public class PlayerController : MonoBehaviour
     //climb
     private void Climb() 
     {
-        if (isWall && isWallStay )
+        if (isWall && isWallStay)
         {
-            if (playerInput.isMoveUp || playerInput.isMoveDown)
+            if (playerInput.isMoveUp)
             {
                 rigid.gravityScale = 0;
-                float ver = Input.GetAxis("Vertical");
-                rigid.velocity = new Vector2(rigid.velocity.x, ver * slidingSpeed);
+                float ver = Input.GetAxisRaw("Vertical");
+                //rigid.velocity = Vector2.zero;
+                //rigid.velocity = new Vector2(rigid.velocity.x, ver * slidingSpeed);
 
-                playerAni.SetBool("isWallCilmbUp", true);
-                armAni.SetBool("ArmIsWallClimbUp", true);
+                transform.position += new Vector3(0,0.03f);
+
+
+                playerAni.SetTrigger("isWallCilmbUp");
+            }
+
+            if (playerInput.isMoveDown)
+            {
+                rigid.gravityScale = 0;
+                float ver = Input.GetAxisRaw("Vertical");
+                //rigid.velocity = Vector2.zero;
+                //rigid.velocity = new Vector2(rigid.velocity.x, ver * slidingSpeed);
+                transform.position -= new Vector3(0,0.03f);
+
+                playerAni.SetTrigger("isWallClimbDown");
             }
 
             //if (!playerInput.isMoveUp && !playerInput.isMoveDown)
             //{
-            //    //벽중간에서 멈춤
-            //    slidingSpeed = 0f;
-            //    //rigid.AddForce(Vector2.zero, ForceMode2D.Force); // 그래도 올라갈때 밀리네.. 
-            //    Debug.Log("climb 일시정지"); //들어가짐 
-            //    //들어가지고 멈추긴 하는데 그래도 밀림.. 
+            //    playerAni.speed = 0;
+            // player의 벽에 고정된 스테이 애니메이션 하나 만들어서 settrigger로 관리하자
             //}
             //else
             //{
-            //    slidingSpeed = 2f;
+            //    playerAni.speed = 20;
             //}
 
         }
@@ -216,10 +227,12 @@ public class PlayerController : MonoBehaviour
             isJump = false;
             jumpCount = 0;
             //Debug.Log("jump reset"); //점프 리셋이 전혀 안되는디
-                                     //isGround bool값을 만들어주고 체크하니까 이제 리셋 됨
-                                     //그리고 공중에서 점프 안하게 됨 해결 !  -> 근대 오ㅔ 또 애니메이션 고장난거야
-                                     // -> jumpCount++ 되는 곳에 isGround 체크해줬더니 애니메이션 또 됨 완벽하게 해결! 
-                                     //Running 도중 jumping ani로 바뀌는 건 그냥 트렌지션에 Running 값도 true로 바꿔줬더니 잘만 나오더라 하... @@
+            //isGround bool값을 만들어주고 체크하니까 이제 리셋 됨
+            //그리고 공중에서 점프 안하게 됨 해결 !  -> 근대 오ㅔ 또 애니메이션 고장난거야
+            // -> jumpCount++ 되는 곳에 isGround 체크해줬더니 애니메이션 또 됨 완벽하게 해결! 
+            //Running 도중 jumping ani로 바뀌는 건 그냥 트렌지션에 Running 값도 true로 바꿔줬더니 잘만 나오더라 하... @@
+          
+            playerAni.SetTrigger("isIdle");
         }
     }
 
@@ -239,8 +252,7 @@ public class PlayerController : MonoBehaviour
         {
             isWallStay = false;
             rigid.gravityScale = 3f;
-            playerAni.SetBool("isWallCilmbUp", false);
-            armAni.SetBool("ArmIsWallClimbUp", false);
+            playerAni.SetTrigger("isIdle");
         }
 
 

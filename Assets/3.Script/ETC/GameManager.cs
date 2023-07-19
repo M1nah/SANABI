@@ -14,7 +14,7 @@ public class GameManager : MonoBehaviour
     {
         instance = this;
     }
-    #endregion //인스턴스 선언
+    #endregion
 
     [SerializeField] GameObject MenuPanelUI;
     [SerializeField] GameObject Player;
@@ -33,6 +33,7 @@ public class GameManager : MonoBehaviour
 
     [SerializeField] Animator playerDeadAni;
     [SerializeField] GameObject playerArm; //dead애니메이션이 실행될 때 꺼져야함
+    [SerializeField] GameObject HPHud; 
 
 
     //페이드인아웃
@@ -43,7 +44,7 @@ public class GameManager : MonoBehaviour
         playerRgd = Player.GetComponent<Rigidbody2D>();
         fadeInOut = FindObjectOfType<FadeInOut>();
 
-        //씬이 로드 될때마다 페이드인
+        //씬을 불러올 때마다 페이드인
         fadeInOut.Fade(false);
     }
 
@@ -101,44 +102,39 @@ public class GameManager : MonoBehaviour
     private IEnumerator Hp_Co()
     {
         Vector2 saveVelocity = playerRgd.velocity;
-
         yield return new WaitForSeconds(0.1f);
-
         playerRgd.velocity = new Vector2(saveVelocity.x * -1, saveVelocity.y * -1).normalized * 10;
         isCoroutineLock = false;
     }
 
     public void Die()
     {
-
         //죽었을 때 player에 붙어있는 컴포넌트 스크립트들 끄기 
         Player.GetComponent<PlayerInput>().enabled = false;
         Player.GetComponent<PlayerController>().enabled = false;
         Player.GetComponent<PlayerHookShot>().enabled = false;
         Player.GetComponent<DastGhost>().enabled = false;
 
+        //데드씬 출력
         StartCoroutine(DieScene_co());
 
-        //플레이어 모든 움직임 멈춤 
-        //deadUI 활성화
-        //씬 로드하기
     }
 
-    private IEnumerator DieScene_co() //데드씬
+    private IEnumerator DieScene_co() 
     {
         playerDeadCam.gameObject.SetActive(true);
+        HPHud.SetActive(false);
         deadImage.SetActive(true);
         yield return new WaitForSeconds(0.2f);
         playerArm.SetActive(false);
         playerDeadAni.SetTrigger("isDie");
-        //여기 플레이어 다이 애니메이션 true
         yield return new WaitForSeconds(2);
 
         //페이드아웃
         fadeInOut.Fade(true);
         yield return new WaitForSeconds(fadeInOut.fadeTime);
         yield return null;
-        ChangeScene(1); //씬 되돌아가기
+        ChangeScene(1); //씬 되돌아가기(리셋)
     }
 
     public void ChangeScene(int sceneNum)
