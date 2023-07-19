@@ -19,10 +19,6 @@ public class IntroMenu : MonoBehaviour
     bool optionPanelActive=false;
     bool quitPanelActive=false;
 
-    //private void Start()
-    //{
-    //    Screen.SetResolution(1080,1920,true);
-    //}
 
     public void StartBtn()
     {

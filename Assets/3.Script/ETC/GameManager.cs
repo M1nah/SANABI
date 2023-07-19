@@ -6,7 +6,6 @@ using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
-
     #region instance
     public static GameManager instance = null;
 
@@ -16,7 +15,6 @@ public class GameManager : MonoBehaviour
     }
     #endregion //인스턴스 선언
 
-
     [SerializeField] GameObject MenuPanelUI;
     [SerializeField] GameObject Player;
     Rigidbody2D playerRgd;
@@ -24,22 +22,26 @@ public class GameManager : MonoBehaviour
 
     public bool isMenuOpen =false;
 
-    //fade-in-out
-    public Image fadeImage;
-
 
     //Player HP && Die
     int playerHP = 4;
     bool isCoroutineLock =false;
     
     [SerializeField] GameObject deadImage;
+    //[SerializeField] Camera playerCam; //죽었을 때 약간 확대되는 카메라
 
 
+    //페이드인아웃
+    FadeInOut fadeInOut;
 
     private void Start()
     {
         playerRgd = Player.GetComponent<Rigidbody2D>();
-        fadeImage = GetComponent<Image>();
+        fadeInOut = FindObjectOfType<FadeInOut>();
+
+
+        //씬이 로드 될때마다 페이드인
+        fadeInOut.Fade(false);
     }
 
     // Update is called once per frame
@@ -76,19 +78,6 @@ public class GameManager : MonoBehaviour
     }
 
 
-
-    public void FadeOut()
-    {
-        Color color = fadeImage.color;
-
-        //알파값(a)이 1보다 작으면 a값 증가
-        if (color.a < 1)
-        {
-            color.a += Time.deltaTime*0.5f;
-        }
-        fadeImage.color = color;
-    }
-
     public void HP()
     {
         playerHP--;
@@ -110,7 +99,7 @@ public class GameManager : MonoBehaviour
     {
         Vector2 saveVelocity = playerRgd.velocity;
 
-        yield return new WaitForSeconds(2);
+        yield return new WaitForSeconds(0.1f);
 
         playerRgd.velocity = new Vector2(saveVelocity.x * -1, saveVelocity.y * -1).normalized * 10;
         isCoroutineLock = false;
@@ -132,30 +121,23 @@ public class GameManager : MonoBehaviour
         //씬 로드하기
     }
 
-    private IEnumerator DieScene_co()
+    private IEnumerator DieScene_co() //데드씬
     {
-        /*
-         1. 검은 오브젝트 배경 .setActive(true) 
-         2. 플레이어 다이 애니메이션 내보내고 +글리치이펙트
-         3. 3초 텀을 둔다음
-         4. 씬 가장 처음으로 이동 페이드인
-         5. player에 붙은 모든 컴모넌트 스크립트들 켜기
-        */
-        
-        
+
         deadImage.SetActive(true);
         //여기 플레이어 다이 애니메이션 true
-        yield return new WaitForSeconds(3);
+        yield return new WaitForSeconds(2);
 
-        ChangeScene(1);
-        //페이드인
-
+        //페이드아웃
+        fadeInOut.Fade(true);
+        yield return new WaitForSeconds(fadeInOut.fadeTime);
+        yield return null;
+        ChangeScene(1); //씬 되돌아가기
     }
 
     public void ChangeScene(int sceneNum)
     {
         SceneManager.LoadScene(sceneNum);
     }
-
 
 }
