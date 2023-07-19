@@ -12,7 +12,6 @@ public class FadeInOut : MonoBehaviour
     public float fadeTime; // fadeSpeed값이 10이면 1초 (값이 클수록 빠름)
 
 
-
         //fade-In. 배경의 알파값이 1에서 0으로(화면이 점점 밝아진다)
         //StartCoroutine(Fade_Co(1,0));
 
@@ -30,8 +29,6 @@ public class FadeInOut : MonoBehaviour
     {
         if (fade_in)
         {
-
-
         StartCoroutine(Fade_Co(0, 1));
         }
         else
@@ -63,6 +60,9 @@ public class FadeInOut : MonoBehaviour
     }
 
 
+
+    //컴포넌트가 켜져있으면 안되는 씬도 있어서 ex.ui밖에없는 인트로 씬
+    //일부러 컴포넌트를 끄고 켜주는 메서드를 따로 뺐다
     public void ActiveFadeImage(bool isActive)
     {
         if (isActive) 

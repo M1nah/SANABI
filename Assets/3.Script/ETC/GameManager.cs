@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
+using Cinemachine;
 
 public class GameManager : MonoBehaviour
 {
@@ -28,7 +29,10 @@ public class GameManager : MonoBehaviour
     bool isCoroutineLock =false;
     
     [SerializeField] GameObject deadImage;
-    //[SerializeField] Camera playerCam; //죽었을 때 약간 확대되는 카메라
+    [SerializeField] CinemachineVirtualCamera playerDeadCam; //죽었을 때 약간 확대되는 카메라
+
+    [SerializeField] Animator playerDeadAni;
+    [SerializeField] GameObject playerArm; //dead애니메이션이 실행될 때 꺼져야함
 
 
     //페이드인아웃
@@ -38,7 +42,6 @@ public class GameManager : MonoBehaviour
     {
         playerRgd = Player.GetComponent<Rigidbody2D>();
         fadeInOut = FindObjectOfType<FadeInOut>();
-
 
         //씬이 로드 될때마다 페이드인
         fadeInOut.Fade(false);
@@ -123,8 +126,11 @@ public class GameManager : MonoBehaviour
 
     private IEnumerator DieScene_co() //데드씬
     {
-
+        playerDeadCam.gameObject.SetActive(true);
         deadImage.SetActive(true);
+        yield return new WaitForSeconds(0.2f);
+        playerArm.SetActive(false);
+        playerDeadAni.SetTrigger("isDie");
         //여기 플레이어 다이 애니메이션 true
         yield return new WaitForSeconds(2);
 
