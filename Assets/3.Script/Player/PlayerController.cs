@@ -212,7 +212,8 @@ public class PlayerController : MonoBehaviour
                //player의 벽에 고정된 스테이 애니메이션 speed로 관리중
                playerAni.speed = 0;
                armAni.speed = 0;
-           }
+
+            }
            else
            {
                playerAni.speed = 1;
@@ -257,10 +258,8 @@ public class PlayerController : MonoBehaviour
         {
             isWallStay = false;
             rigid.gravityScale = 3f;
-            playerAni.SetTrigger("isIdle");
-            armAni.SetTrigger("ArmIsIdle"); 
+            //playerAni.SetTrigger("isIdle");
+            //armAni.SetTrigger("ArmIsIdle"); 
         }
-
-
     }
 }

@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class DeadPlatform : MonoBehaviour
 {
+    //¹âÀ¸¸é Ä«¸Þ¶ó Èçµé±â
 
     private void OnTriggerEnter2D(Collider2D collision)
     {

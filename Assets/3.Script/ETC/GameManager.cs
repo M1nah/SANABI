@@ -21,23 +21,28 @@ public class GameManager : MonoBehaviour
     Rigidbody2D playerRgd;
     //플레이어 컨트롤러와 훅샷 컴포넌트 자체를 끄면서 움직임 멈추게하자 
 
-    public bool isMenuOpen =false;
+    public bool isMenuOpen = false;
 
 
     //Player HP && Die
     int playerHP = 4;
-    bool isCoroutineLock =false;
-    
+    bool isCoroutineLock = false;
+
     [SerializeField] GameObject deadImage;
     [SerializeField] CinemachineVirtualCamera playerDeadCam; //죽었을 때 약간 확대되는 카메라
 
     [SerializeField] Animator playerDeadAni;
     [SerializeField] GameObject playerArm; //dead애니메이션이 실행될 때 꺼져야함
-    [SerializeField] GameObject HPHud; 
+
+    [SerializeField] GameObject [] HPHud; //HP UI 이미지
 
 
     //페이드인아웃
     FadeInOut fadeInOut;
+
+
+
+
 
     private void Start()
     {
@@ -85,17 +90,54 @@ public class GameManager : MonoBehaviour
     public void HP()
     {
         playerHP--;
-        
+
+        HPCondition();
+
         if (playerHP <= 0)
         {
             Die();
         }
-        else if(!isCoroutineLock)
+        else if (!isCoroutineLock)
         {
             isCoroutineLock = true;
             StartCoroutine(Hp_Co());
         }
-        
+
+    }
+
+    public void HPCondition()
+    {
+        switch (playerHP)
+        {
+            case 1:
+                HPHud[0].SetActive(true);
+                HPHud[1].SetActive(false);
+                HPHud[2].SetActive(false);
+                HPHud[3].SetActive(false);
+                break;
+
+            case 2:
+                HPHud[0].SetActive(false);
+                HPHud[1].SetActive(true);
+                HPHud[2].SetActive(false);
+                HPHud[3].SetActive(false);
+                break;
+
+            case 3:
+                HPHud[0].SetActive(false);
+                HPHud[1].SetActive(false);
+                HPHud[2].SetActive(true);
+                HPHud[3].SetActive(false);
+                break;
+
+            case 4:
+                HPHud[0].SetActive(false);
+                HPHud[1].SetActive(false);
+                HPHud[2].SetActive(false);
+                HPHud[3].SetActive(true);
+                break;
+        }
+
     }
 
 
