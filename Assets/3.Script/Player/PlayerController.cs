@@ -192,6 +192,7 @@ public class PlayerController : MonoBehaviour
 
 
                 playerAni.SetTrigger("isWallCilmbUp");
+                armAni.SetTrigger("ArmIsWallClimbUp");
             }
 
             if (playerInput.isMoveDown)
@@ -203,17 +204,20 @@ public class PlayerController : MonoBehaviour
                 transform.position -= new Vector3(0,0.03f);
 
                 playerAni.SetTrigger("isWallClimbDown");
+                armAni.SetTrigger("ArmIsWallClimbDown");
             }
 
-            //if (!playerInput.isMoveUp && !playerInput.isMoveDown)
-            //{
-            //    playerAni.speed = 0;
-            // player의 벽에 고정된 스테이 애니메이션 하나 만들어서 settrigger로 관리하자
-            //}
-            //else
-            //{
-            //    playerAni.speed = 20;
-            //}
+           if (!playerInput.isMoveUp && !playerInput.isMoveDown)
+           {
+               //player의 벽에 고정된 스테이 애니메이션 speed로 관리중
+               playerAni.speed = 0;
+               armAni.speed = 0;
+           }
+           else
+           {
+               playerAni.speed = 1;
+               armAni.speed = 1;
+           }
 
         }
     }
@@ -233,6 +237,7 @@ public class PlayerController : MonoBehaviour
             //Running 도중 jumping ani로 바뀌는 건 그냥 트렌지션에 Running 값도 true로 바꿔줬더니 잘만 나오더라 하... @@
           
             playerAni.SetTrigger("isIdle");
+            armAni.SetTrigger("ArmIsIdle"); 
         }
     }
 
@@ -253,6 +258,7 @@ public class PlayerController : MonoBehaviour
             isWallStay = false;
             rigid.gravityScale = 3f;
             playerAni.SetTrigger("isIdle");
+            armAni.SetTrigger("ArmIsIdle"); 
         }
 
 
