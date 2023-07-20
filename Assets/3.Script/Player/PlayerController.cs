@@ -8,6 +8,18 @@ public class PlayerController : MonoBehaviour
     [SerializeField] public Rigidbody2D rigid; //물리 이동을 위한 변수 선언
     SpriteRenderer spriteRenderer; //방향전환을 위한 변수
 
+
+    [Header("SFX")]
+    [SerializeField] private AudioSource playerAudio;
+
+    [SerializeField] private AudioClip[] playerSFX;
+
+    //[SerializeField] private AudioClip playerFootstep;0
+    //[SerializeField] private AudioClip playerJump;1
+    //[SerializeField] private AudioClip playerClimbUp;2
+    //[SerializeField] private AudioClip playerClimbDown;3
+    [Space]
+
     //move
     [Header("Move")]
     [SerializeField] public float moveSpeed;
@@ -55,6 +67,8 @@ public class PlayerController : MonoBehaviour
 
         playerHookShot = GetComponent<PlayerHookShot>();
 
+        playerAudio = GetComponent<AudioSource>();
+
     }
 
     private void Update()
@@ -80,7 +94,6 @@ public class PlayerController : MonoBehaviour
                 Move();
                 playerAni.SetBool("isRunning", true);
                 armAni.SetBool("ArmIsRunning", true);
-
             }
             else
             {
@@ -115,6 +128,7 @@ public class PlayerController : MonoBehaviour
         //player Movement
         float h = Input.GetAxisRaw("Horizontal");
         rigid.AddForce(Vector2.right * h, ForceMode2D.Impulse);
+        playerAudio.clip = playerSFX[0];
 
         #region maxSpeed 관리
         if (rigid.velocity.x > maxSpeed) //maxSpeed를 넘으면
@@ -156,6 +170,7 @@ public class PlayerController : MonoBehaviour
             isGround = true;
             jumpCount++;
             rigid.AddForce(Vector2.up * jump, ForceMode2D.Impulse);
+            playerAudio.clip = playerSFX[1];
             isJump = true;
         }
     }
@@ -184,27 +199,25 @@ public class PlayerController : MonoBehaviour
             if (playerInput.isMoveUp)
             {
                 rigid.gravityScale = 0;
-                float ver = Input.GetAxisRaw("Vertical");
-                //rigid.velocity = Vector2.zero;
-                //rigid.velocity = new Vector2(rigid.velocity.x, ver * slidingSpeed);
+                //float ver = Input.GetAxisRaw("Vertical");
 
                 transform.position += new Vector3(0,0.03f);
 
 
                 playerAni.SetTrigger("isWallCilmbUp");
                 armAni.SetTrigger("ArmIsWallClimbUp");
+
             }
 
             if (playerInput.isMoveDown)
             {
                 rigid.gravityScale = 0;
-                float ver = Input.GetAxisRaw("Vertical");
-                //rigid.velocity = Vector2.zero;
-                //rigid.velocity = new Vector2(rigid.velocity.x, ver * slidingSpeed);
+                //float ver = Input.GetAxisRaw("Vertical");
                 transform.position -= new Vector3(0,0.03f);
 
                 playerAni.SetTrigger("isWallClimbDown");
                 armAni.SetTrigger("ArmIsWallClimbDown");
+
             }
 
            if (!playerInput.isMoveUp && !playerInput.isMoveDown)

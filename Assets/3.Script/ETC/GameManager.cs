@@ -90,7 +90,7 @@ public class GameManager : MonoBehaviour
     public void HP()
     {
         playerHP--;
-
+        
         HPCondition();
 
         if (playerHP <= 0)
@@ -102,7 +102,6 @@ public class GameManager : MonoBehaviour
             isCoroutineLock = true;
             StartCoroutine(Hp_Co());
         }
-
     }
 
     public void HPCondition()
@@ -137,7 +136,6 @@ public class GameManager : MonoBehaviour
                 HPHud[3].SetActive(true);
                 break;
         }
-
     }
 
 
@@ -165,7 +163,7 @@ public class GameManager : MonoBehaviour
     private IEnumerator DieScene_co() 
     {
         playerDeadCam.gameObject.SetActive(true);
-        HPHud.SetActive(false);
+        //HPHud.SetActive(false); 
         deadImage.SetActive(true);
         yield return new WaitForSeconds(0.2f);
         playerArm.SetActive(false);
