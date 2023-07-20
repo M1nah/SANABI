@@ -8,7 +8,7 @@ public class DeadPlatform : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.CompareTag("Player"))
+        if (collision.CompareTag("Player") && PlayerPrefs.GetInt("Level") != 0)
         {
             GameManager.instance.HP();
             

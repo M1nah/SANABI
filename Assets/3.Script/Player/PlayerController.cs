@@ -12,13 +12,15 @@ public class PlayerController : MonoBehaviour
     [Header("SFX")]
     [SerializeField] private AudioSource playerAudio;
 
-    [SerializeField] private AudioClip[] playerSFX;
-
-    //[SerializeField] private AudioClip playerFootstep;0
-    //[SerializeField] private AudioClip playerJump;1
-    //[SerializeField] private AudioClip playerClimbUp;2
-    //[SerializeField] private AudioClip playerClimbDown;3
+    [SerializeField] private AudioClip playerFootstep;
+    [SerializeField] private AudioClip playerJump;
+    [SerializeField] private AudioClip playerClimbUp;
+    [SerializeField] private AudioClip playerClimbDown;
     [Space]
+
+    //Audio 코루틴 관리 bool값
+    bool isFootstep = false; 
+
 
     //move
     [Header("Move")]
@@ -66,9 +68,6 @@ public class PlayerController : MonoBehaviour
         armAni = Arm.GetComponent<Animator>();
 
         playerHookShot = GetComponent<PlayerHookShot>();
-
-        playerAudio = GetComponent<AudioSource>();
-
     }
 
     private void Update()
@@ -87,18 +86,29 @@ public class PlayerController : MonoBehaviour
                     playerHookShot.isDirection = true;
                 }
             }
-
             else if (playerInput.isMoveLeft || playerInput.isMoveRight )
             {
                 Climb_Ray(); //Wall 검출 RayCast
                 Move();
                 playerAni.SetBool("isRunning", true);
                 armAni.SetBool("ArmIsRunning", true);
+
+                if (!isFootstep)
+                {
+                    isFootstep = true;
+                    StartCoroutine(playerFootstep_Co()); //Footstep
+                }
             }
             else
             {
                 playerAni.SetBool("isRunning", false);
                 armAni.SetBool("ArmIsRunning", false);
+
+                if (isFootstep)
+                {
+                    isFootstep = false;
+                    StopCoroutine(playerFootstep_Co());
+                }
             }
 
 
@@ -128,8 +138,9 @@ public class PlayerController : MonoBehaviour
         //player Movement
         float h = Input.GetAxisRaw("Horizontal");
         rigid.AddForce(Vector2.right * h, ForceMode2D.Impulse);
-        playerAudio.clip = playerSFX[0];
+        
 
+        
         #region maxSpeed 관리
         if (rigid.velocity.x > maxSpeed) //maxSpeed를 넘으면
         {
@@ -163,6 +174,19 @@ public class PlayerController : MonoBehaviour
         }
 
     }
+
+
+    public IEnumerator playerFootstep_Co()
+    {
+        while (playerInput.isMoveLeft || playerInput.isMoveRight)
+        {
+            playerAudio.Play();
+        yield return new WaitForSeconds(0.5f);
+        }
+        isFootstep = false;
+    }
+
+
     private void Jump()
     {
         if (jumpCount < 1)
@@ -170,7 +194,7 @@ public class PlayerController : MonoBehaviour
             isGround = true;
             jumpCount++;
             rigid.AddForce(Vector2.up * jump, ForceMode2D.Impulse);
-            playerAudio.clip = playerSFX[1];
+            playerAudio.PlayOneShot(playerJump);
             isJump = true;
         }
     }
@@ -200,12 +224,11 @@ public class PlayerController : MonoBehaviour
             {
                 rigid.gravityScale = 0;
                 //float ver = Input.GetAxisRaw("Vertical");
-
                 transform.position += new Vector3(0,0.03f);
-
 
                 playerAni.SetTrigger("isWallCilmbUp");
                 armAni.SetTrigger("ArmIsWallClimbUp");
+                StartCoroutine(playerClimeb_Co()); 
 
             }
 
@@ -217,6 +240,7 @@ public class PlayerController : MonoBehaviour
 
                 playerAni.SetTrigger("isWallClimbDown");
                 armAni.SetTrigger("ArmIsWallClimbDown");
+                StartCoroutine(playerClimeb_Co()); 
 
             }
 
@@ -225,14 +249,28 @@ public class PlayerController : MonoBehaviour
                //player의 벽에 고정된 스테이 애니메이션 speed로 관리중
                playerAni.speed = 0;
                armAni.speed = 0;
-
+                StopCoroutine(playerClimeb_Co());
             }
            else
            {
                playerAni.speed = 1;
                armAni.speed = 1;
+               StopCoroutine(playerClimeb_Co());
            }
 
+        }
+    }
+
+    public IEnumerator playerClimeb_Co()
+    {
+        while (playerInput.isMoveUp || playerInput.isMoveDown)
+        {
+            if(playerInput.isMoveUp)
+            playerAudio.Play(); 
+            else if (playerInput.isMoveDown)
+            playerAudio.Play();
+
+        yield return new WaitForSeconds(2f); //소리루프조절
         }
     }
 

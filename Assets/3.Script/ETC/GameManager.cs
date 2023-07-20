@@ -25,7 +25,7 @@ public class GameManager : MonoBehaviour
 
 
     //Player HP && Die
-    int playerHP = 4;
+    int playerHP;
     bool isCoroutineLock = false;
 
     [SerializeField] GameObject deadImage;
@@ -42,8 +42,6 @@ public class GameManager : MonoBehaviour
 
 
 
-
-
     private void Start()
     {
         playerRgd = Player.GetComponent<Rigidbody2D>();
@@ -51,6 +49,18 @@ public class GameManager : MonoBehaviour
 
         //씬을 불러올 때마다 페이드인
         fadeInOut.Fade(false);
+
+
+        //난이도에 따른 HP 세팅 초기화 
+        if(PlayerPrefs.GetInt("Level") == 3)
+        {
+            playerHP = 1;
+        }
+        else
+        {
+            playerHP = 4;
+        }
+
     }
 
     // Update is called once per frame
@@ -102,7 +112,16 @@ public class GameManager : MonoBehaviour
             isCoroutineLock = true;
             StartCoroutine(Hp_Co());
         }
+
+
+        if (playerHP == 1)
+        {
+            //HPReset코루틴;
+            StartCoroutine(HPReset_Co()); //여기는 조건이 hp1일경우가 유일하니까 따로 코루틴을 stop할 필요가 없음! 
+        }
     }
+
+
 
     public void HPCondition()
     {
@@ -135,6 +154,23 @@ public class GameManager : MonoBehaviour
                 HPHud[2].SetActive(false);
                 HPHud[3].SetActive(true);
                 break;
+        }
+    }
+
+
+    private IEnumerator HPReset_Co()
+    {
+        if (PlayerPrefs.GetInt("Level") == 1)
+        {
+            yield return new WaitForSeconds(5f);
+            playerHP = 4;
+            HPCondition();
+        }
+        else if (PlayerPrefs.GetInt("Level") == 2)
+        {
+            yield return new WaitForSeconds(5f);
+            playerHP = 2;
+            HPCondition();
         }
     }
 

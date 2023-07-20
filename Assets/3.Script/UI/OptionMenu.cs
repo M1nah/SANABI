@@ -17,21 +17,27 @@ public class OptionMenu : MonoBehaviour
     //bgm
     public AudioSource BGM;
 
+
+
     // Start is called before the first frame update
     void Start()
     {
         InitUI();
 
+        if (PlayerPrefs.GetFloat("Volume") != 0)
+        {
+            BGM.volume = PlayerPrefs.GetFloat("Volume");
+        }
     }
 
     void InitUI() //해상도 목록
     {
         for(int i = 0; i<Screen.resolutions.Length; i++)
         {
+                Debug.Log(resolutions[i]);
             if(Screen.resolutions[i].refreshRate == 75) 
             {//해상도 값을 가져올 때 화면 재생 빈도가 75인 값만 가져와서 해상도 list에 넣어주기
                 resolutions.Add(Screen.resolutions[i]);
-                Debug.Log(resolutions[i]);
             }
         }
          //==> 특정한 해상도 값을 골라서 가져올 수 없나?
@@ -80,6 +86,7 @@ public class OptionMenu : MonoBehaviour
     //BGM Volume
     public void SetMusicVol(float volume)
     {
+        PlayerPrefs.SetFloat("Volume", volume);
         BGM.volume = volume;
 
         //씬 넘어가서도 설정 꺼지지 않게...

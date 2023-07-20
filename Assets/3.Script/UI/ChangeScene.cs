@@ -12,8 +12,10 @@ public class ChangeScene : MonoBehaviour
         fadeinout = FindObjectOfType<FadeInOut>();
     }
 
-    public void StartButton()
+
+    public void StartButton(int  levelTypeNum)//버튼 클릭 메서드 
     {
+        PlayerPrefs.SetInt("Level", levelTypeNum); //player 프리팹을 자동으로 만들어줌
         StartCoroutine(Start_Co());
     }
 
@@ -24,6 +26,11 @@ public class ChangeScene : MonoBehaviour
         fadeinout.Fade(true);
         yield return new WaitForSeconds(fadeinout.fadeTime);
         SceneManager.LoadScene(1);
+    }
+
+    public void BacktoMain()
+    {
+        SceneManager.LoadScene(0);
     }
 
 }
