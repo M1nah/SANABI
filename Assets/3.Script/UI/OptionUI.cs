@@ -17,10 +17,14 @@ public class OptionUI : MonoBehaviour
     //public AudioSource BGM;
     public AudioMixer audioMixer;
 
+    public Slider BGMSlider = null;
+    public Slider SFXSlider = null;
+
     private void Start()
     {
         InitUI();
 
+        LoadValues();
         //if (PlayerPrefs.GetFloat("Volume") != 0)
         //{
         //    BGM.volume = PlayerPrefs.GetFloat("Volume");
@@ -75,13 +79,29 @@ public class OptionUI : MonoBehaviour
     }
 
     //BGM Volume
-    public void SetMusicVol(float volume)
+    public void SetMusicVol()
     {
-        //씬 넘어가서도 설정 꺼지지 않게...
-        PlayerPrefs.SetFloat("Volume", volume);
+        float BGMvolumeValue = BGMSlider.value;
+        audioMixer.SetFloat("MasterParam", BGMvolumeValue);
+        PlayerPrefs.SetFloat("MasterParam", BGMvolumeValue);
 
-        audioMixer.SetFloat("MasterParam", volume);
-        audioMixer.SetFloat("SFX", volume);
+        float SFXvolumeValue = SFXSlider.value;
+        audioMixer.SetFloat("SFXParam", SFXvolumeValue);
+        PlayerPrefs.SetFloat("SFXParam", SFXvolumeValue);
+
+        //씬 넘어가서도 설정 꺼지지 않게...
+        //PlayerPrefs.SetFloat("Volume", volume);
+
     }
 
+    void LoadValues()
+    {
+        float BGMvoulume = PlayerPrefs.GetFloat("MasterParam");
+        BGMSlider.value = BGMvoulume;
+        audioMixer.SetFloat("MasterParam", BGMvoulume);
+
+        float SFXvoulume = PlayerPrefs.GetFloat("SFXParam");
+        SFXSlider.value = SFXvoulume;
+        audioMixer.SetFloat("SFXParam", SFXvoulume);
+    }
 }

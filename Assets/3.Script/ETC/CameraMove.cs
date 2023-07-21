@@ -6,7 +6,6 @@ public class CameraMove : MonoBehaviour
 {
     public GameObject virtualCam;
 
-
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.CompareTag("Player") && !collision.isTrigger)
@@ -21,15 +20,6 @@ public class CameraMove : MonoBehaviour
         {
             virtualCam.SetActive(false);
         }
-    }
-
-
-    //¡‹¿Œ
-
-
-    private void ZoomOUt()
-    {
-        //01æ¿¿Ã √≥¿Ω Ω√¿€«“ ∂ß Intro 
     }
 
 

@@ -10,6 +10,7 @@ public class ChangeScene : MonoBehaviour
     private void Start()
     {
         fadeinout = FindObjectOfType<FadeInOut>();
+
     }
 
 
