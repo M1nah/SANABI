@@ -30,8 +30,8 @@ public class IntroMenu : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.Escape) && levelPanelActive)
         {
-            levelPanelActive = false;
             Back();
+            levelPanelActive = false;
         }
     }
 
@@ -44,8 +44,8 @@ public class IntroMenu : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.Escape) && optionPanelActive)//esc≈∞ æ»∏‘¿Ω
         {
-            optionPanelActive = false;
             Back();
+            optionPanelActive = false;
         }
 
 
@@ -60,8 +60,8 @@ public class IntroMenu : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.Escape)  && quitPanelActive)
         {
-            quitPanelActive = false;
             Back();
+            quitPanelActive = false;
         }
     }
 

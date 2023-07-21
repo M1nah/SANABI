@@ -40,7 +40,9 @@ public class GameManager : MonoBehaviour
     //페이드인아웃
     FadeInOut fadeInOut;
 
-
+    //die audio
+    [SerializeField] AudioSource BGM;
+    [SerializeField] AudioSource BGM_Bird;
 
     private void Start()
     {
@@ -191,6 +193,10 @@ public class GameManager : MonoBehaviour
         Player.GetComponent<PlayerHookShot>().enabled = false;
         Player.GetComponent<DastGhost>().enabled = false;
 
+        BGM.Stop();
+        BGM_Bird.Stop();
+
+
         //데드씬 출력
         StartCoroutine(DieScene_co());
 
@@ -216,6 +222,18 @@ public class GameManager : MonoBehaviour
     public void ChangeScene(int sceneNum)
     {
         SceneManager.LoadScene(sceneNum);
+    }
+
+    public void BackToGameBtn()
+    {
+        //메뉴가 닫혔을 때 player에 붙어있는 컴포넌트들 켜기 
+        Player.GetComponent<PlayerInput>().enabled = true;
+        Player.GetComponent<PlayerController>().enabled = true;
+        Player.GetComponent<PlayerHookShot>().enabled = true;
+        Player.GetComponent<DastGhost>().enabled = true;
+
+        isMenuOpen = false;
+        MenuPanelUI.SetActive(false);
     }
 
 }

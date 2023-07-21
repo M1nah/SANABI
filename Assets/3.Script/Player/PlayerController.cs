@@ -12,14 +12,13 @@ public class PlayerController : MonoBehaviour
     [Header("SFX")]
     [SerializeField] private AudioSource playerAudio;
 
-    [SerializeField] private AudioClip playerFootstep;
     [SerializeField] private AudioClip playerJump;
-    [SerializeField] private AudioClip playerClimbUp;
-    [SerializeField] private AudioClip playerClimbDown;
+    [SerializeField] private AudioClip playerWallStick;
     [Space]
 
     //Audio 코루틴 관리 bool값
-    bool isFootstep = false; 
+    //bool isFootstep = false;
+    //bool isClimbUp = false;
 
 
     //move
@@ -93,22 +92,28 @@ public class PlayerController : MonoBehaviour
                 playerAni.SetBool("isRunning", true);
                 armAni.SetBool("ArmIsRunning", true);
 
-                if (!isFootstep)
-                {
-                    isFootstep = true;
-                    StartCoroutine(playerFootstep_Co()); //Footstep
-                }
+                //if (!isFootstep)
+                //{
+                //    isFootstep = true;
+                //    //StartCoroutine(playerFootstep_Co()); //Foot
+                //    //StopCoroutine(playerClimeb_Co());
+                //}
             }
             else
             {
                 playerAni.SetBool("isRunning", false);
                 armAni.SetBool("ArmIsRunning", false);
 
-                if (isFootstep)
-                {
-                    isFootstep = false;
-                    StopCoroutine(playerFootstep_Co());
-                }
+                //if (isFootstep)
+                //{
+                //    isFootstep = false;
+                //    StopCoroutine(playerFootstep_Co());
+                //}
+                //if (isClimbUp)
+                //{
+                //    isClimbUp = false;
+                //    StopCoroutine(playerClimeb_Co());
+                //}
             }
 
 
@@ -118,13 +123,25 @@ public class PlayerController : MonoBehaviour
                 Jump();
                 playerAni.SetBool("isJumping", true);
                 armAni.SetBool("ArmIsJumping", true);
-
+                //if (isFootstep)
+                //{
+                //    isFootstep = false;
+                //    StopCoroutine(playerFootstep_Co());
+                //}
+                //if (isClimbUp)
+                //{
+                //    isClimbUp = false;
+                //    StopCoroutine(playerClimeb_Co());
+                //}
             }
             else if (!playerInput.isJump && !isJump)
             {
                 playerAni.SetBool("isJumping", false);
                 armAni.SetBool("ArmIsJumping", false);
-            }
+                //StopCoroutine(playerFootstep_Co());
+                //StopCoroutine(playerClimeb_Co());
+
+        }
     }
 
     private void FixedUpdate()
@@ -138,8 +155,6 @@ public class PlayerController : MonoBehaviour
         //player Movement
         float h = Input.GetAxisRaw("Horizontal");
         rigid.AddForce(Vector2.right * h, ForceMode2D.Impulse);
-        
-
         
         #region maxSpeed 관리
         if (rigid.velocity.x > maxSpeed) //maxSpeed를 넘으면
@@ -176,15 +191,15 @@ public class PlayerController : MonoBehaviour
     }
 
 
-    public IEnumerator playerFootstep_Co()
-    {
-        while (playerInput.isMoveLeft || playerInput.isMoveRight)
-        {
-            playerAudio.Play();
-        yield return new WaitForSeconds(0.5f);
-        }
-        isFootstep = false;
-    }
+    //public IEnumerator playerFootstep_Co()
+    //{
+    //    while (playerInput.isMoveLeft || playerInput.isMoveRight)
+    //    {
+    //        playerAudio.Play();
+    //    yield return new WaitForSeconds(0.3f);
+    //    }
+    //    isFootstep = false;
+    //}
 
 
     private void Jump()
@@ -228,8 +243,12 @@ public class PlayerController : MonoBehaviour
 
                 playerAni.SetTrigger("isWallCilmbUp");
                 armAni.SetTrigger("ArmIsWallClimbUp");
-                StartCoroutine(playerClimeb_Co()); 
 
+                //if (!isClimbUp)
+                //{
+                //    isClimbUp = true;
+                //    StartCoroutine(playerClimeb_Co());
+                //}
             }
 
             if (playerInput.isMoveDown)
@@ -240,7 +259,7 @@ public class PlayerController : MonoBehaviour
 
                 playerAni.SetTrigger("isWallClimbDown");
                 armAni.SetTrigger("ArmIsWallClimbDown");
-                StartCoroutine(playerClimeb_Co()); 
+                //StartCoroutine(playerClimeb_Co()); 
 
             }
 
@@ -249,30 +268,30 @@ public class PlayerController : MonoBehaviour
                //player의 벽에 고정된 스테이 애니메이션 speed로 관리중
                playerAni.speed = 0;
                armAni.speed = 0;
-                StopCoroutine(playerClimeb_Co());
+                //StopCoroutine(playerClimeb_Co());
             }
            else
            {
                playerAni.speed = 1;
                armAni.speed = 1;
-               StopCoroutine(playerClimeb_Co());
+               //StopCoroutine(playerClimeb_Co());
            }
 
         }
     }
 
-    public IEnumerator playerClimeb_Co()
-    {
-        while (playerInput.isMoveUp || playerInput.isMoveDown)
-        {
-            if(playerInput.isMoveUp)
-            playerAudio.Play(); 
-            else if (playerInput.isMoveDown)
-            playerAudio.Play();
-
-        yield return new WaitForSeconds(2f); //소리루프조절
-        }
-    }
+    //public IEnumerator playerClimeb_Co()
+    //{
+    //    while (playerInput.isMoveUp || playerInput.isMoveDown)
+    //    {
+    //        if(playerInput.isMoveUp)
+    //        playerAudio.Play(); 
+    //        else if (playerInput.isMoveDown)
+    //        playerAudio.Play();
+    //
+    //    yield return new WaitForSeconds(0.2f); //소리루프조절
+    //    }
+    //}
 
     //jumpCount Reset 
     private void OnCollisionEnter2D(Collision2D collision)
@@ -300,6 +319,7 @@ public class PlayerController : MonoBehaviour
         if (collision.CompareTag("GrabPlatform") && isWall)
         {
             isWallStay = true;
+            playerAudio.PlayOneShot(playerWallStick); 
         }
     }
 

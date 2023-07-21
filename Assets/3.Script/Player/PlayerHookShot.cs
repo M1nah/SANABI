@@ -4,10 +4,20 @@ using UnityEngine;
 
 public class PlayerHookShot : MonoBehaviour //hookshot && dash
 {
+
+    [Header("SFX")]
+    [SerializeField] private AudioSource playerAudio;
+    [SerializeField] private AudioClip playerHookShot;
+    [SerializeField] private AudioClip playerDash;
+    [Space]
+
+
+
     [SerializeField] GameObject GrabHook;
     public Transform hook;
     public LineRenderer line;
     public LineRenderer guideline;
+
 
     Vector2 mouseDirection; //마우스 커서 위치
 
@@ -74,6 +84,7 @@ public class PlayerHookShot : MonoBehaviour //hookshot && dash
             isHookActive = true;
             isLineMax = false;
             GrabHook.SetActive(true);
+            playerAudio.PlayOneShot(playerHookShot);
         }
 
         if (isHookActive && !isLineMax && !isAttach) //isHookActive가 참이고 lineMax가 거짓일 때만 후크가 날아가게끔 하기
@@ -127,6 +138,7 @@ public class PlayerHookShot : MonoBehaviour //hookshot && dash
         if (Input.GetKeyDown(KeyCode.LeftShift) && isAttach)
         {
             isDash = true;
+            playerAudio.PlayOneShot(playerDash);
             ghost.makeGhost = true; //잔상 on 
 
             if (isDirection) //dash 방향 잡아주고 
