@@ -87,6 +87,8 @@ public class GameManager : MonoBehaviour
 
             isMenuOpen = true;
             MenuPanelUI.SetActive(true);
+
+
         }
         else if (Input.GetKeyDown(KeyCode.Escape) && isMenuOpen)
         {

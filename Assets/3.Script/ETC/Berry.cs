@@ -9,6 +9,7 @@ public class Berry : MonoBehaviour
 
     [SerializeField] PlayerInput playerInput;
     [SerializeField] GameManager gameManager;
+    [SerializeField] GameObject HPUI;
 
     bool isGetBerry=false;
     FadeInOut fadeInOut;
@@ -22,6 +23,7 @@ public class Berry : MonoBehaviour
     {
         if (playerInput.isInteraction && isGetBerry)
         {
+            HPUI.SetActive(false);
             StartCoroutine(ReturnToIntro());
         }
     }

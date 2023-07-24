@@ -36,6 +36,11 @@ public class StartIntro : MonoBehaviour
         HPUI.SetActive(true);
         yield return new WaitForSeconds(0.5f);
         player.GetComponent<StartIntro>().enabled = false;
+
+        player.GetComponent<PlayerInput>().enabled = true;
+        player.GetComponent<PlayerController>().enabled = true;
+        player.GetComponent<PlayerHookShot>().enabled = true;
+        player.GetComponent<DastGhost>().enabled = true;
     }
 
     public IEnumerator StartIntroAudio_Co()

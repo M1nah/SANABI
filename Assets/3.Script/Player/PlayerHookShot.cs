@@ -4,14 +4,11 @@ using UnityEngine;
 
 public class PlayerHookShot : MonoBehaviour //hookshot && dash
 {
-
     [Header("SFX")]
     [SerializeField] private AudioSource playerAudio;
     [SerializeField] private AudioClip playerHookShot;
     [SerializeField] private AudioClip playerDash;
     [Space]
-
-
 
     [SerializeField] GameObject GrabHook;
     public Transform hook;
@@ -25,20 +22,16 @@ public class PlayerHookShot : MonoBehaviour //hookshot && dash
     public bool isLineMax;
     public bool isAttach = false; // 이 변수가 참일 때 platform에 붙는다 linemax가 발동 안함 
 
-
     //dash
     PlayerController playerController;
     PlayerInput playerInput;
-
-
 
     //public float speed; //<=> moveSpeed 변수 대체(기존 player speed) 
     public float dashSpeed;
     public float defaultTime;//기본 시간
     [SerializeField] float dashTime; //dash 시간
 
-    public bool isDirection = false;
-
+    public bool isDirection = false; // dash방향
     public bool isDash = false; //dash 상태
 
     public Animator ani;
@@ -118,14 +111,14 @@ public class PlayerHookShot : MonoBehaviour //hookshot && dash
                 GrabHook.GetComponent<Hook>().joint2D.enabled = false;
                 GrabHook.SetActive(false);
 
-                if (isDirection && !isAttach && playerController.rigid.velocity.y >= 0) //방향에 따라 속도 곱하기...여기 조건식 뭔가 이상함 
-                {
-                    playerController.rigid.AddForce(Vector2.right * 30, ForceMode2D.Force);
-                }
-                else if (!isDirection && !isAttach && playerController.rigid.velocity.y >= 0)
-                {
-                    playerController.rigid.AddForce(Vector2.left * 30, ForceMode2D.Force);
-                }
+                //if (isDirection && !isAttach && playerController.rigid.velocity.y >= 0) //방향에 따라 속도 곱하기...여기 조건식 뭔가 이상함 
+                //{
+                //    playerController.rigid.AddForce(Vector2.right * 5, ForceMode2D.Force);
+                //}
+                //else if (!isDirection && !isAttach && playerController.rigid.velocity.y >= 0)
+                //{
+                //    playerController.rigid.AddForce(Vector2.left * 5, ForceMode2D.Force);
+                //}
             }
 
         }
@@ -151,7 +144,7 @@ public class PlayerHookShot : MonoBehaviour //hookshot && dash
             ghost.makeGhost = false; //잔상off...
         }
 
-        //천장에서 떨어지는 버튼을 누르고 isash가 참알때 ==> dashStay 코루틴 실행
+        //천장에서 떨어지는 버튼을 누르고 isDash가 참알때 ==> dashStay 코루틴 실행
         if (Input.GetMouseButtonUp(0) && isDash)
         {
             StartCoroutine(DashStay_Co());
@@ -160,7 +153,7 @@ public class PlayerHookShot : MonoBehaviour //hookshot && dash
 
         if (!isAttach && !playerController.isGround) //천장에 떨어져있고 player가 땅에 붙어있지 않을 때
         {
-            playerController.rigid.velocity *= new Vector2(2, 1.2f); //똑같이 player 리지드바디 값을 지정해서 느리게 떨어지게 함
+            playerController.rigid.velocity *= new Vector2(1.1f, 1.2f); //똑같이 player 리지드바디 값을 지정해서 느리게 떨어지게 함
         }
     }
 
@@ -173,13 +166,13 @@ public class PlayerHookShot : MonoBehaviour //hookshot && dash
             while (true)
             {
                 timeCheck += Time.deltaTime; //시간이 흐를동안
-                playerController.rigid.velocity = dashStay; // 매 프레임마다 player리지드바디는 dashSatay값이 된다 
+                playerController.rigid.velocity = dashStay; // 매 프레임마다 player리지드바디는 dashStay값이 된다 
 
                 yield return null;
 
                 if (timeCheck >= 0.1) //시간이 0.1 이하일 때
                 {
-                    playerController.rigid.velocity *= new Vector2(2, 1.2f); //player리지드바디 값을 new Vector2로 다시 지정해주고
+                    playerController.rigid.velocity *= new Vector2(1.1f, 1.2f); //player리지드바디 값을 new Vector2로 다시 지정해주고
                     isDash = false; //dash는 종료
                     yield break;
                 }

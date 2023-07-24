@@ -59,8 +59,6 @@ public class FadeInOut : MonoBehaviour
         }
     }
 
-
-
     //컴포넌트가 켜져있으면 안되는 씬도 있어서 ex.ui밖에없는 인트로 씬
     //일부러 컴포넌트를 끄고 켜주는 메서드를 따로 뺐다
     public void ActiveFadeImage(bool isActive)
