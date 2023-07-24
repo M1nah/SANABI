@@ -7,6 +7,7 @@ public class StartIntro : MonoBehaviour
 
     [SerializeField] Animator introAni;
 
+    [SerializeField] GameObject player;
     [SerializeField] GameObject playerArm;
     [SerializeField] GameObject HPUI;
 
@@ -34,6 +35,7 @@ public class StartIntro : MonoBehaviour
         yield return new WaitForSeconds(0.2f);
         HPUI.SetActive(true);
         yield return new WaitForSeconds(0.5f);
+        player.GetComponent<StartIntro>().enabled = false;
     }
 
     public IEnumerator StartIntroAudio_Co()

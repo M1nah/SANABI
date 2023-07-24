@@ -126,8 +126,6 @@ public class GameManager : MonoBehaviour
         }
     }
 
-
-
     public void HPCondition()
     {
         switch (playerHP)
@@ -182,8 +180,9 @@ public class GameManager : MonoBehaviour
     private IEnumerator Hp_Co()
     {
         Vector2 saveVelocity = playerRgd.velocity;
-        yield return new WaitForSeconds(0.1f);
-        playerRgd.velocity = new Vector2(saveVelocity.x * -1, saveVelocity.y * -1).normalized * 10;
+        yield return new WaitForSeconds(0.2f);
+        playerRgd.velocity = new Vector2(saveVelocity.x * -1, saveVelocity.y * -1).normalized * 8;
+        yield return new WaitForSeconds(2f);
         isCoroutineLock = false;
     }
 

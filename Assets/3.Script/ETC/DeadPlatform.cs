@@ -30,7 +30,7 @@ public class DeadPlatform : MonoBehaviour
         yield return new WaitForSeconds(1f);
     }
 
-
+    /*
     //´êÀ¸¸é Ä«¸Þ¶ó°¡ Èçµé¸².... 
     public void Shake()
     {
@@ -56,4 +56,5 @@ public class DeadPlatform : MonoBehaviour
         CancelInvoke("StartShake");
         virtualPlayerFollowCam.transform.position = cameraPos;
     }
+    */
 }
