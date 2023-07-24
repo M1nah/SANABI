@@ -44,6 +44,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] AudioSource BGM;
     [SerializeField] AudioSource BGM_Bird;
 
+
     private void Start()
     {
         playerRgd = Player.GetComponent<Rigidbody2D>();
@@ -236,13 +237,12 @@ public class GameManager : MonoBehaviour
         MenuPanelUI.SetActive(false);
     }
 
+
     public IEnumerator BGM_Co()
     {
-        yield return new WaitForSeconds(1f);
+        yield return new WaitForSeconds(1.2f);
         BGM_Bird.Play();
-        yield return new WaitForSeconds(5f);
+        yield return new WaitForSeconds(6f);
         BGM.Play();
     }
-
-
 }
