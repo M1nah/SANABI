@@ -7,7 +7,6 @@ public class Hook : MonoBehaviour
     [SerializeField] PlayerHookShot hookShot;
     [SerializeField] public DistanceJoint2D joint2D;
 
-
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.CompareTag("GrabPlatform"))

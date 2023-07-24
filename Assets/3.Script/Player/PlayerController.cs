@@ -91,29 +91,11 @@ public class PlayerController : MonoBehaviour
                 Move();
                 playerAni.SetBool("isRunning", true);
                 armAni.SetBool("ArmIsRunning", true);
-
-                //if (!isFootstep)
-                //{
-                //    isFootstep = true;
-                //    //StartCoroutine(playerFootstep_Co()); //Foot
-                //    //StopCoroutine(playerClimeb_Co());
-                //}
             }
             else
             {
                 playerAni.SetBool("isRunning", false);
                 armAni.SetBool("ArmIsRunning", false);
-
-                //if (isFootstep)
-                //{
-                //    isFootstep = false;
-                //    StopCoroutine(playerFootstep_Co());
-                //}
-                //if (isClimbUp)
-                //{
-                //    isClimbUp = false;
-                //    StopCoroutine(playerClimeb_Co());
-                //}
             }
 
 
@@ -123,23 +105,12 @@ public class PlayerController : MonoBehaviour
                 Jump();
                 playerAni.SetBool("isJumping", true);
                 armAni.SetBool("ArmIsJumping", true);
-                //if (isFootstep)
-                //{
-                //    isFootstep = false;
-                //    StopCoroutine(playerFootstep_Co());
-                //}
-                //if (isClimbUp)
-                //{
-                //    isClimbUp = false;
-                //    StopCoroutine(playerClimeb_Co());
-                //}
             }
             else if (!playerInput.isJump && !isJump)
             {
                 playerAni.SetBool("isJumping", false);
                 armAni.SetBool("ArmIsJumping", false);
-                //StopCoroutine(playerFootstep_Co());
-                //StopCoroutine(playerClimeb_Co());
+
 
         }
     }
@@ -191,17 +162,6 @@ public class PlayerController : MonoBehaviour
     }
 
 
-    //public IEnumerator playerFootstep_Co()
-    //{
-    //    while (playerInput.isMoveLeft || playerInput.isMoveRight)
-    //    {
-    //        playerAudio.Play();
-    //    yield return new WaitForSeconds(0.3f);
-    //    }
-    //    isFootstep = false;
-    //}
-
-
     private void Jump()
     {
         if (jumpCount < 1)
@@ -238,28 +198,20 @@ public class PlayerController : MonoBehaviour
             if (playerInput.isMoveUp)
             {
                 rigid.gravityScale = 0;
-                //float ver = Input.GetAxisRaw("Vertical");
                 transform.position += new Vector3(0,0.03f);
 
                 playerAni.SetTrigger("isWallCilmbUp");
                 armAni.SetTrigger("ArmIsWallClimbUp");
 
-                //if (!isClimbUp)
-                //{
-                //    isClimbUp = true;
-                //    StartCoroutine(playerClimeb_Co());
-                //}
             }
 
             if (playerInput.isMoveDown)
             {
                 rigid.gravityScale = 0;
-                //float ver = Input.GetAxisRaw("Vertical");
                 transform.position -= new Vector3(0,0.03f);
 
                 playerAni.SetTrigger("isWallClimbDown");
                 armAni.SetTrigger("ArmIsWallClimbDown");
-                //StartCoroutine(playerClimeb_Co()); 
 
             }
 
@@ -268,30 +220,15 @@ public class PlayerController : MonoBehaviour
                //player의 벽에 고정된 스테이 애니메이션 speed로 관리중
                playerAni.speed = 0;
                armAni.speed = 0;
-                //StopCoroutine(playerClimeb_Co());
             }
            else
            {
                playerAni.speed = 1;
                armAni.speed = 1;
-               //StopCoroutine(playerClimeb_Co());
            }
-
         }
     }
 
-    //public IEnumerator playerClimeb_Co()
-    //{
-    //    while (playerInput.isMoveUp || playerInput.isMoveDown)
-    //    {
-    //        if(playerInput.isMoveUp)
-    //        playerAudio.Play(); 
-    //        else if (playerInput.isMoveDown)
-    //        playerAudio.Play();
-    //
-    //    yield return new WaitForSeconds(0.2f); //소리루프조절
-    //    }
-    //}
 
     //jumpCount Reset 
     private void OnCollisionEnter2D(Collision2D collision)
@@ -329,8 +266,8 @@ public class PlayerController : MonoBehaviour
         {
             isWallStay = false;
             rigid.gravityScale = 3f;
-            //playerAni.SetTrigger("isIdle");
-            //armAni.SetTrigger("ArmIsIdle"); 
+            playerAni.speed = 1;
+            armAni.speed = 1;
         }
     }
 }

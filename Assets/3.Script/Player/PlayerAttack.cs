@@ -2,9 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerAttack : MonoBehaviour //후크에 스크립트 다는게 좋겠음 
+public class PlayerAttack : MonoBehaviour 
 {
-
     CursorPoint cursor;
     PlayerController playerController;
     PlayerHookShot hookShot;
@@ -15,7 +14,6 @@ public class PlayerAttack : MonoBehaviour //후크에 스크립트 다는게 좋겠음
 
     public float hitCount;
 
-
     public bool findEnemy;
     public bool isAtk;
 
@@ -25,7 +23,6 @@ public class PlayerAttack : MonoBehaviour //후크에 스크립트 다는게 좋겠음
         playerController = GetComponent<PlayerController>();
         hookShot = GetComponent<PlayerHookShot>();
     }
-
 
     private void Update()
     {
@@ -40,24 +37,12 @@ public class PlayerAttack : MonoBehaviour //후크에 스크립트 다는게 좋겠음
                     //gravityScale을 바꿨더니 오류 발생.. 
                     hitCount++;
                     //hookShot.enabled = false;
-                    Debug.Log("Enemy 클릭");
-                    
-                
-                    /*
-                    1. enemy Object를 검출했을 때 hook와 line 모두 비활성화
-                    2. 
-                     
-                     
-                    */
-
-
                 }
             }
             else if(Input.GetMouseButtonUp(0) && hitCount>=1)
             {
                 //hookShot.enabled = true;
                 findEnemy = false;
-                Debug.Log("Enemy 클릭 해제");
             }
     }
 
@@ -65,9 +50,7 @@ public class PlayerAttack : MonoBehaviour //후크에 스크립트 다는게 좋겠음
     {
         if(findEnemy && hitCount >= 1)
         {
-
             //using animation
-
         }
     }
 

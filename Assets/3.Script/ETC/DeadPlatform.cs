@@ -20,7 +20,6 @@ public class DeadPlatform : MonoBehaviour
         if (collision.CompareTag("Player") && PlayerPrefs.GetInt("Level") != 0)
         {
             StartCoroutine(DeadZoneAudio_Co());
-            //StartCoroutine(DeadShakeCam_Co());
             GameManager.instance.HP();
         }
     }
@@ -38,7 +37,6 @@ public class DeadPlatform : MonoBehaviour
         cameraPos = virtualPlayerFollowCam.transform.position;
         InvokeRepeating("StartShake", 0f, 0.005f);
         Invoke("StopShake", duration);
-        Debug.Log("Shake");
     }
 
     public void StartShake()
@@ -51,13 +49,11 @@ public class DeadPlatform : MonoBehaviour
         cameraPos.x = cameraPosX;
         cameraPos.y = cameraPosY;
         virtualPlayerFollowCam.transform.position = cameraPos;
-        Debug.Log("StartShake");
     }
 
     public void StopShake()
     {
         CancelInvoke("StartShake");
         virtualPlayerFollowCam.transform.position = cameraPos;
-        Debug.Log("StopShake");
     }
 }

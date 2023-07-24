@@ -22,7 +22,6 @@ public class Berry : MonoBehaviour
     {
         if (playerInput.isInteraction && isGetBerry)
         {
-            Debug.Log("E키를 누름");
             StartCoroutine(ReturnToIntro());
         }
     }
@@ -31,6 +30,7 @@ public class Berry : MonoBehaviour
     {
         fadeInOut.Fade(true);
         yield return new WaitForSeconds(fadeInOut.fadeTime);
+
         gameManager.ChangeScene(0);
     }
 

@@ -6,23 +6,18 @@ using UnityEngine.UI;
 
 public class IntroMenu : MonoBehaviour
 {
-
-
     [SerializeField] GameObject SANNABI_Logo;
     [SerializeField] GameObject IntroBtn;
     [SerializeField] GameObject levelpanel;
     [SerializeField] GameObject optionPanel;
     [SerializeField] GameObject QuitPanel;
 
-
     bool levelPanelActive=false;
     bool optionPanelActive=false;
     bool quitPanelActive=false;
 
-
     public void StartBtn()
     {
-
         levelPanelActive = true;
         SANNABI_Logo.SetActive(false);
         IntroBtn.SetActive(false);
@@ -47,8 +42,6 @@ public class IntroMenu : MonoBehaviour
             Back();
             optionPanelActive = false;
         }
-
-
     }
     public void QuitBtn()
     {
@@ -57,7 +50,6 @@ public class IntroMenu : MonoBehaviour
         IntroBtn.SetActive(false);
         QuitPanel.SetActive(true);
 
-
         if (Input.GetKeyDown(KeyCode.Escape)  && quitPanelActive)
         {
             Back();
@@ -65,13 +57,10 @@ public class IntroMenu : MonoBehaviour
         }
     }
 
-
-
     public void Back()
     {
         SANNABI_Logo.SetActive(true);
         IntroBtn.SetActive(true);
-
 
         QuitPanel.SetActive(false);
         levelpanel.SetActive(false);

@@ -52,6 +52,8 @@ public class GameManager : MonoBehaviour
         //씬을 불러올 때마다 페이드인
         fadeInOut.Fade(false);
 
+        //BGM Roop
+        StartCoroutine(BGM_Co());
 
         //난이도에 따른 HP 세팅 초기화 
         if(PlayerPrefs.GetInt("Level") == 3)
@@ -176,7 +178,6 @@ public class GameManager : MonoBehaviour
         }
     }
 
-
     private IEnumerator Hp_Co()
     {
         Vector2 saveVelocity = playerRgd.velocity;
@@ -205,7 +206,6 @@ public class GameManager : MonoBehaviour
     private IEnumerator DieScene_co() 
     {
         playerDeadCam.gameObject.SetActive(true);
-        //HPHud.SetActive(false); 
         deadImage.SetActive(true);
         yield return new WaitForSeconds(0.2f);
         playerArm.SetActive(false);
@@ -235,5 +235,14 @@ public class GameManager : MonoBehaviour
         isMenuOpen = false;
         MenuPanelUI.SetActive(false);
     }
+
+    public IEnumerator BGM_Co()
+    {
+        yield return new WaitForSeconds(1f);
+        BGM_Bird.Play();
+        yield return new WaitForSeconds(5f);
+        BGM.Play();
+    }
+
 
 }
